@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="primaryTextColor">#212121</color>
+    <color name="secondaryTextColor">#727272</color>
+    <color name="gray">#c6c6c6</color>
+    <color name="soft_grey">#ffeceeef</color>
+    <color name="viewBg">#f1f5f8</color>
+    <color name="view_line">#d4d9d5</color>
+    <color name="chipSelected">#DEF1D0</color>
+    <color name="chipUnSelect">#FBF7F7</color>
+    <color name="light_gray">#EAEAEA</color>
+    <color name="contact_name">#333333</color>
+    <color name="contact_number">#8c8c8c</color>
+    <color name="textColor">#727272</color>
+
+    <color name="BlackN">#0b162d</color>
+
+    <color name="white">#fff</color>
+    <color name="black">#000</color>
+    <color name="windowBackground">#FFFFFF</color>
+    <color name="fullPrimary">#e21c74</color>
+    <color name="grayLight">#F6F5F5</color>
+
+</resources>

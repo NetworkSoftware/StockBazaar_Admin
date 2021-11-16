@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="top"
+    android:layout_margin="10dp"
+    android:gravity="top"
+    android:orientation="vertical">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestScroll"
+        android:layout_width="match_parent"
+        android:layout_height="1000dp"
+        android:layout_marginLeft="10dp"
+
+        android:layout_marginRight="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/sans_bold"
+                    android:gravity="center_vertical"
+                    android:text="Shops Filter"
+                    android:textSize="20dp" />
+
+                <Button
+                    android:id="@+id/submitBtn"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Apply" />
+
+                <ImageView
+                    android:id="@+id/close"
+                    android:layout_width="45dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:padding="10dp"
+                    android:src="@drawable/met_ic_close"
+                    app:tint="@color/black" />
+
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="40dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/gray" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:fontFamily="@font/sans"
+                        android:text="Districts"
+                        android:textColor="#000"
+                        android:textSize="15dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/assignDistrict"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sans_bold"
+                        android:text="Select District"
+                        android:textAppearance="@style/chipTextAppearance"
+                        android:textColor="@color/colorPrimary"
+                        app:chipBackgroundColor="@color/white"
+                        app:chipEndPadding="2dp"
+                        app:chipIconTint="@color/colorPrimary"
+                        app:chipStartPadding="2dp"
+                        app:chipStrokeColor="@color/colorPrimary"
+                        app:chipStrokeWidth="1dp"
+                        app:closeIconVisible="false"
+                        app:rippleColor="@color/colorPrimary" />
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/districtList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:scrollbars="vertical" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:fontFamily="@font/sans"
+                        android:text="Pincode"
+                        android:textColor="#000"
+                        android:textSize="15dp" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/assignPincode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sans_bold"
+                        android:text="Select Pincode"
+                        android:textAppearance="@style/chipTextAppearance"
+                        android:textColor="@color/colorPrimary"
+                        app:chipBackgroundColor="@color/white"
+                        app:chipEndPadding="2dp"
+                        app:chipIconTint="@color/colorPrimary"
+                        app:chipStartPadding="2dp"
+                        app:chipStrokeColor="@color/colorPrimary"
+                        app:chipStrokeWidth="1dp"
+                        app:closeIconVisible="false"
+                        app:rippleColor="@color/colorPrimary" />
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/pincodeList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:scrollbars="vertical" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>
+
