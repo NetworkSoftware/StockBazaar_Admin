@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:clickable="true"
+    android:elevation="5dp"
+    android:layout_margin="5dp"
+    app:cardCornerRadius="3dp"
+    android:paddingBottom="@dimen/row_padding">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FBFAFA"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/profileImage"
+            android:layout_width="50.0dip"
+            android:layout_height="60dp"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/profile" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="125dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_toRightOf="@id/thumbnail"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/sans"
+                    android:paddingLeft="2dp"
+                    android:text="Spare Id"
+                    android:textColor="@color/black"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:id="@+id/spareId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_toRightOf="@id/thumbnail"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/sans_bold"
+                    android:paddingLeft="2dp"
+                    android:text="th"
+                    android:textColor="@color/secondaryTextColor"
+                    android:textSize="16dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_toRightOf="@id/thumbnail"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/sans"
+                    android:paddingLeft="2dp"
+                    android:text="Brand"
+                    android:textColor="@color/black"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:id="@+id/brand"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_toRightOf="@id/thumbnail"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/sans_bold"
+                    android:paddingLeft="2dp"
+                    android:text="th"
+                    android:textColor="@color/secondaryTextColor"
+                    android:textSize="16dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/name"
+                    android:layout_marginLeft="2dp"
+                    android:layout_toRightOf="@id/thumbnail"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/sans"
+                    android:paddingLeft="2dp"
+                    android:text="Spare"
+                    android:textColor="@color/black"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:id="@+id/spare"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/name"
+                    android:layout_marginLeft="2dp"
+                    android:layout_toRightOf="@id/thumbnail"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-medium"
+                    android:paddingLeft="2dp"
+                    android:text="te"
+                    android:textColor="@color/secondaryTextColor"
+                    android:textSize="16dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ram"
+                    android:layout_marginLeft="2dp"
+                    android:layout_toRightOf="@id/thumbnail"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/sans"
+                    android:paddingLeft="2dp"
+                    android:text="Price"
+                    android:textColor="@color/black"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:id="@+id/price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ram"
+                    android:layout_marginLeft="2dp"
+                    android:layout_toRightOf="@id/thumbnail"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/sans_bold"
+                    android:paddingLeft="2dp"
+                    android:text="er"
+                    android:textColor="@color/secondaryTextColor"
+                    android:textSize="16dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ram"
+                    android:layout_marginLeft="2dp"
+                    android:layout_toRightOf="@id/thumbnail"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/sans"
+                    android:paddingLeft="2dp"
+                    android:text="Instock"
+                    android:textColor="@color/black"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:id="@+id/instock"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ram"
+                    android:layout_marginLeft="2dp"
+                    android:layout_toRightOf="@id/thumbnail"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/sans_bold"
+                    android:paddingLeft="2dp"
+                    android:text="er"
+                    android:textColor="@color/secondaryTextColor"
+                    android:textSize="16dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,746 @@
+package customer.smart.support.client.stock;
+
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.deishelon.roundedbottomsheet.RoundedBottomSheetDialog;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
+import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import customer.smart.support.R;
+import customer.smart.support.app.AndroidMultiPartEntity;
+import customer.smart.support.app.AppController;
+import customer.smart.support.app.Appconfig;
+import customer.smart.support.app.Imageutils;
+import customer.smart.support.attachment.ActivityMediaOnline;
+import customer.smart.support.client.bulkPrice.BulkPriceAdapter;
+import customer.smart.support.client.bulkPrice.BulkPriceBeen;
+
+import static customer.smart.support.app.Appconfig.SHOP;
+import static customer.smart.support.app.Appconfig.STOCK;
+import static customer.smart.support.app.Appconfig.mypreference;
+
+public class ProductRegister extends AppCompatActivity implements Imageutils.ImageAttachmentListener, ImageClick {
+
+    private final String[] STOCKUPDATE = new String[]{
+            "In Stock", "Currently Unavailable",
+    };
+    public MaterialButton addBulkPrice;
+    String[] SHOPNAME = new String[]{"Loading"};
+    String[] BRAND = new String[]{"Loading"};
+    String[] CATEGORY = new String[]{"Loading"};
+    TextInputLayout brandTxt, modelTxt, priceTxt,
+            descriptionTxt, incategoryTxt;
+    TextInputEditText model, price,
+            description, selectshop, incategory;
+    AddImageAdapter maddImageAdapter;
+    MaterialBetterSpinner stock_update;
+    MaterialBetterSpinner brand;
+    String studentId = null;
+    TextView submit;
+    Imageutils imageutils;
+    CardView itemsAdd;
+    MaterialBetterSpinner selectcategories;
+    SharedPreferences sharedpreferences;
+    ArrayList<BulkPriceBeen> bulkPriceBeens = new ArrayList<>();
+    BulkPriceAdapter bulkPriceAdapter;
+    private Map<String, String> nameIdMap = new HashMap<>();
+    private Map<String, String> idNameMap = new HashMap<>();
+    private Map<String, String> idBrandMap = new HashMap<>();
+    private ProgressDialog pDialog;
+    private RecyclerView imagelist;
+    private ArrayList<String> samplesList = new ArrayList<>();
+    private String imageUrl = "";
+    private Product product = null;
+    private String shopname = "STOCK BAZAAR";
+    private String shopid = "0";
+    private RecyclerView bulkpricelist;
+    CheckBox isNotify;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.client_stock_register);
+        imageutils = new Imageutils(this);
+        sharedpreferences = getSharedPreferences(mypreference,
+                Context.MODE_PRIVATE);
+        pDialog = new ProgressDialog(this);
+        pDialog.setCancelable(false);
+
+        isNotify = findViewById(R.id.isNotify);
+        itemsAdd = findViewById(R.id.itemsAdd);
+        ImageView image_wallpaper = findViewById(R.id.image_wallpaper);
+        image_wallpaper.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (brand.getText().toString().length() > 0) {
+                    imageutils.imagepicker(1);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Please select brand", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        samplesList = new ArrayList<>();
+        imagelist = findViewById(R.id.imagelist);
+        maddImageAdapter = new AddImageAdapter(this, samplesList, this);
+        final LinearLayoutManager addManager1 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        imagelist.setLayoutManager(addManager1);
+        imagelist.setAdapter(maddImageAdapter);
+        stock_update = findViewById(R.id.stock_update);
+        selectshop = findViewById(R.id.selectShop);
+        brandTxt = findViewById(R.id.brandTxt);
+        modelTxt = findViewById(R.id.modelTxt);
+        priceTxt = findViewById(R.id.priceTxt);
+        descriptionTxt = findViewById(R.id.descriptionTxt);
+        brand = findViewById(R.id.brand);
+        model = findViewById(R.id.model);
+        price = findViewById(R.id.price);
+        description = findViewById(R.id.description);
+        incategory = findViewById(R.id.incategory);
+        incategoryTxt = findViewById(R.id.incategoryTxt);
+
+
+        String type = getIntent().getStringExtra("SHOPNAME");
+        shopid = getIntent().getStringExtra("SHOPID");
+        shopname = type;
+        selectshop.setText(type);
+        selectshop.setFocusableInTouchMode(false);
+
+        selectcategories = findViewById(R.id.selectcategories);
+        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, CATEGORY);
+        selectcategories.setAdapter(categoryAdapter);
+        selectcategories.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                incategoryTxt.setVisibility(View.GONE);
+                if (selectcategories.getText().toString().equalsIgnoreCase(("Accessories")) ||
+                        (selectcategories.getText().toString().equalsIgnoreCase(("Spare")))) {
+                    incategoryTxt.setVisibility(View.VISIBLE);
+                } else {
+                    incategoryTxt.setVisibility(View.GONE);
+                }
+
+                BRAND = idBrandMap.get(SHOPNAME[0]).split(",");
+                ArrayAdapter<String> brandAdapter = new ArrayAdapter<String>(ProductRegister.this,
+                        android.R.layout.simple_dropdown_item_1line, BRAND);
+                brand.setAdapter(brandAdapter);
+            }
+        });
+
+        //brand
+        brand = findViewById(R.id.brand);
+
+        //stock update
+        ArrayAdapter<String> stockAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, STOCKUPDATE);
+        stock_update.setAdapter(stockAdapter);
+        stock_update.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            }
+        });
+        addBulkPrice = findViewById(R.id.addPrice);
+        bulkpricelist = findViewById(R.id.pricelist);
+        bulkPriceBeens = new ArrayList<>();
+        addBulkPrice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showBulkPriceBottom();
+            }
+        });
+        bulkPriceAdapter = new BulkPriceAdapter(this, bulkPriceBeens, new ImageClick() {
+            @Override
+            public void onImageClick(int position) {
+
+            }
+
+            @Override
+            public void onDeleteClick(int position) {
+                bulkPriceBeens.remove(position);
+                bulkPriceAdapter.notifyData(bulkPriceBeens);
+            }
+        }, true);
+        final LinearLayoutManager sizeManager = new LinearLayoutManager(
+                this, LinearLayoutManager.HORIZONTAL, false);
+        bulkpricelist.setLayoutManager(sizeManager);
+        bulkpricelist.setAdapter(bulkPriceAdapter);
+        submit = findViewById(R.id.submit);
+        submit.setText("SUBMIT");
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (brand.getText().toString().length() <= 0) {
+                    brand.setError("Select the Brand");
+                } else if (price.getText().toString().length() <= 0) {
+                    price.setError("Enter the Price");
+                } else if (stock_update.getText().toString().length() <= 0) {
+                    stock_update.setError("Select the Sold or Not");
+                } else if (price.getText().toString().length() <= 0) {
+                    price.setError("Please enter the price");
+                } else if (stock_update.getText().toString().length() <= 0) {
+                    stock_update.setError("Select the Sold or Not");
+                } else if (samplesList.size() <= 0) {
+                    Toast.makeText(getApplicationContext(), "Upload the Images!", Toast.LENGTH_SHORT).show();
+                } else {
+                    stockRegister();
+                }
+            }
+        });
+
+
+        try {
+            product = (Product) getIntent().getSerializableExtra("data");
+            studentId = product.id;
+            brand.setText(product.brand);
+            model.setText(product.model);
+            price.setText(product.price);
+            description.setText(product.description);
+            if (product.shopName != null) {
+                selectshop.setText(product.shopName);
+            } else {
+                selectshop.setText(type);
+            }
+
+            selectcategories.setText(product.categoryName);
+            stock_update.setText(product.stock_update);
+            incategory.setText(product.incategory);
+            imageUrl = product.image;
+            if (imageUrl == null) {
+                imageUrl = "";
+            } else {
+                samplesList = new Gson().fromJson(imageUrl, (Type) List.class);
+            }
+            maddImageAdapter.notifyData(samplesList);
+
+            if (product.getBulkPrice() == null || product.getBulkPrice().equalsIgnoreCase("null")) {
+                bulkPriceBeens = new ArrayList<>();
+            } else {
+                try {
+                    ObjectMapper mapper = new ObjectMapper();
+                    Object listBeans = new Gson().fromJson(product.getBulkPrice(),
+                            Object.class);
+                    bulkPriceBeens = mapper.convertValue(
+                            listBeans,
+                            new TypeReference<ArrayList<BulkPriceBeen>>() {
+                            }
+                    );
+                } catch (Exception e) {
+                    Log.e("xxxxxxxxxx", e.toString());
+                }
+            }
+            if (bulkPriceBeens == null) {
+                bulkPriceBeens = new ArrayList<>();
+            }
+            bulkPriceAdapter.notifyData(bulkPriceBeens);
+
+        } catch (Exception e) {
+            Log.e("xxxxxxxxxxx", e.toString());
+        }
+        getAllCategories(shopid);
+    }
+
+    private void showBulkPriceBottom() {
+        final RoundedBottomSheetDialog mBottomSheetDialog = new RoundedBottomSheetDialog(ProductRegister.this);
+        LayoutInflater inflater = ProductRegister.this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.bottom_bulkprice_layout, null);
+
+        final TextInputLayout qtyTxt = dialogView.findViewById(R.id.qtyLayoutTxt);
+        final TextInputEditText quantity = dialogView.findViewById(R.id.qty);
+        final TextInputEditText qty_price = dialogView.findViewById(R.id.qty_price);
+
+        final Button submit = dialogView.findViewById(R.id.submit);
+        qtyTxt.setVisibility(View.VISIBLE);
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (quantity.getText().toString().length() <= 0) {
+                    Toast.makeText(getApplicationContext(), "Enter Valid Size", Toast.LENGTH_LONG).show();
+                    return;
+                } else if (qty_price.getText().toString().length() <= 0) {
+                    Toast.makeText(getApplicationContext(), "Enter Valid Price", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                bulkPriceBeens.add(new BulkPriceBeen(qty_price.getText().toString(), quantity.getText().toString()));
+                bulkPriceAdapter.notifyData(bulkPriceBeens);
+                mBottomSheetDialog.cancel();
+            }
+        });
+        quantity.requestFocus();
+        qty_price.requestFocus();
+
+        mBottomSheetDialog.setContentView(dialogView);
+        mBottomSheetDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        mBottomSheetDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(final DialogInterface dialog) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        RoundedBottomSheetDialog d = (RoundedBottomSheetDialog) dialog;
+                        FrameLayout bottomSheet = d.findViewById(R.id.design_bottom_sheet);
+                        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    }
+                }, 0);
+            }
+        });
+        mBottomSheetDialog.show();
+    }
+
+    private void stockRegister() {
+        String tag_string_req = "req_register";
+        pDialog.setMessage("Updateing ...");
+        showDialog();
+        int method = Request.Method.POST;
+        if (product != null) {
+            method = Request.Method.PUT;
+        }
+        String url = STOCK;
+        StringRequest strReq = new StringRequest(method,
+                url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("Register Response: ", response);
+                hideDialog();
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    boolean success = jsonObject.getBoolean("success");
+                    String msg = jsonObject.getString("message");
+                    if (success) {
+                        finish();
+                    }
+                    Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    Toast.makeText(getApplicationContext(), "Some Network Error.Try after some time", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Registration Error: ", error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        "Some Network Error.Try after some time", Toast.LENGTH_LONG).show();
+                hideDialog();
+            }
+        }) {
+            protected Map<String, String> getParams() {
+                HashMap localHashMap = new HashMap();
+                if (product != null) {
+                    localHashMap.put("id", studentId);
+                }
+                localHashMap.put("brand", brand.getText().toString());
+                localHashMap.put("model", model.getText().toString());
+                localHashMap.put("price", price.getText().toString());
+                localHashMap.put("bulkPrice", new Gson().toJson(bulkPriceBeens));
+                localHashMap.put("description", description.getText().toString());
+                localHashMap.put("selectshop", shopid);
+                String[] selectedNames = selectcategories.getText().toString().split(",");
+                StringBuilder selectedIds = new StringBuilder();
+                for (int i = 0; i < selectedNames.length; i++) {
+                    selectedIds.append(nameIdMap.get(selectedNames[i]));
+                    if (i != selectedNames.length - 1) {
+                        selectedIds.append(",");
+                    }
+                }
+                localHashMap.put("category", selectedIds.toString());
+                localHashMap.put("stockupdate", stock_update.getText().toString());
+                localHashMap.put("incategory", incategory.getText().toString());
+                localHashMap.put("image", new Gson().toJson(samplesList));
+                localHashMap.put("isNoti", isNotify.isChecked() ? "true" : "false");
+                return localHashMap;
+            }
+        };
+        strReq.setRetryPolicy(Appconfig.getPolicy());
+        AppController.getInstance().addToRequestQueue(strReq);
+    }
+
+    private void getAllCategories(String shopname) {
+        String tag_string_req = "req_register";
+        StringRequest strReq = new StringRequest(Request.Method.GET,
+                SHOP + "?shopname=" + shopname, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    int success = jObj.getInt("success");
+
+                    if (success == 1) {
+                        JSONArray jsonArray = jObj.getJSONArray("category");
+                        nameIdMap = new HashMap<>();
+                        idNameMap = new HashMap<>();
+                        idBrandMap = new HashMap<>();
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            nameIdMap.put(jsonObject.getString("title"),
+                                    jsonObject.getString("id"));
+                            idNameMap.put(jsonObject.getString("id"),
+                                    jsonObject.getString("title"));
+                            idBrandMap.put(jsonObject.getString("title"),
+                                    jsonObject.getString("brand"));
+                        }
+                        JSONArray dataArray = jObj.getJSONArray("data");
+                        for (int l = 0; l < dataArray.length(); l++) {
+                            JSONObject jsonObject = dataArray.getJSONObject(l);
+                            String[] selectedIds = jsonObject.getString("category").split(",");
+                            StringBuilder selectedNames = new StringBuilder();
+                            for (int i = 0; i < selectedIds.length; i++) {
+                                selectedNames.append(idNameMap.get(selectedIds[i]));
+                                if (i != selectedIds.length - 1) {
+                                    selectedNames.append(",");
+                                }
+                            }
+                            SHOPNAME = selectedNames.toString().split(",");
+                            ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(ProductRegister.this,
+                                    android.R.layout.simple_dropdown_item_1line, SHOPNAME);
+                            selectcategories.setAdapter(categoryAdapter);
+
+                            BRAND = idBrandMap.get(SHOPNAME[0]).split(",");
+                            ArrayAdapter<String> brandAdapter = new ArrayAdapter<String>(ProductRegister.this,
+                                    android.R.layout.simple_dropdown_item_1line, BRAND);
+                            brand.setAdapter(brandAdapter);
+                        }
+                    }
+
+                } catch (JSONException e) {
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        }) {
+            protected Map<String, String> getParams() {
+                HashMap localHashMap = new HashMap();
+                return localHashMap;
+            }
+        };
+        strReq.setRetryPolicy(Appconfig.getPolicy());
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+    }
+
+    private void deleteUser() {
+        String tag_string_req = "req_register";
+        pDialog.setMessage("Processing ...");
+        showDialog();
+        StringRequest strReq = new StringRequest(Request.Method.DELETE,
+                STOCK + "?id=" + studentId, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("Register Response: ", response);
+                hideDialog();
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    boolean success = jsonObject.getBoolean("success");
+                    String msg = jsonObject.getString("message");
+                    if (success) {
+                        finish();
+                    }
+                    Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    Toast.makeText(getApplicationContext(), "Some Network Error.Try after some time", Toast.LENGTH_SHORT).show();
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Registration Error: ", error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        "Some Network Error.Try after some time", Toast.LENGTH_LONG).show();
+                hideDialog();
+            }
+        }) {
+            protected Map<String, String> getParams() {
+                HashMap localHashMap = new HashMap();
+                localHashMap.put("id", studentId);
+                return localHashMap;
+            }
+        };
+        strReq.setRetryPolicy(Appconfig.getPolicy());
+        AppController.getInstance().addToRequestQueue(strReq);
+    }
+
+
+    private void showDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }
+
+    private void hideDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        hideDialog();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        imageutils.request_permission_result(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    public void image_attachment(int from, String filename, Bitmap file, Uri uri) {
+        String path = getCacheDir().getPath() + File.separator + "ImageAttach" + File.separator;
+        File storedFile = imageutils.createImage(file, filename, path, false);
+        pDialog.setMessage("Uploading...");
+        showDialog();
+        new UploadFileToServer().execute(Appconfig.compressImage(storedFile.getPath(), ProductRegister.this));
+    }
+
+    @Override
+    public void onImageClick(int position) {
+
+        Intent localIntent = new Intent(ProductRegister.this, ActivityMediaOnline.class);
+        localIntent.putExtra("filePath", samplesList.get(position));
+        localIntent.putExtra("isImage", true);
+        startActivity(localIntent);
+    }
+
+
+    @Override
+    public void onDeleteClick(int position) {
+        samplesList.remove(position);
+        maddImageAdapter.notifyData(samplesList);
+    }
+
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        imageutils.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu options from the res/menu/menu_editor.xml file.
+        // This adds menu items to the app bar.
+        getMenuInflater().inflate(R.menu.menu_delete, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // User clicked on a menu option in the app bar overflow menu
+        switch (item.getItemId()) {
+            case R.id.action_delete:
+                AlertDialog diaBox = AskOption();
+                diaBox.show();
+                return true;
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private AlertDialog AskOption() {
+        AlertDialog myQuittingDialogBox = new AlertDialog.Builder(this)
+                // set message, title, and icon
+                .setTitle("Delete")
+                .setMessage("Do you want to Delete")
+                .setIcon(R.drawable.ic_delete_black_24dp)
+
+                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        //your deleting code
+                        dialog.dismiss();
+                        deleteUser();
+                    }
+
+                })
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+
+                    }
+                })
+                .create();
+
+        return myQuittingDialogBox;
+    }
+
+    private class UploadFileToServer extends AsyncTask<String, Integer, String> {
+        public long totalSize = 0;
+        String filepath;
+
+        @Override
+        protected void onPreExecute() {
+            // setting progress bar to zero
+
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... progress) {
+            pDialog.setMessage("Uploading..." + (progress[0]));
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            filepath = params[0];
+            return uploadFile();
+        }
+
+        @SuppressWarnings("deprecation")
+        private String uploadFile() {
+            String responseString = null;
+
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httppost = new HttpPost(Appconfig.URL_IMAGE_UPLOAD_LATEST);
+            try {
+                AndroidMultiPartEntity entity = new AndroidMultiPartEntity(
+                        new AndroidMultiPartEntity.ProgressListener() {
+
+                            @Override
+                            public void transferred(long num) {
+                                publishProgress((int) ((num / (float) totalSize) * 100));
+                            }
+                        });
+
+                File sourceFile = new File(filepath);
+                // Adding file data to http body
+                entity.addPart("model", new StringBody(brand.getText().toString()));
+                entity.addPart("image", new FileBody(sourceFile));
+
+                totalSize = entity.getContentLength();
+                httppost.setEntity(entity);
+
+                // Making server call
+                HttpResponse response = httpclient.execute(httppost);
+                HttpEntity r_entity = response.getEntity();
+
+                int statusCode = response.getStatusLine().getStatusCode();
+                if (statusCode == 200) {
+                    // Server response
+                    responseString = EntityUtils.toString(r_entity);
+
+                } else {
+                    responseString = "Error occurred! Http Status Code: "
+                            + statusCode;
+
+                }
+
+            } catch (ClientProtocolException e) {
+                responseString = e.toString();
+            } catch (IOException e) {
+                responseString = e.toString();
+            }
+
+            return responseString;
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.e("Response from server: ", result);
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                if (!jsonObject.getBoolean("error")) {
+                    String model = jsonObject.getString("model");
+                    String imageUrl = Appconfig.ip_img + "uploads/" + model + "/" + imageutils.getfilename_from_path(filepath);
+                    samplesList.add(imageUrl);
+                    maddImageAdapter.notifyData(samplesList);
+                } else {
+                    imageUrl = null;
+                }
+                Toast.makeText(getApplicationContext(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+
+            } catch (Error | Exception e) {
+                Toast.makeText(getApplicationContext(), "Image not uploaded", Toast.LENGTH_SHORT).show();
+            }
+            hideDialog();
+            // showing the server response in an alert dialog
+            //showAlert(result);
+
+
+            super.onPostExecute(result);
+        }
+
+    }
+
+}
+
+
+

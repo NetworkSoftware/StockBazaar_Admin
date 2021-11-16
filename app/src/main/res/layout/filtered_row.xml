@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/chipname"
+        style="@style/Widget.MaterialComponents.Chip.Choice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:fontFamily="@font/sans_bold"
+        android:text="Assign"
+        android:textAppearance="@style/chipTextAppearance"
+        android:textColor="@color/black"
+        app:chipBackgroundColor="@color/grayLight"
+        app:chipEndPadding="2dp"
+        app:chipIconTint="@color/black"
+        app:chipStartPadding="2dp"
+        app:chipStrokeColor="@color/gray"
+        app:chipStrokeWidth="1dp"
+        app:closeIcon="@drawable/outline_cancel_black_24dp"
+        app:closeIconEnabled="true"
+        app:closeIconVisible="true"
+        app:rippleColor="@color/gray" />
+
+</LinearLayout>

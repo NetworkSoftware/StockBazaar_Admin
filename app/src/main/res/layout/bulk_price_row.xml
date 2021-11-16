@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/sizeLinear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/rectangle_box"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/titleOne"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:padding="10dp"
+            android:text="10/Nos"
+            android:textColor="@color/black"
+            android:visibility="visible" />
+        <TextView
+            android:id="@+id/titleTwo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:padding="10dp"
+            android:text="350"
+            android:textColor="@color/black"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/delete"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:padding="5dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/cricle_trans_gry"
+                android:padding="5dp"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/ic_delete_black_24dp"
+                app:tint="@color/white" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

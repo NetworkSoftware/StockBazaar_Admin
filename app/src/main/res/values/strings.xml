@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">SB Admin</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="toolbar_title">Stock</string>
+    <string name="action_search">Search</string>
+    <string name="search_hint">Type name…</string>
+    <string name="hint_pet_name">Mobile Name</string>
+    <string name="hint_imei_name">IMEI Number</string>
+    <string name="hint_imei_nam">IMEI Number</string>
+
+    <string name="hint_price">Price</string>
+    <string name="category_model">Model</string>
+
+    <string name="cancel">Just Print</string>
+    <string name="ok">Ok</string>
+    <string name="selectable">selectable</string>
+    <string name="dateandtime">dateandtime</string>
+    <string name="date">date</string>
+
+</resources>

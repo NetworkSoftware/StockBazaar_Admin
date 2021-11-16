@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="customer.smart.support">
+
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+    <uses-permission android:name="android.permission.VIBRATE"></uses-permission>
+
+    <meta-data
+        android:name="android.support.VERSION"
+        android:value="25.3.1" />
+    <meta-data
+        android:name="smart.farmerShepherd.diary.app.MyAppGlideModule"
+        android:value="GlideModule" />
+
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+
+    <application
+        android:name=".app.AppController"
+        android:allowBackup="true"
+        android:icon="@drawable/icon"
+        android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@drawable/icon"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
+        <activity
+            android:name=".StartActivity"
+            android:label="Stock Bazzar Admin">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".NaviActivity"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".shop.MainActivity"
+            android:label="Shop List"
+            android:theme="@style/AppTheme">
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+        </activity>
+        <activity
+            android:name=".ad.MainActivityAd"
+            android:label="AD List" />
+        <activity android:name=".shop.ShopRegister" />
+        <activity android:name=".shop.ShopUpdate" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBufZZ6hR1jYcnwqXg2egbpvCU8Vbd2UU0" />
+
+        <activity
+            android:name=".stock.MainActivityStock"
+            android:label="@string/app_name"
+            android:theme="@style/AppThemeSe.NoActionBar">
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+        </activity>
+
+        <activity
+            android:name=".stock.StockRegister"
+            android:label="Stock Register"
+            android:theme="@style/AppThemeWhite" />
+        <activity
+            android:name=".stock.StockUpdate"
+            android:label="Stock Update"
+            android:theme="@style/AppThemeWhite" />
+        <activity
+            android:name=".contact.MainActivityContact"
+            android:label="@string/app_name"
+            android:theme="@style/AppThemeSe.NoActionBar">
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+        </activity>
+
+
+        <activity
+            android:name=".staff.MainActivityStaff"
+            android:label="@string/app_name"
+            android:theme="@style/AppThemeWhite">
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+        </activity>
+        <activity
+            android:name=".spares.MainActivitySpares"
+            android:label="@string/app_name"
+            android:theme="@style/AppThemeSe.NoActionBar">
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+        </activity>
+        <activity
+            android:name=".contact.ContactRegister"
+            android:label="Staff Update"
+            android:theme="@style/AppThemeWhite" />
+        <activity
+            android:name=".contact.ContactUpdate"
+            android:label="Register Offer"
+            android:theme="@style/AppThemeWhite" />
+
+        <activity
+            android:name=".spares.SparesRegister"
+            android:label="Spare register"
+            android:theme="@style/AppThemeWhite" />
+
+        <activity
+            android:name=".spares.SparesUpdate"
+            android:label="Spare Update"
+            android:theme="@style/AppThemeWhite" />
+
+
+        <activity
+            android:name=".staff.StaffUpdate"
+            android:label="Staff Update"
+            android:theme="@style/AppThemeWhite" />
+        <activity
+            android:name=".offer.OfferRegister"
+            android:label="Register Offer"
+            android:theme="@style/AppThemeWhite" />
+        <activity
+            android:name=".offer.OfferUpdate"
+            android:label="Offer Update"
+            android:theme="@style/AppThemeWhite" />
+        <activity
+            android:name=".offer.OfferActivity"
+            android:label="All Offers"
+            android:theme="@style/AppThemeWhite" />
+        <activity
+            android:name=".staff.StaffRegister"
+            android:label="Staff Register"
+            android:theme="@style/AppThemeWhite" />
+        <activity
+            android:name=".cmobile.MobileRegister"
+            android:label="Mobile Register"
+            android:theme="@style/AppThemeWhite" />
+        <activity
+            android:name=".order.MyOrderPage"
+            android:label="Mobile Register"
+            android:theme="@style/AppThemeWhite" />
+        <activity
+            android:name=".order.MainActivityOrder"
+            android:label="Mobile Register"
+            android:theme="@style/AppThemeWhiteNO" />
+        <activity
+            android:name=".client.category.MainActivityCategories"
+            android:label="@string/app_name"
+            android:theme="@style/AppThemeWhiteNO"/>
+        <activity
+            android:name=".client.shop.MainActivityShop"
+            android:label="@string/app_name"
+            android:theme="@style/AppThemeWhiteNO"/>
+        <activity
+            android:name=".client.shop.ShopRegister"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".client.category.CategoriesRegister"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".client.stock.MainActivityProduct"
+            android:label="@string/app_name"
+            android:theme="@style/AppThemeWhiteNO"/>
+        <activity
+            android:name=".client.stock.ProductRegister"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".cmobile.MainActivityMobile"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme">
+
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+        </activity>
+        <activity
+            android:name=".address.MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppThemeSe.NoActionBar">
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+        </activity>
+        <activity android:name=".attachment.ActivityMediaOnline" />
+
+
+        <provider
+            android:name="customer.smart.support.app.GenericFileProvider"
+            android:authorities="customer.smart.support.provider"
+            android:exported="false"
+            android:enabled="true"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+        <service
+            android:name=".app.FirebaseMessageReceiver"
+            android:exported="false"
+            android:stopWithTask="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+    </application>
+
+</manifest>

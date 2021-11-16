@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "158383121271",
+    "project_id": "sbadminapp",
+    "storage_bucket": "sbadminapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:158383121271:android:48be39698edb05ed053772",
+        "android_client_info": {
+          "package_name": "customer.smart.support"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "158383121271-0da79blhljq1tvp4u0h3773aad1qq6a8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNY0v0N3q35sxY5GdX3_aWpisrofsOlk4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "158383121271-0da79blhljq1tvp4u0h3773aad1qq6a8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
