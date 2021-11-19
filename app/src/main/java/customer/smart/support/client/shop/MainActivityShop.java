@@ -299,6 +299,7 @@ public class MainActivityShop extends AppCompatActivity implements ShopClick {
         intent.putExtra(SHOPID, categoriesList.get(position).id);
         intent.putExtra(SHOPNAME, categoriesList.get(position).shop_name);
         // intent.putExtra("EXTRA_CAT", category.get(0).getTitle());
+        intent.putExtra("EXTRA_CAT", category.get(0).getTitle());
         startActivity(intent);
     }
 
