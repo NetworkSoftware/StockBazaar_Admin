@@ -13,22 +13,22 @@ import java.util.ArrayList;
 import customer.smart.support.R;
 
 
-public class BrandFilterAdapter extends RecyclerView.Adapter<BrandFilterAdapter.MyViewHolder> {
+public class CategoryFilterAdapter extends RecyclerView.Adapter<CategoryFilterAdapter.MyViewHolder> {
 
 
     private final Context context;
     private final OncategoryFilter oncategoryFilter;
-    private ArrayList<BrandFilterBean> blogArrayList;
+    private ArrayList<CategoryFilterBean> blogArrayList;
     private String selectedPosition;
 
-    public BrandFilterAdapter(Context context, ArrayList<BrandFilterBean> blogArrayList, OncategoryFilter oncategoryFilter, String selectedPosition) {
+    public CategoryFilterAdapter(Context context, ArrayList<CategoryFilterBean> blogArrayList, OncategoryFilter oncategoryFilter, String selectedPosition) {
         this.blogArrayList = blogArrayList;
         this.context = context;
         this.oncategoryFilter = oncategoryFilter;
         this.selectedPosition = selectedPosition;
     }
 
-    public void notifyData(ArrayList<BrandFilterBean> myList) {
+    public void notifyData(ArrayList<CategoryFilterBean> myList) {
         this.blogArrayList = myList;
         notifyDataSetChanged();
     }
@@ -47,9 +47,9 @@ public class BrandFilterAdapter extends RecyclerView.Adapter<BrandFilterAdapter.
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        final BrandFilterBean bean = blogArrayList.get(position);
+        final CategoryFilterBean bean = blogArrayList.get(position);
         holder.action_chip.setText(bean.category);
-        if (bean.category.equalsIgnoreCase(selectedPosition)) {
+        if (bean.id.equalsIgnoreCase(selectedPosition)) {
             holder.action_chip.setChipBackgroundColor(ColorStateList.valueOf(context.getResources().getColor(R.color.chipSelected)));
             holder.action_chip.setChipStrokeColor(ColorStateList.valueOf(context.getResources().getColor(R.color.colorPrimary)));
         } else {
@@ -60,7 +60,7 @@ public class BrandFilterAdapter extends RecyclerView.Adapter<BrandFilterAdapter.
         holder.action_chip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                oncategoryFilter.onselectBrand(bean.category);
+                oncategoryFilter.onselectCategory(bean);
             }
         });
     }

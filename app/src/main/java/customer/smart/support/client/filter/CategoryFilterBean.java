@@ -1,15 +1,15 @@
 package customer.smart.support.client.filter;
 
-public class BrandFilterBean {
+public class CategoryFilterBean {
     String category;
     String id;
 
-    public BrandFilterBean(String category, String id) {
+    public CategoryFilterBean(String category, String id) {
         this.category = category;
         this.id = id;
     }
 
-    public BrandFilterBean(String category) {
+    public CategoryFilterBean(String category) {
         this.category = category;
     }
 

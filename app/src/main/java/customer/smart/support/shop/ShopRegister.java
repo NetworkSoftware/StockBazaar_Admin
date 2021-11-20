@@ -67,8 +67,6 @@ import customer.smart.support.app.Appconfig;
 import customer.smart.support.app.GlideApp;
 import customer.smart.support.app.Imageutils;
 import de.hdodenhof.circleimageview.CircleImageView;
-
-
 import static android.widget.Toast.LENGTH_LONG;
 import static customer.smart.support.app.Appconfig.mypreference;
 

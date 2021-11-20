@@ -5,7 +5,6 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -47,33 +46,41 @@ import customer.smart.support.app.Appconfig;
 import customer.smart.support.client.category.Categories;
 import customer.smart.support.client.filter.BrandFilterAdapter;
 import customer.smart.support.client.filter.BrandFilterBean;
-import customer.smart.support.client.filter.OnBrandFilter;
+import customer.smart.support.client.filter.CategoryFilterAdapter;
+import customer.smart.support.client.filter.CategoryFilterBean;
+import customer.smart.support.client.filter.OncategoryFilter;
 import customer.smart.support.client.shop.MainActivityShop;
 
 import static customer.smart.support.app.Appconfig.CATEGORIES;
+import static customer.smart.support.app.Appconfig.SHOP;
 import static customer.smart.support.app.Appconfig.STOCK;
 
 
 public class MainActivityProduct extends AppCompatActivity implements ProductAdapter.ContactsAdapterListener,
-        OnBrandFilter {
+        OncategoryFilter {
     private static final String TAG = MainActivityProduct.class.getSimpleName();
     ProgressDialog progressDialog;
     int offset = 0;
     boolean isAlreadyLoading;
-    private RecyclerView recyclerView, recycler_brand;
+    private RecyclerView recyclerView, recycler_category, recycler_brand;
     private List<Product> contactList;
     private ProductAdapter mAdapter;
     private SearchView searchView;
     private List<Categories> category;
+    private final List<CategoryFilterBean> permanantList = new ArrayList<>();
     private String shopIdFromintent;
     private String shopnameFromintent;
-    private Map<String, String> idNameMap = new HashMap<>();
     private String selectedBrand = "ALL";
+    private String selectedCategory = "ALL";
+    CategoryFilterAdapter categoryFilterAdapter;
     BrandFilterAdapter brandFilterAdapter;
-    private ArrayList<BrandFilterBean> brandBean = new ArrayList<>();
+    private ArrayList<CategoryFilterBean> categoryFilterBeans = new ArrayList<>();
+    private ArrayList<BrandFilterBean> brandFilterBeans = new ArrayList<>();
+    private Set<String> subCategory = new HashSet<>();
     private Set<String> subBrand = new HashSet<>();
     private String selectPrice = "ALL";
-
+    private Map<String, String> idNameMap = new HashMap<>();
+    String[] SHOPNAME = new String[]{"Loading"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,12 +92,21 @@ public class MainActivityProduct extends AppCompatActivity implements ProductAda
         progressDialog.setCancelable(false);
 
         //filter
-        recycler_brand = findViewById(R.id.recycler_brand);
-        brandBean = new ArrayList<>();
-        brandFilterAdapter = new BrandFilterAdapter(MainActivityProduct.this, brandBean, this, selectedBrand);
+        recycler_category = findViewById(R.id.recycler_category);
+        categoryFilterBeans = new ArrayList<>();
+        categoryFilterAdapter = new CategoryFilterAdapter(MainActivityProduct.this, categoryFilterBeans, this, selectedCategory);
         final LinearLayoutManager addManager2 = new LinearLayoutManager(MainActivityProduct.this, LinearLayoutManager.HORIZONTAL, false);
-        recycler_brand.setLayoutManager(addManager2);
+        recycler_category.setLayoutManager(addManager2);
+        recycler_category.setAdapter(categoryFilterAdapter);
+
+        recycler_brand = findViewById(R.id.recycler_brand);
+        brandFilterBeans = new ArrayList<>();
+        brandFilterAdapter = new BrandFilterAdapter(MainActivityProduct.this, brandFilterBeans, this, selectedBrand);
+        final LinearLayoutManager addManager3 = new LinearLayoutManager(MainActivityProduct.this, LinearLayoutManager.HORIZONTAL, false);
+        recycler_brand.setLayoutManager(addManager3);
         recycler_brand.setAdapter(brandFilterAdapter);
+
+
         // toolbar fancy stuff
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.toolbar_title);
@@ -126,6 +142,7 @@ public class MainActivityProduct extends AppCompatActivity implements ProductAda
         Intent intent = getIntent();
         shopIdFromintent = intent.getStringExtra(MainActivityShop.SHOPID);
         shopnameFromintent = intent.getStringExtra(MainActivityShop.SHOPNAME);
+        getAllCategories(shopIdFromintent);
         fetchStock("");
         FloatingActionButton addStock = findViewById(R.id.addStock);
         addStock.setOnClickListener(new View.OnClickListener() {
@@ -145,16 +162,16 @@ public class MainActivityProduct extends AppCompatActivity implements ProductAda
         progressDialog.setMessage("Processing ...");
         showDialog();
         StringRequest strReq = new StringRequest(Request.Method.GET,
-                STOCK  + "?offset=" + offset * 10 + "" + "&searchkey=" + searchKey
+                STOCK + "?offset=" + offset * 10 + "" + "&searchkey=" + searchKey
                         + "&shopId=" + shopIdFromintent + "&selectPrice=ALL" +
-                        "&selectBrand=" + selectedBrand.replace("+","%2B") + "&isAdmin=true", new Response.Listener<String>() {
+                        "&selectBrand=" + selectedBrand.replace("+", "%2B") +
+                        "&category=" + selectedCategory + "&isAdmin=true", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 hideDialog();
                 Log.d("Register Response: ", response);
                 if (offset == 0) {
                     contactList = new ArrayList<>();
-                    subBrand = new HashSet<>();
                 }
                 try {
                     JSONObject jObj = new JSONObject(response);
@@ -216,18 +233,21 @@ public class MainActivityProduct extends AppCompatActivity implements ProductAda
                                 }
                             }
                         }
+                        if (brandFilterBeans.size() <= 0) {
+                            brandFilterBeans = new ArrayList<>();
+                            brandFilterBeans.add(new BrandFilterBean("ALL"));
+                            for (String e : subBrand) {
+                                brandFilterBeans.add(new BrandFilterBean(e));
+                            }
+                            brandFilterAdapter.notifyData(brandFilterBeans);
+                            selectPrice = "ALL";
+                            getSupportActionBar().setSubtitle(selectPrice);
+                            brandFilterAdapter.notifyData(selectPrice);
+                        }
+
                         mAdapter.notifyData(contactList);
                         getSupportActionBar().setSubtitle(contactList.size() + "  Nos");
 
-                        if (brandBean.size() <= 0) {
-                            brandBean = new ArrayList<>();
-                            brandBean.add(new BrandFilterBean("ALL"));
-                            for (String e : subBrand) {
-                                brandBean.add(new BrandFilterBean(e));
-                            }
-                            brandFilterAdapter.notifyData(brandBean);
-
-                        }
                     } else {
                         Toast.makeText(getApplication(), jObj.getString("message"), Toast.LENGTH_SHORT).show();
                     }
@@ -391,6 +411,7 @@ public class MainActivityProduct extends AppCompatActivity implements ProductAda
                     if (success == 1) {
                         JSONArray jsonArray = jObj.getJSONArray("data");
                         category = new ArrayList<>();
+                        subCategory = new HashSet<>();
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             Categories categories = new Categories();
@@ -399,6 +420,7 @@ public class MainActivityProduct extends AppCompatActivity implements ProductAda
                             categories.setImage(jsonObject.getString("image"));
                             category.add(categories);
                         }
+
                     } else {
                         Toast.makeText(MainActivityProduct.this, jObj.getString("message"), Toast.LENGTH_SHORT).show();
                     }
@@ -428,9 +450,73 @@ public class MainActivityProduct extends AppCompatActivity implements ProductAda
     }
 
     @Override
-    public void onSltBrand(String sltBrand) {
-        selectedBrand = sltBrand;
+    public void onselectBrand(String brand) {
+        selectedBrand = brand;
         brandFilterAdapter.notifyData(selectedBrand);
+        offset = 0;
+        fetchStock("");
+    }
+
+    private void getAllCategories(String shopname) {
+        String tag_string_req = "req_register";
+        StringRequest strReq = new StringRequest(Request.Method.GET,
+                SHOP + "?shopname=" + shopname, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    int success = jObj.getInt("success");
+
+                    if (success == 1) {
+                        JSONArray jsonArray = jObj.getJSONArray("category");
+                        idNameMap = new HashMap<>();
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            idNameMap.put(jsonObject.getString("id"),
+                                    jsonObject.getString("title"));
+                        }
+                        categoryFilterBeans = new ArrayList<>();
+                        JSONArray dataArray = jObj.getJSONArray("data");
+                        for (int l = 0; l < dataArray.length(); l++) {
+                            JSONObject jsonObject = dataArray.getJSONObject(l);
+                            String[] selectedIds = jsonObject.getString("category").split(",");
+                            StringBuilder selectedNames = new StringBuilder();
+                            categoryFilterBeans.add(new CategoryFilterBean("ALL","ALL"));
+                            for (int i = 0; i < selectedIds.length; i++) {
+                                categoryFilterBeans.add(new CategoryFilterBean(idNameMap.get(selectedIds[i]),
+                                        selectedIds[i]));
+                                selectedNames.append(idNameMap.get(selectedIds[i]));
+                                if (i != selectedIds.length - 1) {
+                                    selectedNames.append(",");
+                                }
+                            }
+                            categoryFilterAdapter = new CategoryFilterAdapter(MainActivityProduct.this, categoryFilterBeans, MainActivityProduct.this, selectedCategory);
+                            recycler_category.setAdapter(categoryFilterAdapter);
+                        }
+                    }
+
+                } catch (JSONException e) {
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        }) {
+            protected Map<String, String> getParams() {
+                HashMap localHashMap = new HashMap();
+                return localHashMap;
+            }
+        };
+        strReq.setRetryPolicy(Appconfig.getPolicy());
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+    }
+
+    @Override
+    public void onselectCategory(CategoryFilterBean categoryFilterBean) {
+        selectedCategory = categoryFilterBean.getId();
+        categoryFilterAdapter.notifyData(selectedCategory);
         offset = 0;
         fetchStock("");
     }
