@@ -10,7 +10,7 @@ public class BulkPriceBeen implements Serializable {
     public BulkPriceBeen() {
     }
 
-    public BulkPriceBeen(String price ,String quantity) {
+    public BulkPriceBeen(String quantity,String price) {
         this.quantity = quantity;
         this.qty_price =price;
     }

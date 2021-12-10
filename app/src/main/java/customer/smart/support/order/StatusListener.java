@@ -7,4 +7,5 @@ public interface StatusListener {
     void onCallClick(String phone);
     void onCancelClick(String id);
     void onItemClick(Order order);
+    void onWallet(Order order);
 }

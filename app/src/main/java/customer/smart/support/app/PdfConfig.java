@@ -1,25 +1,34 @@
 package customer.smart.support.app;
 
+import static customer.smart.support.app.PdfConfigInvoice.createTextImage;
+import static customer.smart.support.app.PdfConfigInvoice.createTextRight;
+
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import customer.smart.support.R;
 import customer.smart.support.address.AddressBean;
 
 
 public class PdfConfig {
 
+    private static final BaseColor whiteBase = new BaseColor(255, 255, 255);
     private static final BaseColor greenBase = new BaseColor(14, 157, 31);
     private static BaseFont urName;
     private static final Font catNormalFont = new Font(urName, 13, Font.BOLD);
@@ -52,7 +61,22 @@ public class PdfConfig {
         PdfPTable table1 = new PdfPTable(1);
         table1.setWidthPercentage(100);
         table1.setWidths(new float[]{1});
-        table1.addCell(createTextCellTable("FROM" + "\n", catNormalFontTitel));
+
+        PdfPTable table01 = new PdfPTable(3);
+        table01.setWidthPercentage(100);
+        table01.setWidths(new int[]{1, 1,1});
+        table01.addCell(createTextCenterWithLeft("" + "\n", catNormalFontTitel));
+        table01.addCell(createTextLeft("FROM" + "\n", catNormalFontTitel));
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
+                R.drawable.sb_pdf);
+        icon.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        Image img = Image.getInstance(byteArray);
+        img.scaleAbsolute(100, 100);
+        table01.addCell(createTextImage(img));
+        table01.addCell(createTextRight("", catNormalFont));
+        table1.addCell(createTable(table01, 0, whiteBase, false));
         table1.addCell(createTextCenter("\t\t" + addressBean.getSelleraddress(), catNormalFont));
         table1.addCell(createTextCenter("\n", catNormalFont));
         table1.addCell(createTextBorder("TO" + "\n", catNormalFontTitel));
@@ -78,6 +102,21 @@ public class PdfConfig {
         table1.addCell(table11);
         table1.setKeepTogether(true);
         document.add(table1);
+    }
+
+
+    public static PdfPCell createTable(PdfPTable pTable, int padding, BaseColor baseColor, boolean isBorder) throws DocumentException, IOException {
+
+        PdfPCell cell = new PdfPCell();
+        cell.addElement(pTable);
+        cell.setPaddingTop(0);
+        cell.setPaddingBottom(0);
+        cell.setPaddingLeft(padding);
+        cell.setVerticalAlignment(Element.ALIGN_CENTER);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(Rectangle.NO_BORDER);
+        cell.setBackgroundColor(baseColor);
+        return cell;
     }
 
     public static PdfPCell createTextCellTable(String text, Font font) throws DocumentException, IOException {
@@ -108,12 +147,31 @@ public class PdfConfig {
         Paragraph p = new Paragraph(text, font);
         p.setAlignment(Element.ALIGN_CENTER);
         cell.addElement(p);
+        cell.setPadding(5);
         cell.setVerticalAlignment(Element.ALIGN_CENTER);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        cell.setBorder(Rectangle.LEFT);
+        cell.setBorder(Rectangle.LEFT | Rectangle.TOP);
         return cell;
     }
-
+    public static PdfPCell createTextLeft(String text, Font font) throws DocumentException, IOException {
+        PdfPCell cell = new PdfPCell();
+        Paragraph p = new Paragraph(text, font);
+        p.setAlignment(Element.ALIGN_CENTER);
+        cell.addElement(p);
+        cell.setPadding(5);
+        cell.setVerticalAlignment(Element.ALIGN_CENTER);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(Rectangle.TOP);
+        return cell;
+    }
+    public static PdfPCell createTextImage(Image image) throws DocumentException, IOException {
+        PdfPCell cell = new PdfPCell();
+        cell.addElement(image);
+        cell.setUseAscender(true);
+        cell.setPaddingLeft(10);
+        cell.setBorder(Rectangle.TOP | Rectangle.RIGHT);
+        return cell;
+    }
     public static PdfPCell createTextCenterWithRight(String text, Font font) throws DocumentException, IOException {
         PdfPCell cell = new PdfPCell();
         Paragraph p = new Paragraph(text, font);

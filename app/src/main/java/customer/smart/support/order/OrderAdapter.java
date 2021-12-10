@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +35,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
     private List<Order> orderListFiltered;
     private final ContactsAdapterListener listener;
 
-    public OrderAdapter(Context context, List<Order> orderList, ContactsAdapterListener listener, StatusListener statusListener) {
+    public OrderAdapter(Context context, List<Order> orderList, ContactsAdapterListener listener,
+                        StatusListener statusListener) {
         this.context = context;
         this.listener = listener;
         this.orderList = orderList;
@@ -57,6 +60,14 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
         holder.status.setText(order.getStatus());
         holder.phone.setText(order.getPhone());
         holder.name.setText(order.getName());
+        holder.cashback.setText(order.getCashback());
+        if (order.getWallet().equalsIgnoreCase("0")
+                || (order.getWallet().equalsIgnoreCase(""))) {
+            holder.walletAmt.setText("0");
+        } else {
+            holder.walletAmt.setText(order.getWallet());
+        }
+
         holder.orderedOn.setText(Appconfig.convertTimeToLocal(order.createdOn));
         if (order.getStatus().equalsIgnoreCase("ordered")) {
             holder.deliveredBtn.setVisibility(View.VISIBLE);
@@ -108,6 +119,12 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
                 statusListener.onItemClick(order);
             }
         });
+        holder.wallet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                statusListener.onWallet(order);
+            }
+        });
     }
 
     @Override
@@ -134,7 +151,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
                             filteredList.add(row);
                         } else if (row.getPhone().contains(charString.toLowerCase())) {
                             filteredList.add(row);
-                        }else if (row.getId().contains(charString.toLowerCase())) {
+                        } else if (row.getId().contains(charString.toLowerCase())) {
                             filteredList.add(row);
 
                         }
@@ -167,15 +184,15 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView name, price, status, quantity, phone, orderedOn;
-        ImageView deliveredBtn, whatsapp, call, cancalOrder;
+        public TextView name, price, status, quantity, phone, orderedOn, cashback, walletAmt;
+        MaterialButton deliveredBtn, whatsapp, call, cancalOrder, wallet;
         LinearLayout valueLinear, hintLinear;
 
         public MyViewHolder(View view) {
             super(view);
             name = view.findViewById(R.id.name);
             orderedOn = view.findViewById(R.id.orderedOn);
-
+            cashback = view.findViewById(R.id.cashback);
             price = view.findViewById(R.id.price);
             name = view.findViewById(R.id.name);
             phone = view.findViewById(R.id.phone);
@@ -186,7 +203,9 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
             cancalOrder = view.findViewById(R.id.cancalOrder);
             call = view.findViewById(R.id.call);
             valueLinear = view.findViewById(R.id.valueLinear);
+            wallet = view.findViewById(R.id.wallet);
             hintLinear = view.findViewById(R.id.hintLinear);
+            walletAmt = view.findViewById(R.id.walletAmt);
         }
     }
 }

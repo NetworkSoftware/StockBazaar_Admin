@@ -69,6 +69,7 @@ import java.util.List;
 import java.util.Map;
 
 import customer.smart.support.R;
+import customer.smart.support.StartActivity;
 import customer.smart.support.app.AndroidMultiPartEntity;
 import customer.smart.support.app.AppController;
 import customer.smart.support.app.Appconfig;
@@ -76,24 +77,26 @@ import customer.smart.support.app.Imageutils;
 import customer.smart.support.attachment.ActivityMediaOnline;
 import customer.smart.support.client.bulkPrice.BulkPriceAdapter;
 import customer.smart.support.client.bulkPrice.BulkPriceBeen;
+import customer.smart.support.shop.Shop;
 
 import static customer.smart.support.app.Appconfig.SHOP;
 import static customer.smart.support.app.Appconfig.STOCK;
 import static customer.smart.support.app.Appconfig.mypreference;
 
-public class ProductRegister extends AppCompatActivity implements Imageutils.ImageAttachmentListener, ImageClick {
+public class ProductRegister extends AppCompatActivity
+        implements Imageutils.ImageAttachmentListener, ImageClick {
 
     private final String[] STOCKUPDATE = new String[]{
             "In Stock", "Currently Unavailable",
     };
-    public MaterialButton addBulkPrice;
+
     String[] SHOPNAME = new String[]{"Loading"};
     String[] BRAND = new String[]{"Loading"};
     String[] CATEGORY = new String[]{"Loading"};
-    TextInputLayout brandTxt, modelTxt, priceTxt,
-            descriptionTxt, incategoryTxt;
-    TextInputEditText model, price,
-            description, selectshop, incategory;
+    TextInputLayout brandTxt, modelTxt,
+            descriptionTxt;
+    TextInputEditText model,
+            description, selectshop;
     AddImageAdapter maddImageAdapter;
     MaterialBetterSpinner stock_update;
     MaterialBetterSpinner brand;
@@ -104,7 +107,6 @@ public class ProductRegister extends AppCompatActivity implements Imageutils.Ima
     MaterialBetterSpinner selectcategories;
     SharedPreferences sharedpreferences;
     ArrayList<BulkPriceBeen> bulkPriceBeens = new ArrayList<>();
-    BulkPriceAdapter bulkPriceAdapter;
     private Map<String, String> nameIdMap = new HashMap<>();
     private Map<String, String> idNameMap = new HashMap<>();
     private Map<String, String> idBrandMap = new HashMap<>();
@@ -115,8 +117,13 @@ public class ProductRegister extends AppCompatActivity implements Imageutils.Ima
     private Product product = null;
     private String shopname = "STOCK BAZAAR";
     private String shopid = "0";
-    private RecyclerView bulkpricelist;
     CheckBox isNotify;
+    TextView qtyOne;
+    TextInputEditText price;
+    TextView qtyThree;
+    TextInputEditText priceThree;
+    TextView qtyFive;
+    TextInputEditText priceFive;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -127,8 +134,12 @@ public class ProductRegister extends AppCompatActivity implements Imageutils.Ima
                 Context.MODE_PRIVATE);
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
-
+        qtyOne = findViewById(R.id.qtyOne);
+        qtyThree = findViewById(R.id.qtyThree);
+        priceThree = findViewById(R.id.priceThree);
+        priceFive = findViewById(R.id.priceFive);
         isNotify = findViewById(R.id.isNotify);
+        qtyFive = findViewById(R.id.qtyFive);
         itemsAdd = findViewById(R.id.itemsAdd);
         ImageView image_wallpaper = findViewById(R.id.image_wallpaper);
         image_wallpaper.setOnClickListener(new View.OnClickListener() {
@@ -151,15 +162,11 @@ public class ProductRegister extends AppCompatActivity implements Imageutils.Ima
         selectshop = findViewById(R.id.selectShop);
         brandTxt = findViewById(R.id.brandTxt);
         modelTxt = findViewById(R.id.modelTxt);
-        priceTxt = findViewById(R.id.priceTxt);
         descriptionTxt = findViewById(R.id.descriptionTxt);
         brand = findViewById(R.id.brand);
         model = findViewById(R.id.model);
         price = findViewById(R.id.price);
         description = findViewById(R.id.description);
-        incategory = findViewById(R.id.incategory);
-        incategoryTxt = findViewById(R.id.incategoryTxt);
-
 
         String type = getIntent().getStringExtra("SHOPNAME");
         shopid = getIntent().getStringExtra("SHOPID");
@@ -174,14 +181,6 @@ public class ProductRegister extends AppCompatActivity implements Imageutils.Ima
         selectcategories.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                incategoryTxt.setVisibility(View.GONE);
-                if (selectcategories.getText().toString().equalsIgnoreCase(("Accessories")) ||
-                        (selectcategories.getText().toString().equalsIgnoreCase(("Spare")))) {
-                    incategoryTxt.setVisibility(View.VISIBLE);
-                } else {
-                    incategoryTxt.setVisibility(View.GONE);
-                }
-
                 BRAND = idBrandMap.get(SHOPNAME[0]).split(",");
                 ArrayAdapter<String> brandAdapter = new ArrayAdapter<String>(ProductRegister.this,
                         android.R.layout.simple_dropdown_item_1line, BRAND);
@@ -201,31 +200,8 @@ public class ProductRegister extends AppCompatActivity implements Imageutils.Ima
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             }
         });
-        addBulkPrice = findViewById(R.id.addPrice);
-        bulkpricelist = findViewById(R.id.pricelist);
+
         bulkPriceBeens = new ArrayList<>();
-        addBulkPrice.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showBulkPriceBottom();
-            }
-        });
-        bulkPriceAdapter = new BulkPriceAdapter(this, bulkPriceBeens, new ImageClick() {
-            @Override
-            public void onImageClick(int position) {
-
-            }
-
-            @Override
-            public void onDeleteClick(int position) {
-                bulkPriceBeens.remove(position);
-                bulkPriceAdapter.notifyData(bulkPriceBeens);
-            }
-        }, true);
-        final LinearLayoutManager sizeManager = new LinearLayoutManager(
-                this, LinearLayoutManager.HORIZONTAL, false);
-        bulkpricelist.setLayoutManager(sizeManager);
-        bulkpricelist.setAdapter(bulkPriceAdapter);
         submit = findViewById(R.id.submit);
         submit.setText("SUBMIT");
         submit.setOnClickListener(new View.OnClickListener() {
@@ -235,6 +211,14 @@ public class ProductRegister extends AppCompatActivity implements Imageutils.Ima
                     brand.setError("Select the Brand");
                 } else if (price.getText().toString().length() <= 0) {
                     price.setError("Enter the Price");
+                } else if (selectshop.getText().toString().length() <= 0) {
+                    selectshop.setError("Enter the Shop Name");
+                } else if (selectcategories.getText().toString().length() <= 0) {
+                    selectcategories.setError("Enter the Category");
+                } else if (model.getText().toString().length() <= 0) {
+                    model.setError("Enter the Model");
+                } else if (description.getText().toString().length() <= 0) {
+                    description.setError("Enter the Description");
                 } else if (stock_update.getText().toString().length() <= 0) {
                     stock_update.setError("Select the Sold or Not");
                 } else if (price.getText().toString().length() <= 0) {
@@ -244,11 +228,29 @@ public class ProductRegister extends AppCompatActivity implements Imageutils.Ima
                 } else if (samplesList.size() <= 0) {
                     Toast.makeText(getApplicationContext(), "Upload the Images!", Toast.LENGTH_SHORT).show();
                 } else {
+                    bulkPriceBeens = new ArrayList<>();
+                    if (priceThree.getText().length() > 0) {
+                        bulkPriceBeens.add(new BulkPriceBeen("3", priceThree.getText().toString()));
+                    }
+                    if (priceFive.getText().length() > 0) {
+                        bulkPriceBeens.add(new BulkPriceBeen("5", priceFive.getText().toString()));
+                    }
+                    if (bulkPriceBeens.size() > 0) {
+                        bulkPriceBeens.add(new BulkPriceBeen("1", price.getText().toString()));
+                    }
                     stockRegister();
+
                 }
+
             }
         });
 
+        if (sharedpreferences.getString(
+                "role", "admin").equalsIgnoreCase("sadmin")) {
+            isNotify.setVisibility(View.VISIBLE);
+        } else {
+            isNotify.setVisibility(View.GONE);
+        }
 
         try {
             product = (Product) getIntent().getSerializableExtra("data");
@@ -265,7 +267,6 @@ public class ProductRegister extends AppCompatActivity implements Imageutils.Ima
 
             selectcategories.setText(product.categoryName);
             stock_update.setText(product.stock_update);
-            incategory.setText(product.incategory);
             imageUrl = product.image;
             if (imageUrl == null) {
                 imageUrl = "";
@@ -293,60 +294,23 @@ public class ProductRegister extends AppCompatActivity implements Imageutils.Ima
             if (bulkPriceBeens == null) {
                 bulkPriceBeens = new ArrayList<>();
             }
-            bulkPriceAdapter.notifyData(bulkPriceBeens);
+
+            for (int i = 0; i < bulkPriceBeens.size(); i++) {
+                BulkPriceBeen bulkPriceBeen = bulkPriceBeens.get(i);
+                int qty = Integer.parseInt(bulkPriceBeen.getQuantity());
+                if (qty >= 5) {
+                    priceFive.setText(bulkPriceBeen.getQty_price());
+                } else if (qty > 1) {
+                    priceThree.setText(bulkPriceBeen.getQty_price());
+                } else if (qty == 1) {
+                    price.setText(bulkPriceBeen.getQty_price());
+                }
+            }
 
         } catch (Exception e) {
             Log.e("xxxxxxxxxxx", e.toString());
         }
         getAllCategories(shopid);
-    }
-
-    private void showBulkPriceBottom() {
-        final RoundedBottomSheetDialog mBottomSheetDialog = new RoundedBottomSheetDialog(ProductRegister.this);
-        LayoutInflater inflater = ProductRegister.this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.bottom_bulkprice_layout, null);
-
-        final TextInputLayout qtyTxt = dialogView.findViewById(R.id.qtyLayoutTxt);
-        final TextInputEditText quantity = dialogView.findViewById(R.id.qty);
-        final TextInputEditText qty_price = dialogView.findViewById(R.id.qty_price);
-
-        final Button submit = dialogView.findViewById(R.id.submit);
-        qtyTxt.setVisibility(View.VISIBLE);
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (quantity.getText().toString().length() <= 0) {
-                    Toast.makeText(getApplicationContext(), "Enter Valid Size", Toast.LENGTH_LONG).show();
-                    return;
-                } else if (qty_price.getText().toString().length() <= 0) {
-                    Toast.makeText(getApplicationContext(), "Enter Valid Price", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                bulkPriceBeens.add(new BulkPriceBeen(qty_price.getText().toString(), quantity.getText().toString()));
-                bulkPriceAdapter.notifyData(bulkPriceBeens);
-                mBottomSheetDialog.cancel();
-            }
-        });
-        quantity.requestFocus();
-        qty_price.requestFocus();
-
-        mBottomSheetDialog.setContentView(dialogView);
-        mBottomSheetDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        mBottomSheetDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(final DialogInterface dialog) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        RoundedBottomSheetDialog d = (RoundedBottomSheetDialog) dialog;
-                        FrameLayout bottomSheet = d.findViewById(R.id.design_bottom_sheet);
-                        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                    }
-                }, 0);
-            }
-        });
-        mBottomSheetDialog.show();
     }
 
     private void stockRegister() {
@@ -369,7 +333,7 @@ public class ProductRegister extends AppCompatActivity implements Imageutils.Ima
                     boolean success = jsonObject.getBoolean("success");
                     String msg = jsonObject.getString("message");
                     if (success) {
-                        finish();
+                        onBackPressed();
                     }
                     Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
@@ -408,7 +372,7 @@ public class ProductRegister extends AppCompatActivity implements Imageutils.Ima
                 }
                 localHashMap.put("category", selectedIds.toString());
                 localHashMap.put("stockupdate", stock_update.getText().toString());
-                localHashMap.put("incategory", incategory.getText().toString());
+                localHashMap.put("mobile", sharedpreferences.getString(Appconfig.AdminPhone, ""));
                 localHashMap.put("image", new Gson().toJson(samplesList));
                 localHashMap.put("isNoti", isNotify.isChecked() ? "true" : "false");
                 return localHashMap;
@@ -498,7 +462,7 @@ public class ProductRegister extends AppCompatActivity implements Imageutils.Ima
                     boolean success = jsonObject.getBoolean("success");
                     String msg = jsonObject.getString("message");
                     if (success) {
-                        finish();
+                        onBackPressed();
                     }
                     Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
@@ -575,6 +539,11 @@ public class ProductRegister extends AppCompatActivity implements Imageutils.Ima
         maddImageAdapter.notifyData(samplesList);
     }
 
+    @Override
+    public void itemEditClick(int position) {
+
+    }
+
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
@@ -606,7 +575,7 @@ public class ProductRegister extends AppCompatActivity implements Imageutils.Ima
                 diaBox.show();
                 return true;
             case android.R.id.home:
-                finish();
+                onBackPressed();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -740,6 +709,17 @@ public class ProductRegister extends AppCompatActivity implements Imageutils.Ima
 
     }
 
+    @Override
+    public void onBackPressed() {
+        if (getIntent().getStringExtra("from") != null
+                && getIntent().getStringExtra("from").equalsIgnoreCase("admin")) {
+            Intent intent = new Intent(ProductRegister.this, StartActivity.class);
+            startActivity(intent);
+            finishAffinity();
+        } else {
+            super.onBackPressed();
+        }
+    }
 }
 
 

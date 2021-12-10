@@ -19,6 +19,10 @@ public class Order implements Serializable {
     String phone;
     String pincode;
     String specialCost;
+    String user;
+    String cashback;
+    String wallet;
+    String tokenValue;
 
     ArrayList<CartItems> productBeans;
 
@@ -167,5 +171,37 @@ public class Order implements Serializable {
 
     public void setSpecialCost(String specialCost) {
         this.specialCost = specialCost;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getCashback() {
+        return cashback;
+    }
+
+    public void setCashback(String cashback) {
+        this.cashback = cashback;
+    }
+
+    public String getWallet() {
+        return wallet;
+    }
+
+    public void setWallet(String wallet) {
+        this.wallet = wallet;
+    }
+
+    public String getTokenValue() {
+        return tokenValue;
+    }
+
+    public void setTokenValue(String tokenValue) {
+        this.tokenValue = tokenValue;
     }
 }

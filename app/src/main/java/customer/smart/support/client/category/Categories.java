@@ -72,4 +72,5 @@ public class Categories implements Serializable {
     public void setTag(String tag) {
         this.tag = tag;
     }
+
 }

@@ -63,6 +63,13 @@
             android:layout_height="wrap_content"
             android:textSize="15dp"
             android:textStyle="normal" />
+        <TextView
+            android:id="@+id/cashback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15dp"
+            android:textStyle="normal" />
+
 
     </LinearLayout>
 
@@ -81,7 +88,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:src="@drawable/ic_edit_black_24dp"
-            android:tint="@android:color/holo_red_dark" />
+            app:tint="@android:color/holo_red_dark" />
 
         <ImageView
             android:id="@+id/deleteImg"
@@ -91,7 +98,15 @@
             android:visibility="gone"
             android:layout_gravity="center"
             android:src="@drawable/ic_delete_black_24dp"
-            android:tint="@android:color/holo_red_dark" />
+            app:tint="@android:color/holo_red_dark" />
+        <ImageView
+            android:id="@+id/wallet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_baseline_account_balance_wallet_24"
+            app:tint="@android:color/holo_red_dark" />
 
     </LinearLayout>
         </LinearLayout>

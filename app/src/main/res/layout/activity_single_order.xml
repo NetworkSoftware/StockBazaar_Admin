@@ -44,6 +44,7 @@
                     android:textColor="@color/black"
                     android:textSize="18dp" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -73,6 +74,7 @@
                     android:textColor="@color/black"
                     android:textSize="18dp" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -283,6 +285,37 @@
                     android:textSize="18dp" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/sans"
+                    android:gravity="left"
+                    android:text="Cashback: "
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/cashback"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="right"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/sans"
+                    android:gravity="left"
+                    android:text="Rs. 856.85"
+                    android:textColor="@color/black"
+                    android:textSize="18dp" />
+            </LinearLayout>
+
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/myorders_list"
                 android:layout_width="match_parent"
@@ -299,6 +332,37 @@
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/sans"
+                            android:gravity="left"
+                            android:text="Wallet Amt : "
+                            android:textSize="15dp" />
+
+                        <TextView
+                            android:id="@+id/wallet"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="right"
+                            android:layout_marginLeft="5dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/sans"
+                            android:gravity="left"
+                            android:text="Rs. 856.85"
+                            android:textColor="@color/black"
+                            android:textSize="18dp" />
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -389,6 +453,7 @@
                             android:textColor="@color/black"
                             android:textSize="18dp" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -418,6 +483,7 @@
                             android:textColor="@color/black"
                             android:textSize="18dp" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

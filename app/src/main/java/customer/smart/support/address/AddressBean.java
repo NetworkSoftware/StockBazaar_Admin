@@ -7,9 +7,9 @@ public class AddressBean implements Serializable {
     String id;
     String selleraddress;
     String buyeraddress;
-String idtext;
-String cod;
-String payment;
+    String idtext;
+    String cod;
+    String payment;
 
     public String getPayment() {
         return payment;

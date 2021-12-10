@@ -23,7 +23,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/$PROJECT_DIR$/../../Android/Sdk/icons/material/materialicons/search/baseline_search_24.xml" />
+                                      <entry key="url" value="file:/$PROJECT_DIR$/../../../Network%20C/AppData/Local/Android/Sdk/icons/material/materialicons/check/baseline_check_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -33,7 +33,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_baseline_search_24" />
+                            <entry key="outputName" value="ic_baseline_check_24" />
                             <entry key="sourceFile" value="C:\Users\gopal" />
                           </map>
                         </option>

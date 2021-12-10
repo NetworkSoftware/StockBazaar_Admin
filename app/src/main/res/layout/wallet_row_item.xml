@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:layout_marginTop="5dp"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/sans"
+            android:text="In"
+            android:textColor="@color/black"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/sans"
+            android:text=""
+            android:layout_marginTop="5dp"
+            android:textColor="@color/gray"
+            android:textSize="13dp" />
+
+        <TextView
+            android:id="@+id/dated"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/sans"
+            android:text="25/06/2021"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/gray"
+            android:textSize="13dp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginRight="10dp"
+        android:layout_weight="1"
+        android:fontFamily="@font/sans"
+        android:gravity="right"
+        android:text="RS. 2500"
+        android:textColor="@color/black"
+        android:textSize="16dp" />
+
+</LinearLayout>
+

@@ -30,6 +30,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -60,6 +61,7 @@ import java.util.Set;
 import customer.smart.support.R;
 import customer.smart.support.app.AppController;
 import customer.smart.support.app.Appconfig;
+import customer.smart.support.client.wallet.WalletActivity;
 import customer.smart.support.stock.MyDividerItemDecoration;
 
 import static customer.smart.support.app.Appconfig.mypreference;
@@ -84,6 +86,9 @@ public class MainActivity extends AppCompatActivity implements OnShopClick,
     private RecyclerView pincodeList;
     private FilteredAdapater pincodeAdapter;
 
+    int offset = 0;
+    boolean isAlreadyLoading;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements OnShopClick,
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
+
 
         final FloatingActionButton addShop = findViewById(R.id.addShop);
         final FloatingActionButton addFilter = findViewById(R.id.addFilter);
@@ -109,20 +115,14 @@ public class MainActivity extends AppCompatActivity implements OnShopClick,
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(shopAdapter);
 
-            String data = sharedpreferences.getString("data", "");
+        String data = sharedpreferences.getString("data", "");
 
-            if (data.contains("addshop")) {
-                addShop.setVisibility(View.VISIBLE);
-            } else {
-                addShop.setVisibility(View.GONE);
-            }
-
-       /* if (sharedpreferences.getString("role", "admin").equalsIgnoreCase("sadmin")) {
+        if (data.contains("addshop")) {
             addShop.setVisibility(View.VISIBLE);
         } else {
             addShop.setVisibility(View.GONE);
         }
-*/
+
         addShop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -324,6 +324,22 @@ public class MainActivity extends AppCompatActivity implements OnShopClick,
             }
         });
 
+        NestedScrollView nestedScrollview = findViewById(R.id.nestedScrollview);
+        nestedScrollview.setNestedScrollingEnabled(false);
+        nestedScrollview.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) { //scrollY is the sliding distance
+                if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
+                    if (!isAlreadyLoading) {
+                        if (searchView != null && !searchView.isIconified() && searchView.getQuery().toString().length() > 0) {
+                            getAllStaff(searchView.getQuery().toString());
+                        } else {
+                            getAllStaff("");
+                        }
+                    }
+                }
+            }
+        });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -361,7 +377,7 @@ public class MainActivity extends AppCompatActivity implements OnShopClick,
     }
 
 
-    private void getAllStaff() {
+    private void getAllStaff(final String searchKey) {
         String tag_string_req = "req_register";
         progressDialog.setMessage("Fetching ...");
         showDialog();
@@ -376,10 +392,12 @@ public class MainActivity extends AppCompatActivity implements OnShopClick,
                 try {
                     JSONObject jObj = new JSONObject(response);
                     int success = jObj.getInt("success");
-
-                    if (success == 1) {
-                        JSONArray jsonArray = jObj.getJSONArray("shops");
+                    if (offset == 0) {
                         shopList = new ArrayList<>();
+                    }
+                    if (success == 1) {
+                        offset = offset + 1;
+                        JSONArray jsonArray = jObj.getJSONArray("shops");
                         Set<String> districts = new HashSet<>();
                         Set<String> pincodes = new HashSet<>();
                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -398,6 +416,7 @@ public class MainActivity extends AppCompatActivity implements OnShopClick,
                             shop.setPincode(jsonObject.getString("pincode"));
                             shop.setbusinesstype(jsonObject.getString("businesstype"));
                             shop.setType(jsonObject.getString("isDealer"));
+                            shop.setWalletAmt(jsonObject.getString("walletAmt"));
                             shopList.add(shop);
                             if (shop.address.length() > 0) {
                                 districts.add(shop.address);
@@ -443,6 +462,8 @@ public class MainActivity extends AppCompatActivity implements OnShopClick,
             protected Map<String, String> getParams() {
                 HashMap localHashMap = new HashMap();
                 localHashMap.put("isAdmin", "true");
+                localHashMap.put("searchkey", searchKey);
+                localHashMap.put("offset",(offset * 10)+"");
                 return localHashMap;
             }
         };
@@ -452,7 +473,8 @@ public class MainActivity extends AppCompatActivity implements OnShopClick,
     @Override
     protected void onStart() {
         super.onStart();
-        getAllStaff();
+        offset = 0;
+        getAllStaff("");
     }
 
     @Override
@@ -466,6 +488,14 @@ public class MainActivity extends AppCompatActivity implements OnShopClick,
         Intent intent = new Intent(MainActivity.this, ShopUpdate.class);
         intent.putExtra("object", shop);
         startActivity(intent);
+    }
+
+    @Override
+    public void onWalletClick(Shop position) {
+        Intent io = new Intent(MainActivity.this, WalletActivity.class);
+        io.putExtra("id", position.getId());
+        io.putExtra("name", position.getName());
+        startActivity(io);
     }
 
     @Override
@@ -493,7 +523,8 @@ public class MainActivity extends AppCompatActivity implements OnShopClick,
                     JSONObject jObj = new JSONObject(response);
                     int success = jObj.getInt("success");
                     if (success == 1) {
-                        getAllStaff();
+                        offset = 0;
+                        getAllStaff("");
                     }
                     Toast.makeText(MainActivity.this, jObj.getString("message"), Toast.LENGTH_SHORT).show();
                     shopAdapter.notifyData(shopList);
@@ -570,23 +601,45 @@ public class MainActivity extends AppCompatActivity implements OnShopClick,
         searchView.setSearchableInfo(searchManager
                 .getSearchableInfo(getComponentName()));
         searchView.setMaxWidth(Integer.MAX_VALUE);
-
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                offset = 0;
+                getAllStaff("");
+                return false;
+            }
+        });
         // listening to search query text change
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // filter recycler view when query submitted
-                shopAdapter.getFilter().filter(query);
+                //     mAdapter.getFilter().filter(query);
+                if (query.length() > 3) {
+                    offset = 0;
+                    getAllStaff(query);
+                } else if (query.length() == 0) {
+                    getAllStaff("");
+                }
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String query) {
                 // filter recycler view when text is changed
-                shopAdapter.getFilter().filter(query);
+                // mAdapter.getFilter().filter(query);
+                if (query.length() > 3) {
+                    offset = 0;
+                    getAllStaff(query);
+                } else if (query.length() == 0) {
+                    getAllStaff("");
+                }
                 return false;
             }
         });
+        if (getIntent() != null && getIntent().getBooleanExtra("isSearch", false)) {
+            searchView.setIconified(false);
+        }
         return true;
     }
 
@@ -612,6 +665,7 @@ public class MainActivity extends AppCompatActivity implements OnShopClick,
     public void onBackPressed() {
         // close search view on back button pressed
         if (!searchView.isIconified()) {
+            offset = 0;
             searchView.setIconified(true);
             return;
         }

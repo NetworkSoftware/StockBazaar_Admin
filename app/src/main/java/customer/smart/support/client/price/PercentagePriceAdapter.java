@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -54,6 +55,8 @@ public class PercentagePriceAdapter extends RecyclerView.Adapter<PercentagePrice
         PercentagePriceBeen price = percentagePriceBeens.get(position);
         holder.priceRange.setText(price.getPriceRange());
         holder.pricePercentage.setText(price.getPrice_percentage());
+        holder.threeQty.setText(price.getPriceThree());
+        holder.fiveQty.setText(price.getPriceFive());
 
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,13 +64,8 @@ public class PercentagePriceAdapter extends RecyclerView.Adapter<PercentagePrice
                 imageClick.onDeleteClick(position);
             }
         });
-        if (isEdit) {
-            holder.delete.setVisibility(View.VISIBLE);
-        } else {
-            holder.delete.setVisibility(View.GONE);
-        }
 
-        if (!isEdit && selectedPosition == position) {
+   /*     if (!isEdit && selectedPosition == position) {
             holder.sizeLinear.setBackgroundResource(R.drawable.rectangle_box_select);
             holder.priceRange.setTextColor(Color.WHITE);
             holder.pricePercentage.setTextColor(Color.WHITE);
@@ -82,6 +80,13 @@ public class PercentagePriceAdapter extends RecyclerView.Adapter<PercentagePrice
             public void onClick(View view) {
                 imageClick.onImageClick(position);
             }
+        });*/
+
+        holder.priceRange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imageClick.itemEditClick(position);
+            }
         });
 
     }
@@ -92,15 +97,17 @@ public class PercentagePriceAdapter extends RecyclerView.Adapter<PercentagePrice
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView priceRange, pricePercentage;
-        LinearLayout delete, sizeLinear;
+        private final TextView priceRange, pricePercentage, threeQty, fiveQty;
+
+        ImageView delete;
 
         public MyViewHolder(View view) {
             super((view));
             priceRange = view.findViewById(R.id.titleOne);
             pricePercentage = view.findViewById(R.id.titleTwo);
+            threeQty = view.findViewById(R.id.titleThree);
+            fiveQty = view.findViewById(R.id.titleFour);
             delete = view.findViewById(R.id.delete);
-            sizeLinear = view.findViewById(R.id.sizeLinear);
 
         }
     }

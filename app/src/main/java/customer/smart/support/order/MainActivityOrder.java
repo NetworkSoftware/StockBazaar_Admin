@@ -10,14 +10,19 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,9 +38,12 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.deishelon.roundedbottomsheet.RoundedBottomSheetDialog;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -54,6 +62,7 @@ import customer.smart.support.app.Appconfig;
 import static customer.smart.support.app.Appconfig.ORDER_CHANGE_STATUS;
 import static customer.smart.support.app.Appconfig.ORDER_GET_ALL;
 import static customer.smart.support.app.Appconfig.ORDER_GET_ALL_IDS;
+import static customer.smart.support.app.Appconfig.WALLET;
 
 public class MainActivityOrder extends AppCompatActivity implements OrderAdapter.ContactsAdapterListener, StatusListener {
     private static final String TAG = MainActivityOrder.class.getSimpleName();
@@ -152,8 +161,14 @@ public class MainActivityOrder extends AppCompatActivity implements OrderAdapter
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             accMobsIds.put("mob" + jsonObject.getString("id"), jsonObject.getString("shopname"));
                         }
+                        jsonArray = jObj.getJSONArray("stock");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            accMobsIds.put(jsonObject.getString("id"), jsonObject.getString("shopname"));
+                        }
                     }
                 } catch (JSONException e) {
+                    Log.e("xxxxxxxxxxx", e.toString());
                 }
                 hideDialog();
                 fetchContacts();
@@ -322,6 +337,10 @@ public class MainActivityOrder extends AppCompatActivity implements OrderAdapter
         order.setCreatedOn(jsonObject.getString("createdon"));
         order.setShipCost(jsonObject.getString("shipCost"));
         order.setCreatedOn(jsonObject.getString("createdon"));
+        order.setUser(jsonObject.getString("user"));
+        order.setTokenValue(jsonObject.getString("tokenValue"));
+        order.setWallet(jsonObject.has("wallet") ? jsonObject.getString("wallet") : "0");
+        order.setCashback(jsonObject.getString("cashback"));
         ObjectMapper mapper = new ObjectMapper();
         Object listBeans = new Gson().fromJson(jsonObject.getString("items"),
                 Object.class);
@@ -441,7 +460,6 @@ public class MainActivityOrder extends AppCompatActivity implements OrderAdapter
         try {
             Uri uri = Uri.parse("smsto:91" + phone);
             Intent i = new Intent(Intent.ACTION_SENDTO, uri);
-            //  i.putExtra("sms_body", "Hello");
             i.setPackage("com.whatsapp.w4b");
             startActivity(i);
 
@@ -530,6 +548,11 @@ public class MainActivityOrder extends AppCompatActivity implements OrderAdapter
         startActivity(intent);
     }
 
+    @Override
+    public void onWallet(Order order) {
+        showCashBack(order);
+    }
+
 
     private void statusChange(final String id, final String status, final String reason) {
         String tag_string_req = "req_register";
@@ -586,4 +609,129 @@ public class MainActivityOrder extends AppCompatActivity implements OrderAdapter
     }
 
 
+    private void showCashBack(final Order order) {
+        final RoundedBottomSheetDialog mBottomSheetDialog = new RoundedBottomSheetDialog(MainActivityOrder.this);
+        LayoutInflater inflater = MainActivityOrder.this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.bottom_amount_layout, null);
+
+        TextInputLayout reviewTxt = dialogView.findViewById(R.id.walletTxt);
+        final TextInputEditText walletEdit = dialogView.findViewById(R.id.wallet);
+        final TextInputEditText description = dialogView.findViewById(R.id.description);
+
+
+        final RadioButton radioIn = dialogView.findViewById(R.id.radioIn);
+        final RadioButton radioOut = dialogView.findViewById(R.id.radioOut);
+        radioIn.setChecked(true);
+
+        radioIn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    radioIn.setChecked(true);
+                    radioOut.setChecked(false);
+                } else {
+                    radioIn.setChecked(false);
+                    radioOut.setChecked(true);
+                }
+            }
+        });
+        radioOut.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    radioIn.setChecked(false);
+                    radioOut.setChecked(true);
+                } else {
+                    radioIn.setChecked(true);
+                    radioOut.setChecked(false);
+                }
+            }
+        });
+
+        final Button submit = dialogView.findViewById(R.id.submit);
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (walletEdit.getText().toString().length() <= 0 ||
+                        description.getText().toString().length() <= 0) {
+                    Toast.makeText(MainActivityOrder.this, "Enter Valid Cashback", Toast.LENGTH_LONG).show();
+                    return;
+                } else {
+                    updateWallet(order.getUser(), walletEdit.getText().toString(), description.getText().toString(),
+                            radioIn.isChecked(), order.id, mBottomSheetDialog);
+                }
+            }
+        });
+        mBottomSheetDialog.setContentView(dialogView);
+        walletEdit.requestFocus();
+        mBottomSheetDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        mBottomSheetDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(final DialogInterface dialog) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        RoundedBottomSheetDialog d = (RoundedBottomSheetDialog) dialog;
+                        FrameLayout bottomSheet = d.findViewById(R.id.design_bottom_sheet);
+                        BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    }
+                }, 0);
+            }
+        });
+        mBottomSheetDialog.show();
+    }
+
+
+    private void updateWallet(final String userId, final String wallet, final String description, final boolean isCredit,
+                              final String orderId, final RoundedBottomSheetDialog mBottomSheetDialog) {
+        String tag_string_req = "req_register";
+        showDialog();
+        StringRequest strReq = new StringRequest(Request.Method.PUT,
+                WALLET, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                hideDialog();
+                Log.d("Register Response: ", response);
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    Toast.makeText(getApplication(), jObj.getString("message"), Toast.LENGTH_SHORT).show();
+                    int success = jObj.getInt("success");
+                    if (success == 1) {
+                        if (mBottomSheetDialog != null) {
+                            mBottomSheetDialog.cancel();
+                        }
+                        offset = 0;
+                        fetchContacts();
+                    }
+                } catch (JSONException e) {
+                    Log.e("xxxxxxxxxxx", e.toString());
+                    Toast.makeText(getApplication(), "Some Network Error.Try after some time", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                hideDialog();
+                Log.e("Registration Error: ", error.getMessage());
+                Toast.makeText(getApplication(),
+                        "Some Network Error.Try after some time", Toast.LENGTH_LONG).show();
+            }
+        }) {
+            protected Map<String, String> getParams() {
+                HashMap localHashMap = new HashMap();
+                localHashMap.put("userId", userId);
+                localHashMap.put("amt", wallet);
+                localHashMap.put("description", description);
+                localHashMap.put("credit", isCredit ? "add" : "minus");
+                localHashMap.put("orderId", orderId);
+                return localHashMap;
+            }
+        };
+        strReq.setRetryPolicy(Appconfig.getPolicy());
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+    }
 }

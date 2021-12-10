@@ -66,7 +66,6 @@ public class MainActivityProduct extends AppCompatActivity implements ProductAda
     private List<Product> contactList;
     private ProductAdapter mAdapter;
     private SearchView searchView;
-    private List<Categories> category;
     private final List<CategoryFilterBean> permanantList = new ArrayList<>();
     private String shopIdFromintent;
     private String shopnameFromintent;
@@ -76,7 +75,6 @@ public class MainActivityProduct extends AppCompatActivity implements ProductAda
     BrandFilterAdapter brandFilterAdapter;
     private ArrayList<CategoryFilterBean> categoryFilterBeans = new ArrayList<>();
     private ArrayList<BrandFilterBean> brandFilterBeans = new ArrayList<>();
-    private Set<String> subCategory = new HashSet<>();
     private Set<String> subBrand = new HashSet<>();
     private String selectPrice = "ALL";
     private Map<String, String> idNameMap = new HashMap<>();
@@ -143,7 +141,6 @@ public class MainActivityProduct extends AppCompatActivity implements ProductAda
         shopIdFromintent = intent.getStringExtra(MainActivityShop.SHOPID);
         shopnameFromintent = intent.getStringExtra(MainActivityShop.SHOPNAME);
         getAllCategories(shopIdFromintent);
-        fetchStock("");
         FloatingActionButton addStock = findViewById(R.id.addStock);
         addStock.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,7 +148,6 @@ public class MainActivityProduct extends AppCompatActivity implements ProductAda
                 Intent intent = new Intent(MainActivityProduct.this, ProductRegister.class);
                 intent.putExtra("SHOPNAME", shopnameFromintent);
                 intent.putExtra("SHOPID", shopIdFromintent);
-                intent.putExtra("CATEGORY", category.get(0).getTitle());
                 startActivity(intent);
             }
         });
@@ -179,7 +175,6 @@ public class MainActivityProduct extends AppCompatActivity implements ProductAda
                     if (success == 1) {
                         JSONArray jsonArray = jObj.getJSONArray("data");
                         offset = offset + 1;
-                        HashMap<String, String> idNameMap = new HashMap<>();
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             Product product = new Product();
@@ -206,9 +201,6 @@ public class MainActivityProduct extends AppCompatActivity implements ProductAda
                             product.setStock_update(jsonObject.getString("stockupdate"));
                             if (!jsonObject.isNull("quantity")) {
                                 product.setQty(jsonObject.getString("quantity"));
-                            }
-                            if (!jsonObject.isNull("incategory")) {
-                                product.setIncategory(jsonObject.getString("incategory"));
                             }
                             if (jsonObject.get("image") instanceof JSONArray) {
                                 ArrayList<String> samplesList = new ArrayList<>();
@@ -381,7 +373,7 @@ public class MainActivityProduct extends AppCompatActivity implements ProductAda
     protected void onStart() {
         super.onStart();
         offset = 0;
-        fetchCategory();
+        fetchStock("");
     }
 
     private void showDialog() {
@@ -392,61 +384,6 @@ public class MainActivityProduct extends AppCompatActivity implements ProductAda
     private void hideDialog() {
         if (progressDialog.isShowing())
             progressDialog.dismiss();
-    }
-
-    private void fetchCategory() {
-        String tag_string_req = "req_register";
-        progressDialog.setMessage("Processing ...");
-        showDialog();
-        StringRequest strReq = new StringRequest(Request.Method.GET,
-                CATEGORIES, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d("Register Response: ", response);
-                hideDialog();
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    int success = jObj.getInt("success");
-
-                    if (success == 1) {
-                        JSONArray jsonArray = jObj.getJSONArray("data");
-                        category = new ArrayList<>();
-                        subCategory = new HashSet<>();
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            Categories categories = new Categories();
-                            categories.setId(jsonObject.getString("id"));
-                            categories.setTitle(jsonObject.getString("title"));
-                            categories.setImage(jsonObject.getString("image"));
-                            category.add(categories);
-                        }
-
-                    } else {
-                        Toast.makeText(MainActivityProduct.this, jObj.getString("message"), Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    Log.e("xxxxxxxxxxx", e.toString());
-                    Toast.makeText(MainActivityProduct.this, "Some Network Error.Try after some time", Toast.LENGTH_SHORT).show();
-
-                }
-
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("Registration Error: ", error.getMessage());
-                Toast.makeText(MainActivityProduct.this,
-                        "Some Network Error.Try after some time", Toast.LENGTH_LONG).show();
-            }
-        }) {
-            protected Map<String, String> getParams() {
-                HashMap localHashMap = new HashMap();
-                return localHashMap;
-            }
-        };
-        strReq.setRetryPolicy(Appconfig.getPolicy());
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
     @Override
@@ -481,7 +418,7 @@ public class MainActivityProduct extends AppCompatActivity implements ProductAda
                             JSONObject jsonObject = dataArray.getJSONObject(l);
                             String[] selectedIds = jsonObject.getString("category").split(",");
                             StringBuilder selectedNames = new StringBuilder();
-                            categoryFilterBeans.add(new CategoryFilterBean("ALL","ALL"));
+                            categoryFilterBeans.add(new CategoryFilterBean("ALL", "ALL"));
                             for (int i = 0; i < selectedIds.length; i++) {
                                 categoryFilterBeans.add(new CategoryFilterBean(idNameMap.get(selectedIds[i]),
                                         selectedIds[i]));

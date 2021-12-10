@@ -70,6 +70,16 @@
                     android:layout_marginRight="10dp"
                     android:fontFamily="@font/sans_bold"
                     android:gravity="left"
+                    android:text="Wallet Amount"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginRight="10dp"
+                    android:fontFamily="@font/sans_bold"
+                    android:gravity="left"
                     android:text="Status"
                     android:textColor="@android:color/black" />
 
@@ -91,6 +101,16 @@
                     android:fontFamily="@font/sans_bold"
                     android:gravity="left"
                     android:text="Phone"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginRight="10dp"
+                    android:fontFamily="@font/sans_bold"
+                    android:gravity="left"
+                    android:text="Cashback"
                     android:textColor="@android:color/black" />
 
 
@@ -137,6 +157,16 @@
                     android:text="COD" />
 
                 <TextView
+                    android:id="@+id/walletAmt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="15dp"
+                    android:fontFamily="@font/sans_bold"
+                    android:gravity="left"
+                    android:text="2020-09-19" />
+
+                <TextView
                     android:id="@+id/status"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -166,6 +196,15 @@
                     android:gravity="left"
                     android:text="2020-09-19" />
 
+                <TextView
+                    android:id="@+id/cashback"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="15dp"
+                    android:fontFamily="@font/sans_bold"
+                    android:gravity="left"
+                    android:text="2020-09-19" />
 
                 <TextView
                     android:id="@+id/orderedOn"
@@ -178,51 +217,62 @@
                     android:text="2020-09-19" />
 
             </LinearLayout>
+        </LinearLayout>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1.5"
                 android:backgroundTint="@color/soft_grey"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
-                <ImageView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/call"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:src="@drawable/telephone" />
+                    android:backgroundTint="@color/colorPrimary"
+                    android:text="Phone" />
 
-                <ImageView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/whatsapp"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:src="@drawable/whatsapp" />
+                    android:backgroundTint="@color/colorPrimary"
+                    android:text="WhatsApp" />
 
-                <ImageView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/cancalOrder"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:src="@drawable/cancel" />
+                    android:backgroundTint="@color/colorPrimary"
+                    android:text="Cancel Order" />
 
-
-                <ImageView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/deliveredBtn"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/delivery" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:text="Delivered" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/wallet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:text="Wallet" />
 
             </LinearLayout>
-        </LinearLayout>
+        </HorizontalScrollView>
 
 
     </LinearLayout>

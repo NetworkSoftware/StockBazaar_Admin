@@ -200,9 +200,6 @@ public class MainActivityShop extends AppCompatActivity implements ShopClick {
                                     productListBean.setBulkPrice(jsonObject.getString("bulkPrice"));
                                 }
 
-                                if (!jsonObject.isNull("incategory")) {
-                                    productListBean.setIncategory(jsonObject.getString("incategory"));
-                                }
                                 if (jsonObject.get("image") instanceof JSONArray) {
                                     ArrayList<String> samplesList = new ArrayList<>();
                                     for (int k = 0; k < jsonObject.getJSONArray("image").length(); k++) {

@@ -32,6 +32,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
@@ -155,7 +156,7 @@ public class ShopRegister extends AppCompatActivity implements Imageutils.ImageA
 
                     if (success == 1) {
                         JSONArray jsonArray = jObj.getJSONArray("data");
-                        CATEGORY = new String[jsonArray.length()];
+                        CATEGORY = new  String[jsonArray.length()];
                         nameIdMap = new HashMap<>();
                         HashMap<String, String> idNameMap = new HashMap<>();
                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -327,7 +328,7 @@ public class ShopRegister extends AppCompatActivity implements Imageutils.ImageA
             String responseString = null;
 
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(Appconfig.URL_IMAGE_UPLOAD);
+            HttpPost httppost = new HttpPost(Appconfig.URL_IMAGE_UPLOAD_LATEST);
             try {
                 AndroidMultiPartEntity entity = new AndroidMultiPartEntity(
                         new AndroidMultiPartEntity.ProgressListener() {
@@ -340,6 +341,7 @@ public class ShopRegister extends AppCompatActivity implements Imageutils.ImageA
 
                 File sourceFile = new File(filepath);
                 // Adding file data to http body
+                entity.addPart("shopname", new StringBody(shop_name.getText().toString()));
                 entity.addPart("image", new FileBody(sourceFile));
 
                 totalSize = entity.getContentLength();
@@ -376,6 +378,7 @@ public class ShopRegister extends AppCompatActivity implements Imageutils.ImageA
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 if (!jsonObject.getBoolean("error")) {
+                    String model = jsonObject.getString("model");
                     GlideApp.with(getApplicationContext())
                             .load(filepath)
                             .dontAnimate()
@@ -383,7 +386,7 @@ public class ShopRegister extends AppCompatActivity implements Imageutils.ImageA
                             .skipMemoryCache(false)
                             .placeholder(R.drawable.profile)
                             .into(profiletImage);
-                    imageUrl = Appconfig.ip + "/images/" + imageutils.getfilename_from_path(filepath);
+                    imageUrl = Appconfig.ip + "/uploads/" +model+"/"+ imageutils.getfilename_from_path(filepath);
                 } else {
                     imageUrl = null;
                 }

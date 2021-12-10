@@ -1,6 +1,7 @@
 package customer.smart.support.client.category;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -22,6 +24,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,6 +48,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
@@ -62,6 +66,7 @@ import customer.smart.support.app.AppController;
 import customer.smart.support.app.Appconfig;
 import customer.smart.support.app.GlideApp;
 import customer.smart.support.app.Imageutils;
+import customer.smart.support.client.bulkPrice.BulkPriceBeen;
 import customer.smart.support.client.price.PercentagePriceAdapter;
 import customer.smart.support.client.price.PercentagePriceBeen;
 import customer.smart.support.client.stock.ImageClick;
@@ -82,6 +87,8 @@ public class CategoriesRegister extends AppCompatActivity implements Imageutils.
     ArrayList<PercentagePriceBeen> percentagePriceBeens = new ArrayList<>();
     PercentagePriceAdapter percentagePriceAdapter;
     private RecyclerView percentagepricelist;
+    NestedScrollView nestScroll;
+    private RoundedBottomSheetDialog mBottomSheetDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,11 +99,16 @@ public class CategoriesRegister extends AppCompatActivity implements Imageutils.
 
         getSupportActionBar().setTitle("Categories Register");
 
+
         profiletImage = (ImageView) findViewById(R.id.profiletImage);
         profiletImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imageutils.imagepicker(1);
+                if (brand.getText().toString().length() > 0) {
+                    imageutils.imagepicker(1);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Please select brand", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -104,16 +116,17 @@ public class CategoriesRegister extends AppCompatActivity implements Imageutils.
         pDialog.setCancelable(false);
 
         description = findViewById(R.id.description);
-
+        nestScroll = (findViewById(R.id.nestScroll));
         tag = findViewById(R.id.tag);
         brand = findViewById(R.id.brand);
         addBulkPrice = findViewById(R.id.addPrice);
         percentagepricelist = findViewById(R.id.pricelist);
         percentagePriceBeens = new ArrayList<>();
+
         addBulkPrice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showBulkPercentagePrice();
+                showBulkPercentagePrice(-1);
             }
         });
         percentagePriceAdapter = new PercentagePriceAdapter(this, percentagePriceBeens, new ImageClick() {
@@ -127,11 +140,18 @@ public class CategoriesRegister extends AppCompatActivity implements Imageutils.
                 percentagePriceBeens.remove(position);
                 percentagePriceAdapter.notifyData(percentagePriceBeens);
             }
+
+            @Override
+            public void itemEditClick(int position) {
+                showBulkPercentagePrice(position);
+            }
         }, true);
         final LinearLayoutManager sizeManager = new LinearLayoutManager(
-                this, LinearLayoutManager.HORIZONTAL, false);
+                this, LinearLayoutManager.VERTICAL, false);
         percentagepricelist.setLayoutManager(sizeManager);
         percentagepricelist.setAdapter(percentagePriceAdapter);
+
+
         submit = (TextView) findViewById(R.id.submit);
 
         submit.setOnClickListener(new View.OnClickListener() {
@@ -153,6 +173,9 @@ public class CategoriesRegister extends AppCompatActivity implements Imageutils.
                     .load(Appconfig.getResizedImage(categories.getImage(), true))
                     .placeholder(R.drawable.ic_add_a_photo_black_24dp)
                     .into(profiletImage);
+
+
+            //
             if (categories.getPercentage() == null || categories.getPercentage().equalsIgnoreCase("null")) {
                 percentagePriceBeens = new ArrayList<>();
             } else {
@@ -180,34 +203,65 @@ public class CategoriesRegister extends AppCompatActivity implements Imageutils.
         }
     }
 
-    private void showBulkPercentagePrice() {
-        final RoundedBottomSheetDialog mBottomSheetDialog = new RoundedBottomSheetDialog(CategoriesRegister.this);
+    private void showBulkPercentagePrice(int position) {
+        mBottomSheetDialog = new RoundedBottomSheetDialog(CategoriesRegister.this);
         LayoutInflater inflater = CategoriesRegister.this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.bottom_percentageprice_layout, null);
 
         final TextInputLayout qtyTxt = dialogView.findViewById(R.id.qtyLayoutTxt);
         final TextInputEditText pricePercentage = dialogView.findViewById(R.id.pricePercentage);
         final TextInputEditText priceRange = dialogView.findViewById(R.id.priceRange);
+        final TextInputEditText threeQty = dialogView.findViewById(R.id.threeQty);
+        final TextInputEditText fiveQty = dialogView.findViewById(R.id.fiveQty);
 
+        if (position >= 0) {
+            PercentagePriceBeen hrPrice = percentagePriceBeens.get(position);
+            pricePercentage.setText(hrPrice.getPrice_percentage());
+            priceRange.setText(hrPrice.getPriceRange());
+            threeQty.setText(hrPrice.getPriceThree());
+            fiveQty.setText(hrPrice.getPriceFive());
+        }
         final Button submit = dialogView.findViewById(R.id.submit);
         qtyTxt.setVisibility(View.VISIBLE);
+        pricePercentage.requestFocus();
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (pricePercentage.getText().toString().length() <= 0) {
-                    Toast.makeText(getApplicationContext(), "Enter Valid Size", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Enter Valid Price Percentage", Toast.LENGTH_LONG).show();
+                    pricePercentage.requestFocus();
+                    return;
+                } else if (threeQty.getText().toString().length() <= 0) {
+                    Toast.makeText(getApplicationContext(), "Enter Valid Qty Three", Toast.LENGTH_LONG).show();
+                    threeQty.requestFocus();
+                    return;
+                } else if (fiveQty.getText().toString().length() <= 0) {
+                    Toast.makeText(getApplicationContext(), "Enter Valid Qty Five", Toast.LENGTH_LONG).show();
+                    fiveQty.requestFocus();
                     return;
                 } else if (priceRange.getText().toString().length() <= 0) {
-                    Toast.makeText(getApplicationContext(), "Enter Valid Price", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Enter Valid PriceRange", Toast.LENGTH_LONG).show();
+                    priceRange.requestFocus();
                     return;
                 }
-                percentagePriceBeens.add(new PercentagePriceBeen(pricePercentage.getText().toString(), priceRange.getText().toString()));
+                if (position >= 0) {
+                    percentagePriceBeens.get(position).setPrice_percentage(pricePercentage.getText().toString());
+                    percentagePriceBeens.get(position).setPriceRange(priceRange.getText().toString());
+                    percentagePriceBeens.get(position).setPriceThree(threeQty.getText().toString());
+                    percentagePriceBeens.get(position).setPriceFive(fiveQty.getText().toString());
+                } else {
+                    percentagePriceBeens.add(new PercentagePriceBeen(pricePercentage.getText().toString(),
+                            priceRange.getText().toString(),
+                            threeQty.getText().toString(),
+                            fiveQty.getText().toString()));
+
+
+                }
+
                 percentagePriceAdapter.notifyData(percentagePriceBeens);
-                mBottomSheetDialog.cancel();
+                bottomSheetCancel();
             }
         });
-        pricePercentage.requestFocus();
-        priceRange.requestFocus();
 
         mBottomSheetDialog.setContentView(dialogView);
         mBottomSheetDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -227,6 +281,7 @@ public class CategoriesRegister extends AppCompatActivity implements Imageutils.
         });
         mBottomSheetDialog.show();
     }
+
 
     private void categoryReg() {
         String tag_string_req = "req_register";
@@ -275,7 +330,16 @@ public class CategoriesRegister extends AppCompatActivity implements Imageutils.
                 localHashMap.put("title", description.getText().toString());
                 localHashMap.put("brand", brand.getText().toString());
                 localHashMap.put("tag", tag.getText().toString());
-                localHashMap.put("percentage", new Gson().toJson(percentagePriceBeens));
+                ArrayList<PercentagePriceBeen> tempList=new ArrayList<>();
+                for (int i=0;i<percentagePriceBeens.size();i++){
+                    tempList.add(new PercentagePriceBeen(
+                            percentagePriceBeens.get(i).getPrice_percentage(),
+                            percentagePriceBeens.get(i).getPriceRange()
+                            ));
+                }
+                localHashMap.put("percentage", new Gson().toJson(tempList));
+                localHashMap.put("qtyPercent", new Gson().toJson(percentagePriceBeens));
+
                 return localHashMap;
             }
         };
@@ -348,7 +412,7 @@ public class CategoriesRegister extends AppCompatActivity implements Imageutils.
             String responseString = null;
 
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(Appconfig.URL_IMAGE_UPLOAD);
+            HttpPost httppost = new HttpPost(Appconfig.URL_IMAGE_UPLOAD_LATEST);
             try {
                 AndroidMultiPartEntity entity = new AndroidMultiPartEntity(
                         new AndroidMultiPartEntity.ProgressListener() {
@@ -361,6 +425,7 @@ public class CategoriesRegister extends AppCompatActivity implements Imageutils.
 
                 File sourceFile = new File(filepath);
                 // Adding file data to http body
+                entity.addPart("model", new StringBody("category"));
                 entity.addPart("image", new FileBody(sourceFile));
 
                 totalSize = entity.getContentLength();
@@ -397,6 +462,7 @@ public class CategoriesRegister extends AppCompatActivity implements Imageutils.
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 if (!jsonObject.getBoolean("error")) {
+                    String model = jsonObject.getString("model");
                     GlideApp.with(getApplicationContext())
                             .load(filepath)
                             .dontAnimate()
@@ -404,7 +470,7 @@ public class CategoriesRegister extends AppCompatActivity implements Imageutils.
                             .skipMemoryCache(false)
                             .placeholder(R.drawable.profile)
                             .into(profiletImage);
-                    imageUrl = Appconfig.ip + "/images/" + imageutils.getfilename_from_path(filepath);
+                    imageUrl = Appconfig.ip_img + "uploads/" + model + "/" + imageutils.getfilename_from_path(filepath);
                 } else {
                     imageUrl = null;
                 }
@@ -421,5 +487,24 @@ public class CategoriesRegister extends AppCompatActivity implements Imageutils.
             super.onPostExecute(result);
         }
 
+    }
+
+    public static void hideKeyboard(AppCompatActivity activity) {
+        InputMethodManager imm = (InputMethodManager)
+                activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(activity.getWindow().getDecorView().getWindowToken(), 0);
+    }
+
+    private void bottomSheetCancel() {
+        if (mBottomSheetDialog != null) {
+            mBottomSheetDialog.cancel();
+        }
+        hideKeyboard(CategoriesRegister.this);
+        nestScroll.post(new Runnable() {
+            @Override
+            public void run() {
+                nestScroll.fullScroll(View.FOCUS_DOWN);
+            }
+        });
     }
 }

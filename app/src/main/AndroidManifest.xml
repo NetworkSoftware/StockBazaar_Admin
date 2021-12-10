@@ -101,6 +101,9 @@
             android:label="Stock Update"
             android:theme="@style/AppThemeWhite" />
         <activity
+            android:name=".client.wallet.WalletActivity"
+            android:theme="@style/AppThemeWhite" />
+        <activity
             android:name=".contact.MainActivityContact"
             android:label="@string/app_name"
             android:theme="@style/AppThemeSe.NoActionBar">
@@ -199,27 +202,35 @@
         <activity
             android:name=".client.category.MainActivityCategories"
             android:label="@string/app_name"
-            android:theme="@style/AppThemeWhiteNO"/>
+            android:theme="@style/AppThemeWhiteNO" />
+        <activity
+            android:name=".client.wallet.MainActivityWallet"
+            android:label="@string/app_name"
+            android:theme="@style/AppThemeWhiteNO" />
         <activity
             android:name=".client.shop.MainActivityShop"
             android:label="@string/app_name"
-            android:theme="@style/AppThemeWhiteNO"/>
+            android:theme="@style/AppThemeWhiteNO" />
+        <activity
+            android:name=".client.seller_as.MainActivitySeller"
+            android:label="@string/app_name"
+            android:theme="@style/AppThemeWhiteNO" />
         <activity
             android:name=".client.shop.ShopRegister"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".client.category.CategoriesRegister"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".client.stock.MainActivityProduct"
             android:label="@string/app_name"
-            android:theme="@style/AppThemeWhiteNO"/>
+            android:theme="@style/AppThemeWhiteNO" />
         <activity
             android:name=".client.stock.ProductRegister"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".cmobile.MainActivityMobile"
             android:label="@string/app_name"
@@ -255,8 +266,8 @@
         <provider
             android:name="customer.smart.support.app.GenericFileProvider"
             android:authorities="customer.smart.support.provider"
-            android:exported="false"
             android:enabled="true"
+            android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"

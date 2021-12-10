@@ -34,11 +34,12 @@ public class Appconfig {
     //Key values
     public static final String shopIdKey = "shopIdKey";
     public static final String Phone = "phone";
+    public static final String AdminPhone = "user";
     public static final String mypreference = "mypref";
-      public static final String ip = "http://thestockbazaar.com/prisma/tmobile/";
-      public static final String ip_img = "http://thestockbazaar.com/prisma/tmobile/";
-    /*    public static final String ip = "http://192.168.1.108:8111/prisma/tmobile/";
-        public static final String ip_img = "http://192.168.1.108:8111/prisma/tmobile/";*/
+    public static final String ip = "http://thestockbazaar.com/prisma/tmobile/";
+    public static final String ip_img = "http://thestockbazaar.com/prisma/tmobile/";
+    /*       public static final String ip = "http://192.168.1.204:8111/prisma/tmobile/";
+           public static final String ip_img = "http://192.168.1.204:8111/prisma/tmobile/";*/
     public static final String CREATE_SHOP = ip + "create_shop.php";
     public static final String STATUSUPDATE = ip + "status_update";
     public static final String STAFF_LOGIN = ip + "staff_login.php";
@@ -72,12 +73,14 @@ public class Appconfig {
     public static final String UPDATE_CONTACT = ip + "staff/update_contact.php";
     //client
     public static final String SHOP = ip + "clientshop";
+    public static final String SELLER = ip + "seller";
     public static final String STOCK = ip + "stock";
+    public static final String WALLET = ip + "wallet";
+    public static final String GETWALLET = ip + "getwallet";
+    public static final String WALLETSTATUS = ip + "wallet_status";
     //category
     public static final String CATEGORIES = ip + "category";
     public static final String FETCH_ITEM_BY_ID = ip + "fetchItemById";
-
-
     public static String URL_IMAGE_UPLOAD = ip + "fileUpload.php";
     public static String URL_IMAGE_UPLOAD_LATEST = ip + "fileUploadlatest.php";
     public static String URL_FEED_UPLOAD = ip + "fileFeed.php";
@@ -209,7 +212,12 @@ public class Appconfig {
         return filename;
 
     }
-
+    public static DefaultRetryPolicy getTimeOut() {
+        return new DefaultRetryPolicy(
+                50000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+    }
 
     public static String getFilename(Context context) {
         File file = new File(context.getCacheDir().getPath(), "MyFolder/Images");

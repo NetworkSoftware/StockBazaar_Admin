@@ -14,24 +14,23 @@ public class Product implements Serializable {
     String stock_update;
     String image;
     String qty;
-    String incategory;
     String categoryName;
     String bulkPrice;
     String category;
     String  categoryTag;
-
+    String incategory;
 
 
     public Product() {
     }
 
-    public Product(String brand, String model, String price, String description, String selectshop, String selectcategories, String stock_update, String image) {
+    public Product(String brand, String model, String price, String description,
+                   String selectshop,String stock_update, String image) {
         this.brand = brand;
         this.model = model;
         this.price = price;
         this.description = description;
         this.selectshop = selectshop;
-        this.selectcategories = selectcategories;
         this.stock_update = stock_update;
         this.image = image;
     }
@@ -116,13 +115,6 @@ public class Product implements Serializable {
         this.qty = qty;
     }
 
-    public String getIncategory() {
-        return incategory;
-    }
-
-    public void setIncategory(String incategory) {
-        this.incategory = incategory;
-    }
 
     public String getCategoryName() {
         return categoryName;
@@ -162,5 +154,13 @@ public class Product implements Serializable {
 
     public void setCategoryTag(String categoryTag) {
         this.categoryTag = categoryTag;
+    }
+
+    public String getIncategory() {
+        return incategory;
+    }
+
+    public void setIncategory(String incategory) {
+        this.incategory = incategory;
     }
 }

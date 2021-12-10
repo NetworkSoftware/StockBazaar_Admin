@@ -7,15 +7,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import androidx.annotation.MainThread;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import customer.smart.support.ad.MainActivityAd;
-import customer.smart.support.app.Appconfig;
 import customer.smart.support.client.category.MainActivityCategories;
+import customer.smart.support.client.seller_as.MainActivitySeller;
 import customer.smart.support.client.shop.MainActivityShop;
-import customer.smart.support.client.stock.MainActivityProduct;
+import customer.smart.support.client.wallet.MainActivityWallet;
 import customer.smart.support.cmobile.MainActivityMobile;
 import customer.smart.support.contact.MainActivityContact;
 import customer.smart.support.offer.OfferActivity;
@@ -48,6 +47,8 @@ public class NaviActivity extends AppCompatActivity {
         LinearLayout address = findViewById(R.id.address);
         LinearLayout spare = findViewById(R.id.spare);
         LinearLayout orders = findViewById(R.id.orders);
+        LinearLayout seller = findViewById(R.id.seller);
+        LinearLayout wallet = findViewById(R.id.wallet);
 
         LinearLayout category = findViewById(R.id.category);
         LinearLayout client_shop = findViewById(R.id.client_shop);
@@ -63,31 +64,106 @@ public class NaviActivity extends AppCompatActivity {
             address.setVisibility(View.VISIBLE);
             spare.setVisibility(View.VISIBLE);
             orders.setVisibility(View.VISIBLE);
-            //client.setVisibility(View.VISIBLE);
             category.setVisibility(View.VISIBLE);
+            seller.setVisibility(View.VISIBLE);
+            wallet.setVisibility(View.VISIBLE);
             client_shop.setVisibility(View.VISIBLE);
         } else if (sharedpreferences.getString("role", "admin").equalsIgnoreCase("admin")) {
 
             String data = sharedpreferences.getString("data", "");
 
-            if (data.contains("adv")) {ad.setVisibility(View.VISIBLE);} else {ad.setVisibility(View.GONE);}
-            if (data.contains("shop")) {shop.setVisibility(View.VISIBLE);} else {shop.setVisibility(View.GONE);}
-            if (data.contains("stock")) {stock.setVisibility(View.VISIBLE);} else {stock.setVisibility(View.GONE);}
-            if (data.contains("staff")) {staff.setVisibility(View.VISIBLE);} else {staff.setVisibility(View.GONE);}
-            if (data.contains("cmobile")) {cmobile.setVisibility(View.VISIBLE);} else {cmobile.setVisibility(View.GONE);}
-            if (data.contains("offer")) {offer.setVisibility(View.VISIBLE);} else {offer.setVisibility(View.GONE);}
-            if (data.contains("contact")) {contact.setVisibility(View.VISIBLE);} else {contact.setVisibility(View.GONE);}
-            if (data.contains("address")) {address.setVisibility(View.VISIBLE);} else {address.setVisibility(View.GONE);}
-            if (data.contains("spare")) {spare.setVisibility(View.VISIBLE);} else {spare.setVisibility(View.GONE);}
-            if (data.contains("orders")) {orders.setVisibility(View.VISIBLE);} else {orders.setVisibility(View.GONE);}
-            if (data.contains("category")) {category.setVisibility(View.VISIBLE);} else {category.setVisibility(View.GONE);}
-            if (data.contains("cshop")) {client_shop.setVisibility(View.VISIBLE);} else {client_shop.setVisibility(View.GONE);}
+            if (data.contains("adv")) {
+                ad.setVisibility(View.VISIBLE);
+            } else {
+                ad.setVisibility(View.GONE);
+            }
+            if (data.contains("shop")) {
+                shop.setVisibility(View.VISIBLE);
+            } else {
+                shop.setVisibility(View.GONE);
+            }
+            if (data.contains("stock")) {
+                stock.setVisibility(View.VISIBLE);
+            } else {
+                stock.setVisibility(View.GONE);
+            }
+            if (data.contains("staff")) {
+                staff.setVisibility(View.VISIBLE);
+            } else {
+                staff.setVisibility(View.GONE);
+            }
+            if (data.contains("cmobile")) {
+                cmobile.setVisibility(View.VISIBLE);
+            } else {
+                cmobile.setVisibility(View.GONE);
+            }
+            if (data.contains("offer")) {
+                offer.setVisibility(View.VISIBLE);
+            } else {
+                offer.setVisibility(View.GONE);
+            }
+            if (data.contains("contact")) {
+                contact.setVisibility(View.VISIBLE);
+            } else {
+                contact.setVisibility(View.GONE);
+            }
+            if (data.contains("address")) {
+                address.setVisibility(View.VISIBLE);
+            } else {
+                address.setVisibility(View.GONE);
+            }
+            if (data.contains("spare")) {
+                spare.setVisibility(View.VISIBLE);
+            } else {
+                spare.setVisibility(View.GONE);
+            }
+            if (data.contains("orders")) {
+                orders.setVisibility(View.VISIBLE);
+            } else {
+                orders.setVisibility(View.GONE);
+            }
+            if (data.contains("category")) {
+                category.setVisibility(View.VISIBLE);
+            } else {
+                category.setVisibility(View.GONE);
+            }
+            if (data.contains("cshop")) {
+                client_shop.setVisibility(View.VISIBLE);
+            } else {
+                client_shop.setVisibility(View.GONE);
+            }
+            if (data.contains("seller")) {
+                seller.setVisibility(View.VISIBLE);
+            } else {
+                seller.setVisibility(View.GONE);
+            }
+            if (data.contains("wallet")) {
+                wallet.setVisibility(View.VISIBLE);
+            } else {
+                wallet.setVisibility(View.GONE);
+            }
+
+
         }
 
         client_shop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent io = new Intent(NaviActivity.this, MainActivityShop.class);
+                startActivity(io);
+            }
+        });
+        seller.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent io = new Intent(NaviActivity.this, MainActivitySeller.class);
+                startActivity(io);
+            }
+        });
+        wallet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent io = new Intent(NaviActivity.this, MainActivityWallet.class);
                 startActivity(io);
             }
         });

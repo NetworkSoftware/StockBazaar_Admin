@@ -15,6 +15,8 @@ public class CartItems implements Serializable {
     public static final String COLUMN_QTY = "quantity";
     public static final String COLUMN_MAX_QTY = "maxquantity";
     public static final String COLUMN_BULKPRICE = "bulkPrice";
+    public static final String COLUMN_MIN_QTY = "minQuantity";
+    public static final String COLUMN_WISH = "wish";
 
 
     // Create table SQL query
@@ -29,7 +31,9 @@ public class CartItems implements Serializable {
                     + COLUMN_DESCRIPTION + " description,"
                     + COLUMN_MAX_QTY + " maxquantity,"
                     + COLUMN_QTY + " quantity,"
-                    + COLUMN_BULKPRICE + " bulkPrice"
+                    + COLUMN_BULKPRICE + " bulkPrice,"
+                    + COLUMN_MIN_QTY + " minQuantity,"
+                    + COLUMN_WISH + " wish"
                     + ")";
 
 
@@ -44,6 +48,8 @@ public class CartItems implements Serializable {
     public String shopName;
     public boolean isBulk;
     public String bulkPrice;
+    public String minQuantity;
+    public String wish;
 
     public CartItems(String id, String name, String description, String image, String quantity, String price) {
         this.id = id;
@@ -148,5 +154,29 @@ public class CartItems implements Serializable {
 
     public void setBulkPrice(String bulkPrice) {
         this.bulkPrice = bulkPrice;
+    }
+
+    public static String getColumnMinQty() {
+        return COLUMN_MIN_QTY;
+    }
+
+    public static String getColumnWish() {
+        return COLUMN_WISH;
+    }
+
+    public String getMinQuantity() {
+        return minQuantity;
+    }
+
+    public void setMinQuantity(String minQuantity) {
+        this.minQuantity = minQuantity;
+    }
+
+    public String getWish() {
+        return wish;
+    }
+
+    public void setWish(String wish) {
+        this.wish = wish;
     }
 }

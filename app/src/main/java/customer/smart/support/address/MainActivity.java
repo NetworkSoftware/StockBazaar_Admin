@@ -56,9 +56,9 @@ public class MainActivity extends BaseActivity {
             "3000042878", "51713"
     };
     TextInputLayout selleraddressText;
-    TextInputLayout buyeraddressText,idText,codText;
-    BetterSpinner selleraddress,id;
-    TextInputEditText buyeraddress,cod;
+    TextInputLayout buyeraddressText, idText, codText;
+    BetterSpinner selleraddress, id;
+    TextInputEditText buyeraddress, cod;
     NestedScrollView nestScroll;
     TextView seller_name;
     LinearLayout headerbar;
@@ -67,18 +67,19 @@ public class MainActivity extends BaseActivity {
     MaterialButton selectbuyer;
     private final String[] ADDRESS = new String[]{
             "NETWORK COMMUNICATION\n" +
-                    "134, 4TH STREET ," +
-                    "CROSS CUT ROAD," +
-                    " GANDHIPURAM," +
+                    "134,4th STREET\n," +
+                    "GANDHIPURAM," +
                     "COIMBATORE," +
-                    " 641012." +
-                    "Ph: 9787665726, 7010504536",
+                    "TN- 641012," +
+                    "Ph: 7010504536, 9787665726",
             "STOCK BAZAAR\n" +
-                    "174/134, 4TH STREET," +
-                    "CROSS CUT ROAD," +
-                    " GANDHIPURAM, COIMBATORE" +
-                    " 641012." +
-                    "Ph:9514414404, 9787665726",
+                    "Online Shopping App\n" +
+                    "174," +
+                    "GANDHIPURAM," +
+                    "COIMBATORE" +
+                    "Tn-641012" +
+                    "Ph:9514414404,\n" +
+                    "Email:smartar226@gmail.com",
     };
     private final String TAG = getClass().getSimpleName();
 

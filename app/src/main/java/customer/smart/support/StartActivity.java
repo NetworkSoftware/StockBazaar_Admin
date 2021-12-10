@@ -31,11 +31,13 @@ import customer.smart.support.client.stock.MainActivityProduct;
 
 import static customer.smart.support.app.Appconfig.mypreference;
 import static customer.smart.support.client.shop.MainActivityShop.SHOPID;
+import static customer.smart.support.client.shop.MainActivityShop.SHOPNAME;
 
 public class StartActivity extends AppCompatActivity {
     ProgressDialog dialog;
     EditText password, phoneNo;
     SharedPreferences sharedpreferences;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,8 +51,8 @@ public class StartActivity extends AppCompatActivity {
         dialog = new ProgressDialog(this);
         dialog.setCancelable(false);
 
-        password =  findViewById(R.id.password);
-        phoneNo =  findViewById(R.id.mobile);
+        password = findViewById(R.id.password);
+        phoneNo = findViewById(R.id.mobile);
         if (sharedpreferences.contains("user")) {
             phoneNo.setText(sharedpreferences.getString("user", ""));
             password.requestFocus();
@@ -85,17 +87,19 @@ public class StartActivity extends AppCompatActivity {
                     int success = jObj.getInt("success");
                     String msg = jObj.getString("message");
                     if (success == 1) {
-                        if (!jObj.isNull("isClient")&& jObj.getBoolean("isClient")) {
+                        SharedPreferences.Editor editor = sharedpreferences.edit();
+                        editor.putString("user", phoneNo.getText().toString());
+                        if (!jObj.isNull("isClient") && jObj.getBoolean("isClient")) {
+                            editor.commit();
                             Intent io = new Intent(StartActivity.this, MainActivityProduct.class);
                             io.putExtra(SHOPID, jObj.getJSONObject("data").getString("id"));
+                            io.putExtra(SHOPNAME, jObj.getJSONObject("data").getString("shopname"));
                             io.putExtra("from", "client");
                             io.putExtra("EXTRA_CAT", jObj.getJSONObject("data").getString("category"));
                             startActivity(io);
                             finish();
-                        }else {
-                            SharedPreferences.Editor editor = sharedpreferences.edit();
+                        } else {
                             editor.putString("role", jObj.getString("role"));
-                            editor.putString("user", phoneNo.getText().toString());
                             editor.putString("data", jObj.getString("data"));
                             editor.commit();
                             Intent io = new Intent(StartActivity.this, NaviActivity.class);

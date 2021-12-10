@@ -63,18 +63,19 @@ public class MyOrderPage extends AppCompatActivity {
 
     private final String[] ADDRESS = new String[]{
             "NETWORK COMMUNICATION\n" +
-                    "134, 4TH STREET ," +
-                    "CROSS CUT ROAD," +
-                    " GANDHIPURAM," +
+                    "134,4th STREET\n," +
+                    "GANDHIPURAM," +
                     "COIMBATORE," +
-                    " 641012." +
-                    "Ph: 9787665726, 7010504536",
+                    "TN- 641012," +
+                    "Ph: 7010504536, 9787665726",
             "STOCK BAZAAR\n" +
-                    "174/134, 4TH STREET," +
-                    "CROSS CUT ROAD," +
-                    " GANDHIPURAM, COIMBATORE" +
-                    " 641012." +
-                    "Ph:9514414404, 9787665726",
+                    "Online Shopping App\n" +
+                    "174," +
+                    "GANDHIPURAM," +
+                    "COIMBATORE" +
+                    "Tn-641012" +
+                    "Ph:9514414404,\n" +
+                    "Email:smartar226@gmail.com",
     };
 
     private final String[] IDS = new String[]{
@@ -84,10 +85,11 @@ public class MyOrderPage extends AppCompatActivity {
     MyOrderListProAdapter myOrderListAdapter;
     SharedPreferences sharedpreferences;
     TextView address;
-    TextView payment,tokenAdvance;
+    TextView payment, tokenAdvance, wallet;
     TextView grandtotal;
     TextView shippingTotal;
-    TextView subtotal, status, paymentId, comments, name, pincode, phone, specialDiscount;
+    TextView subtotal, status, paymentId, comments, name, pincode, phone,
+            specialDiscount, cashback;
     ProgressDialog pDialog;
     private ArrayList<CartItems> myorderBeans = new ArrayList<>();
     private Order myorderBean;
@@ -117,6 +119,7 @@ public class MyOrderPage extends AppCompatActivity {
         myorders_list.setAdapter(myOrderListAdapter);
 
         address = findViewById(R.id.address);
+        wallet = findViewById(R.id.wallet);
         name = findViewById(R.id.name);
         pincode = findViewById(R.id.pincode);
         phone = findViewById(R.id.phone);
@@ -125,12 +128,13 @@ public class MyOrderPage extends AppCompatActivity {
         shippingTotal = findViewById(R.id.shippingTotal);
         subtotal = findViewById(R.id.subtotal);
         status = findViewById(R.id.status);
+        cashback = findViewById(R.id.cashback);
         paymentId = findViewById(R.id.paymentId);
         comments = findViewById(R.id.comments);
         specialDiscount = findViewById(R.id.specialDiscount);
         invoiceBtn = findViewById(R.id.invoiceBtn);
         addressBtn = findViewById(R.id.addressBtn);
-        date=findViewById(R.id.date);
+        date = findViewById(R.id.date);
         invoiceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -160,31 +164,38 @@ public class MyOrderPage extends AppCompatActivity {
             myorderBean = (Order) getIntent().getSerializableExtra("data");
             address.setText(myorderBean.address);
             pincode.setText(myorderBean.pincode);
+            wallet.setText(myorderBean.wallet);
             name.setText(myorderBean.name);
             phone.setText(myorderBean.phone);
             status.setText(myorderBean.status);
             payment.setText(myorderBean.payment);
             paymentId.setText(myorderBean.paymentId);
             comments.setText(myorderBean.comments);
+            cashback.setText(myorderBean.cashback);
             grandtotal.setText(myorderBean.grandCost);
             specialDiscount.setText(myorderBean.specialCost);
             myorderBeans = myorderBean.productBeans;
-
             shippingTotal.setText(myorderBean.shipCost);
             subtotal.setText(myorderBean.amount);
             myOrderListAdapter.notifyData(myorderBeans);
-
             float finalTotal = Float.parseFloat(myorderBean.amount.replace("₹", ""));
             if (myorderBean.getPayment().equalsIgnoreCase("cod") &&
                     myorderBean.getPaymentId() != null && !myorderBean.getPaymentId().equalsIgnoreCase("null")
                     && myorderBean.getPaymentId().length() > 0) {
-                float tokenPercent = (finalTotal / 100) * 10;
-                finalTotal=finalTotal-tokenPercent;
-                tokenAdvance.setText("₹" + decimalFormat.format(tokenPercent) + ".00");
+
+                if (!"0".equalsIgnoreCase(myorderBean.getTokenValue())) {
+                    float token = Float.parseFloat(myorderBean.getTokenValue());
+                    tokenAdvance.setText("₹" + decimalFormat.format(token) + ".00");
+                } else {
+                    float tokenPercent = (finalTotal / 100) * 10;
+                    finalTotal = finalTotal - tokenPercent;
+                    tokenAdvance.setText("₹" + decimalFormat.format(tokenPercent) + ".00");
+                }
             } else {
                 tokenAdvance.setText("₹0.00");
             }
-
+            float sub = Float.parseFloat(myorderBean.getTokenValue());
+            finalTotal = finalTotal - sub;
             subtotal.setText("₹" + decimalFormat.format(finalTotal) + ".00");
 
 

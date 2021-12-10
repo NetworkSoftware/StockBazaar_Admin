@@ -1,6 +1,7 @@
 package customer.smart.support.client.category;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -10,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -73,6 +75,7 @@ public class MainActivityCategories extends AppCompatActivity implements Categor
             }
         });
     }
+
     /**
      * fetches json by making http calls
      */
@@ -101,7 +104,7 @@ public class MainActivityCategories extends AppCompatActivity implements Categor
                             categories.setBrand(jsonObject.getString("brand"));
                             categories.setTag(jsonObject.getString("tag"));
                             categories.setImage(jsonObject.getString("image"));
-                            categories.setPercentage(jsonObject.getString("percentage"));
+                            categories.setPercentage(jsonObject.getString("qtyPercent"));
                             categoriesList.add(categories);
                         }
                         mAdapter.notifyData(categoriesList);
@@ -179,8 +182,8 @@ public class MainActivityCategories extends AppCompatActivity implements Categor
 
     @Override
     public void onDeleteClick(int position) {
-        deleteFile(position);
-
+        AlertDialog diaBox = AskOption(position);
+        diaBox.show();
     }
 
     @Override
@@ -190,32 +193,62 @@ public class MainActivityCategories extends AppCompatActivity implements Categor
         startActivity(intent);
     }
 
+    private AlertDialog AskOption(final int position) {
+        AlertDialog myQuittingDialogBox = new AlertDialog.Builder(this)
+                //set message, title, and icon
+                .setTitle("Delete")
+                .setMessage("Do you want to Delete")
+                .setIcon(R.drawable.ic_delete_black_24dp)
+
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        deleteFile(position);
+                        dialog.dismiss();
+                    }
+
+                })
+
+
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+
+                    }
+                })
+                .create();
+        return myQuittingDialogBox;
+
+    }
+
     private void deleteFile(final int position) {
         String tag_string_req = "req_register";
         progressDialog.setMessage("Fetching ...");
         showDialog();
         // showDialog();
         StringRequest strReq = new StringRequest(Request.Method.DELETE,
-                CATEGORIES+"?id="+categoriesList.get(position).id, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.d("Register Response: ", response);
-                hideDialog();
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    if (jObj.getBoolean("success")) {
-                        categoriesList.remove(position);
-                        mAdapter.notifyData(categoriesList);
+                CATEGORIES + "?id=" + categoriesList.get(position).id,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("Register Response: ", response);
+                        hideDialog();
+                        try {
+                            JSONObject jObj = new JSONObject(response);
+                            if (jObj.getBoolean("success")) {
+                                categoriesList.remove(position);
+                                mAdapter.notifyData(categoriesList);
+                            }
+                            Toast.makeText(MainActivityCategories.this, jObj.getString("message"), Toast.LENGTH_SHORT).show();
+                        } catch (JSONException e) {
+                            Log.e("xxxxxxxxxxx", e.toString());
+                            Toast.makeText(MainActivityCategories.this, "Some Network Error.Try after some time", Toast.LENGTH_SHORT).show();
+
+                        }
+
                     }
-                    Toast.makeText(MainActivityCategories.this, jObj.getString("message"), Toast.LENGTH_SHORT).show();
-                } catch (JSONException e) {
-                    Log.e("xxxxxxxxxxx", e.toString());
-                    Toast.makeText(MainActivityCategories.this, "Some Network Error.Try after some time", Toast.LENGTH_SHORT).show();
-
-                }
-
-            }
-        }, new Response.ErrorListener() {
+                }, new Response.ErrorListener() {
 
             @Override
             public void onErrorResponse(VolleyError error) {

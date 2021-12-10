@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestScroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dp">
@@ -105,39 +106,111 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:fontFamily="@font/sans"
-                android:text="Price Details"
-                android:textColor="@color/black"
-                android:textSize="17dp" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:orientation="horizontal"
-                android:padding="10dp">
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="0.7"
+                    android:fontFamily="@font/sans"
+                    android:text="PRICE DETAILS"
+                    android:textColor="#000"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/addPrice"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="10dp"
-                    android:text="ADD"
-                    android:textColor="@color/colorPrimary"
-                    app:strokeColor="@color/colorPrimary" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/pricelist"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:scrollbars="vertical" />
+                    android:layout_marginLeft="45dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:text="Add"
+                    android:textSize="12dp"
+                    app:icon="@drawable/ic_baseline_add_24"
+                    app:strokeColor="@color/colorAccent" />
             </LinearLayout>
+
+
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="180dp"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/rect"
+                            android:fontFamily="@font/sans"
+                            android:paddingLeft="10dp"
+                            android:paddingTop="15dp"
+                            android:paddingRight="10dp"
+                            android:paddingBottom="15dp"
+                            android:maxLines="2"
+                            android:text="Price Range"
+                            android:textColor="@color/black"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:background="@drawable/rect"
+                            android:fontFamily="@font/sans"
+                            android:paddingLeft="10dp"
+                            android:paddingTop="15dp"
+                            android:paddingRight="10dp"
+                            android:paddingBottom="15dp"
+                            android:text="1"
+                            android:textColor="@color/black"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:background="@drawable/rect"
+                            android:fontFamily="@font/sans"
+                            android:paddingLeft="10dp"
+                            android:paddingTop="15dp"
+                            android:paddingRight="10dp"
+                            android:paddingBottom="15dp"
+                            android:text="3"
+                            android:textColor="@color/black"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/sgstLabel"
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:background="@drawable/rect"
+                            android:fontFamily="@font/sans"
+                            android:paddingLeft="10dp"
+                            android:paddingTop="15dp"
+                            android:paddingRight="10dp"
+                            android:paddingBottom="15dp"
+                            android:text="5"
+                            android:textColor="@color/black"
+                            android:textStyle="bold" />
+
+
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/pricelist"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

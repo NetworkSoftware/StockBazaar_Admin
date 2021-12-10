@@ -72,7 +72,9 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.MyViewHolder> 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView shopName, name, phone, pincode;
         public CircleImageView profiletImage;
-        private ImageView editImg, deleteImg;
+        TextView cashback;
+        private ImageView editImg, deleteImg,wallet;
+
 
         public MyViewHolder(View view) {
             super(view);
@@ -83,6 +85,8 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.MyViewHolder> 
             profiletImage = (CircleImageView) view.findViewById(R.id.profileImage);
             editImg = (ImageView) view.findViewById(R.id.editImg);
             deleteImg = (ImageView) view.findViewById(R.id.deleteImg);
+            wallet = view.findViewById(R.id.wallet);
+            cashback = view.findViewById(R.id.cashback);
 
 
         }
@@ -116,6 +120,7 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.MyViewHolder> 
         holder.shopName.setText(shop.area);
         holder.phone.setText(shop.contact);
         holder.pincode.setText(shop.pincode);
+        holder.cashback.setText(shop.walletAmt);
         GlideApp.with(context)
                 .load(shop.image)
                 .dontAnimate()
@@ -144,6 +149,13 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.MyViewHolder> 
             @Override
             public void onClick(View v) {
                 onShopClick.onEditClick(moviesListFiltered.get(position));
+            }
+        });
+
+        holder.wallet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onShopClick.onWalletClick(shop);
             }
         });
 

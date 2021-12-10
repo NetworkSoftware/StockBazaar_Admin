@@ -381,6 +381,12 @@ public class MainActivityMobile extends AppCompatActivity implements MobileAdapt
     }
 
     @Override
+    public void onWalletClick(Shop position) {
+
+    }
+
+
+    @Override
     public void onCallClick(String phone) {
         Intent intent = new Intent(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel:" + phone));

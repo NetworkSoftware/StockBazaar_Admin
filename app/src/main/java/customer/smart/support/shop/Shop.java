@@ -21,6 +21,7 @@ public class Shop implements Serializable {
     public String businesstype;
     public String type;
     public String statusTxt;
+    public String walletAmt;
 
     public Shop() {
     }
@@ -175,5 +176,13 @@ public class Shop implements Serializable {
 
     public void setStatusTxt(String statusTxt) {
         this.statusTxt = statusTxt;
+    }
+
+    public String getWalletAmt() {
+        return walletAmt;
+    }
+
+    public void setWalletAmt(String walletAmt) {
+        this.walletAmt = walletAmt;
     }
 }

@@ -49,6 +49,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
@@ -67,6 +68,7 @@ import customer.smart.support.app.Appconfig;
 import customer.smart.support.app.GlideApp;
 import customer.smart.support.app.Imageutils;
 import de.hdodenhof.circleimageview.CircleImageView;
+
 import static android.widget.Toast.LENGTH_LONG;
 import static customer.smart.support.app.Appconfig.mypreference;
 
@@ -218,16 +220,16 @@ public class ShopRegister extends AppCompatActivity implements Imageutils.ImageA
             }
         });
 
-        name =  findViewById(R.id.name);
-        contact =  findViewById(R.id.contact);
-        shopname =  findViewById(R.id.shopName);
+        name = findViewById(R.id.name);
+        contact = findViewById(R.id.contact);
+        shopname = findViewById(R.id.shopName);
         district = findViewById(R.id.district);
         newMobiles = findViewById(R.id.newMobiles);
         oldMobiles = findViewById(R.id.oldMobiles);
         service = findViewById(R.id.service);
-        password =  findViewById(R.id.password);
-        confirmPass =  findViewById(R.id.confirmPass);
-        pincode =  findViewById(R.id.pincode);
+        password = findViewById(R.id.password);
+        confirmPass = findViewById(R.id.confirmPass);
+        pincode = findViewById(R.id.pincode);
 
         ArrayAdapter<String> disAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, DISTRICTLIST);
@@ -266,7 +268,7 @@ public class ShopRegister extends AppCompatActivity implements Imageutils.ImageA
                 if (name.getText().toString().length() > 0 &&
                         contact.getText().toString().length() > 0 &&
                         pincode.getText().toString().length() > 0 &&
-                        getBusinessType().length()>0 &&
+                        getBusinessType().length() > 0 &&
                         shopname.getText().toString().length() > 0 &&
                         password.getText().toString().length() > 0 &&
                         type.getText().toString().length() > 0 &&
@@ -350,13 +352,13 @@ public class ShopRegister extends AppCompatActivity implements Imageutils.ImageA
                 localHashMap.put("password", password.getText().toString());
                 localHashMap.put("name", name.getText().toString());
                 localHashMap.put("mobile", contact.getText().toString());
-                localHashMap.put("imgurl", imageUrl==null ? "dummy":imageUrl);
+                localHashMap.put("imgurl", imageUrl == null ? "dummy" : imageUrl);
                 localHashMap.put("area", actv.getText().toString());
                 localHashMap.put("address", district.getText().toString());
                 localHashMap.put("latLon", latLon);
                 localHashMap.put("pincode", pincode.getText().toString());
                 localHashMap.put("businesstype", getBusinessType());
-                localHashMap.put("dealerPhone","9514414404");
+                localHashMap.put("dealerPhone", "9514414404");
                 localHashMap.put("isDealer", type.getText().toString());
                 return localHashMap;
             }
@@ -418,7 +420,7 @@ public class ShopRegister extends AppCompatActivity implements Imageutils.ImageA
             String responseString = null;
 
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(Appconfig.URL_IMAGE_UPLOAD);
+            HttpPost httppost = new HttpPost(Appconfig.URL_IMAGE_UPLOAD_LATEST);
             try {
                 AndroidMultiPartEntity entity = new AndroidMultiPartEntity(
                         new AndroidMultiPartEntity.ProgressListener() {
@@ -431,6 +433,7 @@ public class ShopRegister extends AppCompatActivity implements Imageutils.ImageA
 
                 File sourceFile = new File(filepath);
                 // Adding file data to http body
+                entity.addPart("model", new StringBody("shopReg"));
                 entity.addPart("image", new FileBody(sourceFile));
 
                 totalSize = entity.getContentLength();
@@ -467,6 +470,7 @@ public class ShopRegister extends AppCompatActivity implements Imageutils.ImageA
             try {
                 JSONObject jsonObject = new JSONObject(result.toString());
                 if (!jsonObject.getBoolean("error")) {
+                    String model = jsonObject.getString("model");
                     GlideApp.with(getApplicationContext())
                             .load(filepath)
                             .dontAnimate()
@@ -474,7 +478,7 @@ public class ShopRegister extends AppCompatActivity implements Imageutils.ImageA
                             .skipMemoryCache(false)
                             .placeholder(R.drawable.profile)
                             .into(profiletImage);
-                    imageUrl = Appconfig.ip_img + "uploads/" + imageutils.getfilename_from_path(filepath);
+                    imageUrl = Appconfig.ip_img + "uploads/" + model + "/" + imageutils.getfilename_from_path(filepath);
                 } else {
                     imageUrl = null;
                 }

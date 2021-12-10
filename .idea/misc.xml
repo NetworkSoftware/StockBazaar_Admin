@@ -7,10 +7,59 @@
         <entry key="..\:/Users/Admin/AndroidStudioProjects/CustomerSupport_SBAdmin/app/src/main/res/layout/categories_register.xml" value="0.1" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/CustomerSupport_SBAdmin/app/src/main/res/layout/client_stock_register.xml" value="0.1" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/CustomerSupport_SBAdmin/app/src/main/res/layout/spares_register.xml" value="0.1" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/drawable-mdpi/cricle_trans.xml" value="0.11458333333333333" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/drawable-mdpi/ic_baseline_account_balance_wallet_24.xml" value="0.2203125" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/drawable-xhdpi/ic_outline_delete_24.xml" value="0.11197916666666667" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/drawable-xhdpi/rect.xml" value="0.2203125" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/drawable-xxhdpi/rectangle_box_select.xml" value="0.2203125" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/drawable/cricle_trans.xml" value="0.11458333333333333" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/drawable/cricle_trans_back.xml" value="0.2203125" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/drawable/cricle_trans_gry.xml" value="0.2203125" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/drawable/dialog_bg.xml" value="0.2203125" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/drawable/ic_baseline_account_balance_wallet_24.xml" value="0.2203125" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/drawable/ic_baseline_edit_24.xml" value="0.11197916666666667" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/drawable/ic_delete_black_24dp.xml" value="0.2203125" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/drawable/rectangle_box.xml" value="0.2203125" />
         <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/activity_attachment_item.xml" value="0.1" />
         <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/activity_client_mainstock.xml" value="0.18333333333333332" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/activity_main_seller.xml" value="0.22121896162528218" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/activity_main_shop.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/activity_main_wallet.xml" value="0.18125" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/activity_mainorder.xml" value="0.21316033364226136" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/activity_navi.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/activity_single_order.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/activity_start.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/activity_view_wallet.xml" value="0.1" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/address_reg.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/alert_seller_details.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/allwallet_row_item.xml" value="0.25" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/bottom_amount_layout.xml" value="0.15" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/bottom_bulkprice_layout.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/bottom_percentageprice_layout.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/bottom_qtypercent_layout.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/brand_filter.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/bulk_price_row.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/categories_register.xml" value="0.22" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/categories_row_item.xml" value="0.1" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/client_stock_register.xml" value="0.2557471264367816" />
         <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/content_client_mainstok.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/content_main_wallet.xml" value="0.18125" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/content_mainorder.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/content_mainseller.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/content_mainshopname.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/cricle_trans.xml" value="0.1" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/image_list_row.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/mobile_register.xml" value="0.1" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/order_row_item.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/price_item_list.xml" value="0.1" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/qty_percent_row.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/seller_row_item.xml" value="0.25" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/shop_item.xml" value="0.1814814814814815" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/shop_reg.xml" value="0.1" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/shop_row_item.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/layout/wallet_row_item.xml" value="0.1" />
+        <entry key="..\:/Users/Network C/AndroidStudioProjects/StockBazaar_Admin/app/src/main/res/menu/product_menu.xml" value="0.12760416666666666" />
       </map>
     </option>
   </component>

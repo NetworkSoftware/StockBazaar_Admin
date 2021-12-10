@@ -40,7 +40,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.My
 
         holder.title.setText(categories.title);
         GlideApp.with(context)
-                .load(Appconfig.getResizedImage(categories.getImage(), true))
+                .load(Appconfig.getResizedImage(categories.getImage(), false))
                 .placeholder(R.drawable.profile)
                 .into(holder.thumbnail);
         holder.thumbnail.setOnClickListener(new View.OnClickListener() {
