@@ -180,7 +180,8 @@ public class MyOrderPage extends AppCompatActivity {
             myOrderListAdapter.notifyData(myorderBeans);
             float finalTotal = Float.parseFloat(myorderBean.amount.replace("₹", ""));
             if (myorderBean.getPayment().equalsIgnoreCase("cod") &&
-                    myorderBean.getPaymentId() != null && !myorderBean.getPaymentId().equalsIgnoreCase("null")
+                    myorderBean.getPaymentId() != null &&
+                    !myorderBean.getPaymentId().equalsIgnoreCase("null")
                     && myorderBean.getPaymentId().length() > 0) {
 
                 if (!"0".equalsIgnoreCase(myorderBean.getTokenValue())) {

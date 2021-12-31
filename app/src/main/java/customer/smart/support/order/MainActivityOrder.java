@@ -164,6 +164,7 @@ public class MainActivityOrder extends AppCompatActivity implements OrderAdapter
                         jsonArray = jObj.getJSONArray("stock");
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            Log.e("xxxxxshopname",jsonObject.getString("id")+""+jsonObject.getString("shopname"));
                             accMobsIds.put(jsonObject.getString("id"), jsonObject.getString("shopname"));
                         }
                     }
