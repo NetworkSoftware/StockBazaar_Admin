@@ -9,13 +9,11 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 import customer.smart.support.R;
 
@@ -25,24 +23,11 @@ import customer.smart.support.R;
 
 public class AssignFilterAdapter extends RecyclerView.Adapter<AssignFilterAdapter.MyViewHolder>
         implements Filterable {
-    private Context context;
+    private final Context context;
     private ArrayList<String> contactList;
-    private String selectedStrings;
+    private final String selectedStrings;
     private ArrayList<String> contactListFiltered;
-    private OnFilterCheck listener;
-
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, subtitle;
-        CheckBox inevestCheck;
-
-        public MyViewHolder(View view) {
-            super(view);
-            title = view.findViewById(R.id.title);
-            subtitle = view.findViewById(R.id.subtitle);
-            inevestCheck = view.findViewById(R.id.inevestCheck);
-        }
-    }
-
+    private final OnFilterCheck listener;
 
     public AssignFilterAdapter(Context context, ArrayList<String> contactList,
                                OnFilterCheck listener, String listString) {
@@ -72,15 +57,11 @@ public class AssignFilterAdapter extends RecyclerView.Adapter<AssignFilterAdapte
         final String contact = contactListFiltered.get(position);
         holder.title.setText(contact);
         holder.subtitle.setText("Tap to select");
-        if (selectedStrings.contains(contact)) {
-            holder.inevestCheck.setChecked(true);
-        } else {
-            holder.inevestCheck.setChecked(false);
-        }
+        holder.inevestCheck.setChecked(selectedStrings.contains(contact));
         holder.inevestCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(!buttonView.isPressed()) {
+                if (!buttonView.isPressed()) {
                     return;
                 }
                 listener.onChecked(contact, isChecked);
@@ -106,9 +87,6 @@ public class AssignFilterAdapter extends RecyclerView.Adapter<AssignFilterAdapte
                 } else {
                     ArrayList<String> filteredList = new ArrayList<>();
                     for (String row : contactList) {
-
-                        // name match condition. this might differ depending on your requirement
-                        // here we are looking for name or phone number match
                         if (row.toLowerCase().contains(charString.toLowerCase())) {
                             filteredList.add(row);
                         }
@@ -133,5 +111,17 @@ public class AssignFilterAdapter extends RecyclerView.Adapter<AssignFilterAdapte
     public interface ContactsAdapterListener {
         void onContactSelected(Shop contact);
 
+    }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        public TextView title, subtitle;
+        CheckBox inevestCheck;
+
+        public MyViewHolder(View view) {
+            super(view);
+            title = view.findViewById(R.id.title);
+            subtitle = view.findViewById(R.id.subtitle);
+            inevestCheck = view.findViewById(R.id.inevestCheck);
+        }
     }
 }

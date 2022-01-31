@@ -30,9 +30,9 @@ import customer.smart.support.app.GlideApp;
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHolder>
         implements Filterable {
     private final Context context;
+    private final ContactsAdapterListener listener;
     private List<Product> productList;
     private List<Product> productListFiltered;
-    private final ContactsAdapterListener listener;
 
     public ProductAdapter(Context context, List<Product> productList, ContactsAdapterListener listener, MainActivityProduct mainActivityProduct) {
         this.context = context;
@@ -48,6 +48,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 
         return new MyViewHolder(itemView);
     }
+
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         final Product product = productListFiltered.get(position);
@@ -55,8 +56,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         holder.shop.setText(product.getShopName());
         holder.price.setText("₹ " + product.getPrice());
         holder.category.setText(product.getCategoryName());
-
-
+        holder.createdOn.setText(product.createdon);
+        holder.stock_update_row.setText(product.stock_update);
         ArrayList<String> urls = new Gson().fromJson(product.image, (Type) List.class);
         new ObjectMapper()
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -120,7 +121,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView shop, brand, price, stock_update_row, category;
+        public TextView shop, brand, price, stock_update_row, category, createdOn;
         public ImageView thumbnail;
 
         public MyViewHolder(View view) {
@@ -131,6 +132,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
             thumbnail = view.findViewById(R.id.thumbnail);
             stock_update_row = view.findViewById(R.id.stock_update_row);
             category = view.findViewById(R.id.category);
+            createdOn = view.findViewById(R.id.createdOn);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

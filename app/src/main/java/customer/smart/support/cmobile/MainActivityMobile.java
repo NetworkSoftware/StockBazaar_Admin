@@ -1,5 +1,8 @@
 package customer.smart.support.cmobile;
 
+import static customer.smart.support.app.Appconfig.STATUSUPDATE;
+import static customer.smart.support.app.Appconfig.mypreference;
+
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
@@ -26,14 +29,9 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -43,7 +41,6 @@ import com.deishelon.roundedbottomsheet.RoundedBottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.tabs.TabLayout;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import org.json.JSONArray;
@@ -60,12 +57,8 @@ import java.util.Set;
 import customer.smart.support.R;
 import customer.smart.support.app.AppController;
 import customer.smart.support.app.Appconfig;
-import customer.smart.support.shop.MainActivity;
 import customer.smart.support.shop.OnShopClick;
 import customer.smart.support.shop.Shop;
-
-import static customer.smart.support.app.Appconfig.STATUSUPDATE;
-import static customer.smart.support.app.Appconfig.mypreference;
 
 public class MainActivityMobile extends AppCompatActivity implements MobileAdapterNew.ContactsAdapterListener, OnShopClick, OnStatus {
 
@@ -119,6 +112,7 @@ public class MainActivityMobile extends AppCompatActivity implements MobileAdapt
         recycler_status.setAdapter(statusAdapter);
 
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -504,6 +498,8 @@ public class MainActivityMobile extends AppCompatActivity implements MobileAdapt
             }
         }
         shopAdapter.notifyData(shopList);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setSubtitle(shopList.size() + " Nos");
     }
 
     @Override

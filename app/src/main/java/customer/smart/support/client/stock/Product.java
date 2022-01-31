@@ -18,7 +18,7 @@ public class Product implements Serializable {
     String bulkPrice;
     String category;
     String  categoryTag;
-    String incategory;
+    String incategory,createdon;
 
 
     public Product() {
@@ -162,5 +162,13 @@ public class Product implements Serializable {
 
     public void setIncategory(String incategory) {
         this.incategory = incategory;
+    }
+
+    public String getCreatedon() {
+        return createdon;
+    }
+
+    public void setCreatedon(String createdon) {
+        this.createdon = createdon;
     }
 }

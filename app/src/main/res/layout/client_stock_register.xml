@@ -15,48 +15,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:orientation="horizontal"
-                android:padding="10dp">
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/itemsAdd"
-                    android:layout_width="100dp"
-                    android:layout_height="200dp"
-                    android:layout_margin="5dp"
-                    android:background="@drawable/dotted"
-                    android:elevation="50dp"
-                    app:cardCornerRadius="5dp">
-
-
-                    <ImageView
-                        android:id="@+id/image_wallpaper"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:scaleType="centerCrop"
-                        android:src="@color/white" />
-
-                    <ImageView
-                        android:id="@+id/image_placeholder"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_gravity="center"
-                        android:scaleType="fitCenter"
-                        app:srcCompat="@drawable/ic_outline_add_a_photo_24" />
-                </androidx.cardview.widget.CardView>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/imagelist"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:scrollbars="vertical" />
-            </LinearLayout>
-
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -115,6 +73,47 @@
                         android:textColorHint="#c6c6c6"
                         android:textSize="15dp"
                         app:met_floatingLabel="normal" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:orientation="horizontal"
+                        android:padding="10dp">
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/itemsAdd"
+                            android:layout_width="100dp"
+                            android:layout_height="200dp"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/dotted"
+                            android:elevation="50dp"
+                            app:cardCornerRadius="5dp">
+
+
+                            <ImageView
+                                android:id="@+id/image_wallpaper"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:scaleType="centerCrop"
+                                android:src="@color/white" />
+
+                            <ImageView
+                                android:id="@+id/image_placeholder"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:layout_gravity="center"
+                                android:scaleType="fitCenter"
+                                app:srcCompat="@drawable/ic_outline_add_a_photo_24" />
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/imagelist"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:scrollbars="vertical" />
+                    </LinearLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/modelTxt"

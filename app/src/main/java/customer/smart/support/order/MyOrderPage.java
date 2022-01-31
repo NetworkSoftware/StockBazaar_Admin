@@ -69,13 +69,12 @@ public class MyOrderPage extends AppCompatActivity {
                     "TN- 641012," +
                     "Ph: 7010504536, 9787665726",
             "STOCK BAZAAR\n" +
-                    "Online Shopping App\n" +
-                    "174," +
+                    "174 4TH STR," +
+                    "CROSS CUT"+
                     "GANDHIPURAM," +
-                    "COIMBATORE" +
-                    "Tn-641012" +
-                    "Ph:9514414404,\n" +
-                    "Email:smartar226@gmail.com",
+                    "CBE TN 641012," +
+                    "PH 9514414404,\n" +
+                    "stockbazaar226@gmail.com",
     };
 
     private final String[] IDS = new String[]{
@@ -292,7 +291,7 @@ public class MyOrderPage extends AppCompatActivity {
                 android.R.layout.simple_dropdown_item_1line, IDS);
         id.setAdapter(IdsAdapter);
 
-        buyeraddress.setText(name.getText().toString() + "\n" + address.getText().toString() + "\n" + pincode.getText().toString() + "\nPh:" +
+        buyeraddress.setText(name.getText().toString() + "\n" + address.getText().toString() + "\nPh:" +
                 phone.getText().toString());
 
 

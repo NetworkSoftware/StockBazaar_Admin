@@ -254,8 +254,6 @@ public class CategoriesRegister extends AppCompatActivity implements Imageutils.
                             priceRange.getText().toString(),
                             threeQty.getText().toString(),
                             fiveQty.getText().toString()));
-
-
                 }
 
                 percentagePriceAdapter.notifyData(percentagePriceBeens);
@@ -383,7 +381,6 @@ public class CategoriesRegister extends AppCompatActivity implements Imageutils.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         imageutils.onActivityResult(requestCode, resultCode, data);
-
     }
 
     private class UploadFileToServer extends AsyncTask<String, Integer, String> {

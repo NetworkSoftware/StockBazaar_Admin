@@ -2,13 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="info.androidhive.recyclerviewsearch.MainActivityStock">
-    <item
-        android:id="@+id/action_search"
-        android:icon="@drawable/ic_search_black_24dp"
-        android:orderInCategory="100"
-        android:title="Search"
-        app:showAsAction="always"
-        app:actionViewClass="androidx.appcompat.widget.SearchView" />
+
     <item
         android:id="@+id/logOut"
         android:icon="@drawable/ic_baseline_logout_24"

@@ -1,9 +1,14 @@
 package customer.smart.support.client.stock;
 
+import static customer.smart.support.app.Appconfig.SHOP;
+import static customer.smart.support.app.Appconfig.STOCK;
+import static customer.smart.support.app.Appconfig.mypreference;
+
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,7 +49,6 @@ import customer.smart.support.R;
 import customer.smart.support.StartActivity;
 import customer.smart.support.app.AppController;
 import customer.smart.support.app.Appconfig;
-import customer.smart.support.client.category.Categories;
 import customer.smart.support.client.filter.BrandFilterAdapter;
 import customer.smart.support.client.filter.BrandFilterBean;
 import customer.smart.support.client.filter.CategoryFilterAdapter;
@@ -51,34 +56,32 @@ import customer.smart.support.client.filter.CategoryFilterBean;
 import customer.smart.support.client.filter.OncategoryFilter;
 import customer.smart.support.client.shop.MainActivityShop;
 
-import static customer.smart.support.app.Appconfig.CATEGORIES;
-import static customer.smart.support.app.Appconfig.SHOP;
-import static customer.smart.support.app.Appconfig.STOCK;
-
 
 public class MainActivityProduct extends AppCompatActivity implements ProductAdapter.ContactsAdapterListener,
         OncategoryFilter {
     private static final String TAG = MainActivityProduct.class.getSimpleName();
+    private final List<CategoryFilterBean> permanantList = new ArrayList<>();
+    private final Set<String> subBrand = new HashSet<>();
     ProgressDialog progressDialog;
     int offset = 0;
     boolean isAlreadyLoading;
+    CategoryFilterAdapter categoryFilterAdapter;
+    BrandFilterAdapter brandFilterAdapter;
+    String[] SHOPNAME = new String[]{"Loading"};
     private RecyclerView recyclerView, recycler_category, recycler_brand;
     private List<Product> contactList;
     private ProductAdapter mAdapter;
     private SearchView searchView;
-    private final List<CategoryFilterBean> permanantList = new ArrayList<>();
+    private ImageView logout;
     private String shopIdFromintent;
     private String shopnameFromintent;
     private String selectedBrand = "ALL";
     private String selectedCategory = "ALL";
-    CategoryFilterAdapter categoryFilterAdapter;
-    BrandFilterAdapter brandFilterAdapter;
     private ArrayList<CategoryFilterBean> categoryFilterBeans = new ArrayList<>();
     private ArrayList<BrandFilterBean> brandFilterBeans = new ArrayList<>();
-    private Set<String> subBrand = new HashSet<>();
     private String selectPrice = "ALL";
     private Map<String, String> idNameMap = new HashMap<>();
-    String[] SHOPNAME = new String[]{"Loading"};
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +92,8 @@ public class MainActivityProduct extends AppCompatActivity implements ProductAda
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
 
+        sharedPreferences = getSharedPreferences(mypreference,
+                Context.MODE_PRIVATE);
         //filter
         recycler_category = findViewById(R.id.recycler_category);
         categoryFilterBeans = new ArrayList<>();
@@ -180,6 +185,7 @@ public class MainActivityProduct extends AppCompatActivity implements ProductAda
                             Product product = new Product();
                             product.setId(jsonObject.getString("id"));
                             product.setBrand(jsonObject.getString("brand"));
+                            product.setCreatedon(jsonObject.getString("createdon"));
                             product.setModel(jsonObject.getString("model"));
                             product.setPrice(jsonObject.getString("price"));
                             product.setDescription(jsonObject.getString("description"));
@@ -329,6 +335,9 @@ public class MainActivityProduct extends AppCompatActivity implements ProductAda
         if (id == android.R.id.home) {
             onBackPressed();
         }
+        if (id == R.id.logOut) {
+           logout();
+        }
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_search) {
             return true;
@@ -456,5 +465,13 @@ public class MainActivityProduct extends AppCompatActivity implements ProductAda
         categoryFilterAdapter.notifyData(selectedCategory);
         offset = 0;
         fetchStock("");
+    }
+
+    protected void logout() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(Appconfig.isLogin, false);
+        editor.commit();
+        startActivity(new Intent(MainActivityProduct.this, StartActivity.class));
+        finishAffinity();
     }
 }

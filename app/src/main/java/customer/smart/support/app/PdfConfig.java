@@ -1,6 +1,5 @@
 package customer.smart.support.app;
 
-import static customer.smart.support.app.PdfConfigInvoice.createTextImage;
 import static customer.smart.support.app.PdfConfigInvoice.createTextRight;
 
 import android.content.Context;
@@ -21,6 +20,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Locale;
 
 import customer.smart.support.R;
 import customer.smart.support.address.AddressBean;
@@ -64,17 +64,22 @@ public class PdfConfig {
 
         PdfPTable table01 = new PdfPTable(3);
         table01.setWidthPercentage(100);
-        table01.setWidths(new int[]{1, 1,1});
+        table01.setWidths(new int[]{1, 1, 1});
         table01.addCell(createTextCenterWithLeft("" + "\n", catNormalFontTitel));
         table01.addCell(createTextLeft("FROM" + "\n", catNormalFontTitel));
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
-                R.drawable.sb_pdf);
-        icon.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        byte[] byteArray = stream.toByteArray();
-        Image img = Image.getInstance(byteArray);
-        img.scaleAbsolute(100, 100);
-        table01.addCell(createTextImage(img));
+        if (addressBean.getSelleraddress().toLowerCase(Locale.ROOT).contains("stock bazaar")) {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
+                    R.drawable.sb_pdf);
+            icon.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+            Image img = Image.getInstance(byteArray);
+            img.scaleAbsolute(100, 100);
+            table01.addCell(createTextImage(img));
+        }else {
+            table01.addCell(createTextImage(null));
+        }
+
         table01.addCell(createTextRight("", catNormalFont));
         table1.addCell(createTable(table01, 0, whiteBase, false));
         table1.addCell(createTextCenter("\t\t" + addressBean.getSelleraddress(), catNormalFont));
@@ -153,6 +158,7 @@ public class PdfConfig {
         cell.setBorder(Rectangle.LEFT | Rectangle.TOP);
         return cell;
     }
+
     public static PdfPCell createTextLeft(String text, Font font) throws DocumentException, IOException {
         PdfPCell cell = new PdfPCell();
         Paragraph p = new Paragraph(text, font);
@@ -164,6 +170,7 @@ public class PdfConfig {
         cell.setBorder(Rectangle.TOP);
         return cell;
     }
+
     public static PdfPCell createTextImage(Image image) throws DocumentException, IOException {
         PdfPCell cell = new PdfPCell();
         cell.addElement(image);
@@ -172,6 +179,7 @@ public class PdfConfig {
         cell.setBorder(Rectangle.TOP | Rectangle.RIGHT);
         return cell;
     }
+
     public static PdfPCell createTextCenterWithRight(String text, Font font) throws DocumentException, IOException {
         PdfPCell cell = new PdfPCell();
         Paragraph p = new Paragraph(text, font);

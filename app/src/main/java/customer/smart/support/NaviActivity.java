@@ -1,19 +1,25 @@
 package customer.smart.support;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 
 import customer.smart.support.ad.MainActivityAd;
+import customer.smart.support.app.Appconfig;
 import customer.smart.support.client.category.MainActivityCategories;
 import customer.smart.support.client.seller_as.MainActivitySeller;
 import customer.smart.support.client.shop.MainActivityShop;
+import customer.smart.support.client.stock.MainActivityProduct;
 import customer.smart.support.client.wallet.MainActivityWallet;
 import customer.smart.support.cmobile.MainActivityMobile;
 import customer.smart.support.contact.MainActivityContact;
@@ -265,5 +271,34 @@ public class NaviActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.navi_menu, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            onBackPressed();
+        }
+        if (id == R.id.logOut) {
+            logout();
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    protected void logout() {
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putBoolean(Appconfig.isLogin, false);
+        editor.commit();
+        startActivity(new Intent(NaviActivity.this, StartActivity.class));
+        finishAffinity();
     }
 }

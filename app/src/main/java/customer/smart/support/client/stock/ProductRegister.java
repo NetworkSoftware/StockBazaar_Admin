@@ -1,5 +1,9 @@
 package customer.smart.support.client.stock;
 
+import static customer.smart.support.app.Appconfig.SHOP;
+import static customer.smart.support.app.Appconfig.STOCK;
+import static customer.smart.support.app.Appconfig.mypreference;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,18 +13,13 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,11 +36,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.deishelon.roundedbottomsheet.RoundedBottomSheetDialog;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
@@ -75,13 +71,7 @@ import customer.smart.support.app.AppController;
 import customer.smart.support.app.Appconfig;
 import customer.smart.support.app.Imageutils;
 import customer.smart.support.attachment.ActivityMediaOnline;
-import customer.smart.support.client.bulkPrice.BulkPriceAdapter;
 import customer.smart.support.client.bulkPrice.BulkPriceBeen;
-import customer.smart.support.shop.Shop;
-
-import static customer.smart.support.app.Appconfig.SHOP;
-import static customer.smart.support.app.Appconfig.STOCK;
-import static customer.smart.support.app.Appconfig.mypreference;
 
 public class ProductRegister extends AppCompatActivity
         implements Imageutils.ImageAttachmentListener, ImageClick {
@@ -107,6 +97,13 @@ public class ProductRegister extends AppCompatActivity
     MaterialBetterSpinner selectcategories;
     SharedPreferences sharedpreferences;
     ArrayList<BulkPriceBeen> bulkPriceBeens = new ArrayList<>();
+    CheckBox isNotify;
+    TextView qtyOne;
+    TextInputEditText price;
+    TextView qtyThree;
+    TextInputEditText priceThree;
+    TextView qtyFive;
+    TextInputEditText priceFive;
     private Map<String, String> nameIdMap = new HashMap<>();
     private Map<String, String> idNameMap = new HashMap<>();
     private Map<String, String> idBrandMap = new HashMap<>();
@@ -117,13 +114,6 @@ public class ProductRegister extends AppCompatActivity
     private Product product = null;
     private String shopname = "STOCK BAZAAR";
     private String shopid = "0";
-    CheckBox isNotify;
-    TextView qtyOne;
-    TextInputEditText price;
-    TextView qtyThree;
-    TextInputEditText priceThree;
-    TextView qtyFive;
-    TextInputEditText priceFive;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -175,6 +165,11 @@ public class ProductRegister extends AppCompatActivity
         selectshop.setFocusableInTouchMode(false);
 
         selectcategories = findViewById(R.id.selectcategories);
+        if("MOBILE SPARES".equalsIgnoreCase(selectcategories.getText().toString())){
+            brand.setHint("Select Items");
+        }else {
+            brand.setHint("Select Brand");
+        }
         ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, CATEGORY);
         selectcategories.setAdapter(categoryAdapter);
@@ -182,6 +177,12 @@ public class ProductRegister extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 BRAND = idBrandMap.get(SHOPNAME[0]).split(",");
+
+                if("MOBILE SPARES".equalsIgnoreCase(selectcategories.getText().toString())){
+                    brand.setHint("Select Spare");
+                }else {
+                    brand.setHint("Select Brand");
+                }
                 ArrayAdapter<String> brandAdapter = new ArrayAdapter<String>(ProductRegister.this,
                         android.R.layout.simple_dropdown_item_1line, BRAND);
                 brand.setAdapter(brandAdapter);
@@ -190,7 +191,6 @@ public class ProductRegister extends AppCompatActivity
 
         //brand
         brand = findViewById(R.id.brand);
-
         //stock update
         ArrayAdapter<String> stockAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, STOCKUPDATE);
@@ -525,7 +525,6 @@ public class ProductRegister extends AppCompatActivity
 
     @Override
     public void onImageClick(int position) {
-
         Intent localIntent = new Intent(ProductRegister.this, ActivityMediaOnline.class);
         localIntent.putExtra("filePath", samplesList.get(position));
         localIntent.putExtra("isImage", true);
@@ -609,6 +608,18 @@ public class ProductRegister extends AppCompatActivity
         return myQuittingDialogBox;
     }
 
+    @Override
+    public void onBackPressed() {
+        if (getIntent().getStringExtra("from") != null
+                && getIntent().getStringExtra("from").equalsIgnoreCase("admin")) {
+            Intent intent = new Intent(ProductRegister.this, StartActivity.class);
+            startActivity(intent);
+            finishAffinity();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     private class UploadFileToServer extends AsyncTask<String, Integer, String> {
         public long totalSize = 0;
         String filepath;
@@ -688,7 +699,8 @@ public class ProductRegister extends AppCompatActivity
                 JSONObject jsonObject = new JSONObject(result);
                 if (!jsonObject.getBoolean("error")) {
                     String model = jsonObject.getString("model");
-                    String imageUrl = Appconfig.ip_img + "uploads/" + model + "/" + imageutils.getfilename_from_path(filepath);
+                    String imageUrl = Appconfig.ip_img + "uploads/" + model + "/" +
+                            imageutils.getfilename_from_path(filepath);
                     samplesList.add(imageUrl);
                     maddImageAdapter.notifyData(samplesList);
                 } else {
@@ -700,25 +712,9 @@ public class ProductRegister extends AppCompatActivity
                 Toast.makeText(getApplicationContext(), "Image not uploaded", Toast.LENGTH_SHORT).show();
             }
             hideDialog();
-            // showing the server response in an alert dialog
-            //showAlert(result);
-
-
             super.onPostExecute(result);
         }
 
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (getIntent().getStringExtra("from") != null
-                && getIntent().getStringExtra("from").equalsIgnoreCase("admin")) {
-            Intent intent = new Intent(ProductRegister.this, StartActivity.class);
-            startActivity(intent);
-            finishAffinity();
-        } else {
-            super.onBackPressed();
-        }
     }
 }
 

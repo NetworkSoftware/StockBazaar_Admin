@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
@@ -11,21 +10,22 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_gravity="center"
-        android:padding="10dp"
         android:layout_marginTop="10dp"
-        android:src="@drawable/icon"/>
+        android:padding="10dp"
+        android:src="@drawable/icon" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="10dp">
 
         <EditText
             android:id="@+id/mobile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Mobile"
             android:layout_margin="5dp"
+            android:hint="Mobile"
             android:textColor="#000"
             android:textSize="15dp" />
 
@@ -34,17 +34,67 @@
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Password"
             android:layout_margin="5dp"
+            android:hint="Password"
             android:textColor="#000"
-            android:textSize="15dp" />
+            android:textSize="15dp"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.poovam.pinedittextfield.SquarePinField
+                android:id="@+id/otp_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:inputType="numberDecimal"
+                android:textSelectHandle="@drawable/text_handle"
+                android:textSize="16sp"
+                android:visibility="gone"
+                app:cornerRadius="10dp"
+                app:fieldBgColor="#ddd"
+                app:noOfFields="4" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/loginOtp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:layout_weight="1"
+                android:text="OTP LOGIN" />
+
+            <Button
+                android:id="@+id/loginPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:layout_weight="1"
+                android:text="PASSWORD LOGIN" />
+        </LinearLayout>
 
 
-    <Button
-        android:id="@+id/submit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="SUBMIT" />
+        <TextView
+            android:id="@+id/requestOtp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/sans_bold"
+            android:gravity="right"
+            android:text="Request OTP"
+            android:textColor="@color/black"
+            android:textSize="16dp" />
     </LinearLayout>
 </LinearLayout>

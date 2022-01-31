@@ -1,12 +1,19 @@
 package customer.smart.support.client.shop;
 
+import static com.android.volley.Request.Method.GET;
+import static customer.smart.support.app.Appconfig.CATEGORIES;
+import static customer.smart.support.app.Appconfig.SHOP;
+
 import android.app.ProgressDialog;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -15,6 +22,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -43,14 +51,11 @@ import customer.smart.support.app.Appconfig;
 import customer.smart.support.client.category.Categories;
 import customer.smart.support.client.stock.MainActivityProduct;
 import customer.smart.support.client.stock.Product;
+import customer.smart.support.client.stock.ProductAdapter;
 import customer.smart.support.client.stock.ProductRegister;
 
-import static com.android.volley.Request.Method.GET;
-import static customer.smart.support.app.Appconfig.CATEGORIES;
-import static customer.smart.support.app.Appconfig.SHOP;
 
-
-public class MainActivityShop extends AppCompatActivity implements ShopClick {
+public class MainActivityShop extends AppCompatActivity implements ShopClick, ShopAdapter.ContactsAdapterListener {
     public static final String SHOPID = "id";
     public static final String SHOPNAME = "shopname";
     private static final String TAG = MainActivityShop.class.getSimpleName();
@@ -60,6 +65,7 @@ public class MainActivityShop extends AppCompatActivity implements ShopClick {
     private List<Shop> categoriesList;
     private List<Categories> category;
     private ShopAdapter mAdapter;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +80,7 @@ public class MainActivityShop extends AppCompatActivity implements ShopClick {
         getSupportActionBar().setTitle("Shop Name");
         recyclerView = findViewById(R.id.recycler_view);
         categoriesList = new ArrayList<>();
-        mAdapter = new ShopAdapter(this, categoriesList, this);
+        mAdapter = new ShopAdapter(this, categoriesList,this, this);
         final LinearLayoutManager addManager1 = new GridLayoutManager(MainActivityShop.this, 1);
         recyclerView.setLayoutManager(addManager1);
         recyclerView.setAdapter(mAdapter);
@@ -245,21 +251,6 @@ public class MainActivityShop extends AppCompatActivity implements ShopClick {
     }
 
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            finish();
-        }
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_search) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-
     private void whiteNotificationBar(View view) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             int flags = view.getSystemUiVisibility();
@@ -284,9 +275,9 @@ public class MainActivityShop extends AppCompatActivity implements ShopClick {
     }
 
     @Override
-    public void onItemClick(int position) {
+    public void onItemClick(Shop shop) {
         Intent intent = new Intent(MainActivityShop.this, ShopRegister.class);
-        intent.putExtra("data", categoriesList.get(position));
+        intent.putExtra("data", shop);
         startActivity(intent);
     }
 
@@ -332,6 +323,7 @@ public class MainActivityShop extends AppCompatActivity implements ShopClick {
                     } else {
                         Toast.makeText(MainActivityShop.this, jObj.getString("message"), Toast.LENGTH_SHORT).show();
                     }
+                    mAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     Log.e("xxxxxxxxxxx", e.toString());
                     Toast.makeText(MainActivityShop.this, "Some Network Error.Try after some time", Toast.LENGTH_SHORT).show();
@@ -434,4 +426,64 @@ public class MainActivityShop extends AppCompatActivity implements ShopClick {
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) menu.findItem(R.id.action_search)
+                .getActionView();
+        searchView.setSearchableInfo(searchManager
+                .getSearchableInfo(getComponentName()));
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+
+        // listening to search query text change
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // filter recycler view when query submitted
+                mAdapter.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                // filter recycler view when text is changed
+                mAdapter.getFilter().filter(query);
+                return false;
+            }
+        });
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_search) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        // close search view on back button pressed
+        if (!searchView.isIconified()) {
+            searchView.setIconified(true);
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    @Override
+    public void onContactSelected(Shop product) {
+
+    }
 }

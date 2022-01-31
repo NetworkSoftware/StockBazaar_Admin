@@ -2,6 +2,7 @@ package customer.smart.support.app;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -13,6 +14,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import static customer.smart.support.app.Appconfig.mypreference;
+
+import customer.smart.support.StartActivity;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -75,4 +78,5 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (pDialog!=null && pDialog.isShowing())
             pDialog.dismiss();
     }
+
 }

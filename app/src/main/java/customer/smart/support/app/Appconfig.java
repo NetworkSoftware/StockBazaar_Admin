@@ -33,13 +33,23 @@ import java.util.TimeZone;
 public class Appconfig {
     //Key values
     public static final String shopIdKey = "shopIdKey";
+    public static final String isLogin = "isLoginKey";
+    public static final String isClient = "isClientKey";
+    public static final String shopId = "shopId";
+    public static final String shopName = "shopName";
+    public static final String category = "categoryKey";
+
+    public static final String configKey = "configKey";
+    public static final String usernameKey = "usernameKey";
+    public static final String auth_key = "auth_key";
+    public static final String user_id = "user_id";
     public static final String Phone = "phone";
     public static final String AdminPhone = "user";
     public static final String mypreference = "mypref";
     public static final String ip = "http://thestockbazaar.com/prisma/tmobile/";
     public static final String ip_img = "http://thestockbazaar.com/prisma/tmobile/";
-/*           public static final String ip = "http://192.168.1.204:8111/prisma/tmobile/";
-           public static final String ip_img = "http://192.168.1.204:8111/prisma/tmobile/";*/
+    /*        public static final String ip = "http://192.168.1.204:8111/prisma/tmobile/";
+            public static final String ip_img = "http://192.168.1.204:8111/prisma/tmobile/";*/
     public static final String CREATE_SHOP = ip + "create_shop.php";
     public static final String STATUSUPDATE = ip + "status_update";
     public static final String STAFF_LOGIN = ip + "staff_login.php";
@@ -78,6 +88,9 @@ public class Appconfig {
     public static final String WALLET = ip + "wallet";
     public static final String GETWALLET = ip + "getwallet";
     public static final String WALLETSTATUS = ip + "wallet_status";
+    public static final String OTP = ip + "otp";
+    public static final String OTPLOGIN = ip + "otplogin";
+
     //category
     public static final String CATEGORIES = ip + "category";
     public static final String FETCH_ITEM_BY_ID = ip + "fetchItemByIdNew";
@@ -335,4 +348,5 @@ public class Appconfig {
                 }).create();
         dialog.show();
     }
+
 }

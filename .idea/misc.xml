@@ -3,6 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/StudioProjects/StockBazaar_Admin/app/src/main/res/layout/activity_maincontact.xml" value="0.12708333333333333" />
+        <entry key="..\:/StudioProjects/StockBazaar_Admin/app/src/main/res/layout/activity_navi.xml" value="0.12708333333333333" />
+        <entry key="..\:/StudioProjects/StockBazaar_Admin/app/src/main/res/layout/activity_single_order.xml" value="0.12708333333333333" />
+        <entry key="..\:/StudioProjects/StockBazaar_Admin/app/src/main/res/layout/activity_splash.xml" value="0.12708333333333333" />
+        <entry key="..\:/StudioProjects/StockBazaar_Admin/app/src/main/res/layout/activity_start.xml" value="0.12708333333333333" />
+        <entry key="..\:/StudioProjects/StockBazaar_Admin/app/src/main/res/layout/client_product_row_item.xml" value="0.12708333333333333" />
+        <entry key="..\:/StudioProjects/StockBazaar_Admin/app/src/main/res/layout/client_stock_register.xml" value="0.25" />
+        <entry key="..\:/StudioProjects/StockBazaar_Admin/app/src/main/res/layout/order_row_item.xml" value="0.12708333333333333" />
+        <entry key="..\:/StudioProjects/StockBazaar_Admin/app/src/main/res/menu/menu_main.xml" value="0.12708333333333333" />
+        <entry key="..\:/StudioProjects/StockBazaar_Admin/app/src/main/res/menu/navi_menu.xml" value="0.12708333333333333" />
+        <entry key="..\:/StudioProjects/StockBazaar_Admin/app/src/main/res/menu/product_menu.xml" value="0.12708333333333333" />
+        <entry key="..\:/StudioProjects/StockBazaar_Admin/app/src/main/res/menu/toolbar_menu.xml" value="0.12708333333333333" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/CustomerSupport_SBAdmin/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/CustomerSupport_SBAdmin/app/src/main/res/layout/categories_register.xml" value="0.1" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/CustomerSupport_SBAdmin/app/src/main/res/layout/client_stock_register.xml" value="0.1" />
