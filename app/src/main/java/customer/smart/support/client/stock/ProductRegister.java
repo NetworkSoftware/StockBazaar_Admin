@@ -176,16 +176,19 @@ public class ProductRegister extends AppCompatActivity
         selectcategories.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                BRAND = idBrandMap.get(SHOPNAME[0]).split(",");
+                BRAND = idBrandMap.containsKey(selectcategories.getText().toString())?
+                        idBrandMap.get(selectcategories.getText().toString()).split(","):
+                        idBrandMap.get(SHOPNAME[0]).split(",");
 
                 if("MOBILE SPARES".equalsIgnoreCase(selectcategories.getText().toString())){
-                    brand.setHint("Select Spare");
+                    brand.setHint("Select Item");
                 }else {
                     brand.setHint("Select Brand");
                 }
                 ArrayAdapter<String> brandAdapter = new ArrayAdapter<String>(ProductRegister.this,
                         android.R.layout.simple_dropdown_item_1line, BRAND);
                 brand.setAdapter(brandAdapter);
+                brand.setText("");
             }
         });
 
