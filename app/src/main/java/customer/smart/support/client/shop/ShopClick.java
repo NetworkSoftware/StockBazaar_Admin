@@ -2,8 +2,8 @@ package customer.smart.support.client.shop;
 
 public interface ShopClick {
 
-    void onDeleteClick(int position);
+    void onDeleteClick(Shop shop);
     void onItemClick(Shop shop);
-    void onStockAdd(int position);
+    void onStockAdd(Shop shop);
     void onCategoryAdd(int position);
 }

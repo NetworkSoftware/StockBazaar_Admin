@@ -78,10 +78,12 @@ public class StartActivity extends AppCompatActivity {
                     password.setVisibility(View.VISIBLE);
                     otp_view.setVisibility(View.GONE);
                     requestOtp.setText("LOGIN OTP");
+                    loginOtp.setText("OTP LOGIN");
                 } else {
                     password.setVisibility(View.GONE);
                     otp_view.setVisibility(View.VISIBLE);
                     requestOtp.setText("PASSWORD LOGIN");
+                    loginOtp.setText("VERIFY OTP");
                 }
             }
         });

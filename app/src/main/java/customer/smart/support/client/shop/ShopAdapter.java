@@ -98,7 +98,7 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.MyViewHolder>
         holder.cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bannerClick.onDeleteClick(position);
+                bannerClick.onDeleteClick(shop);
             }
         });
 
@@ -111,7 +111,7 @@ public class ShopAdapter extends RecyclerView.Adapter<ShopAdapter.MyViewHolder>
         holder.stock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bannerClick.onStockAdd(position);
+                bannerClick.onStockAdd(shop);
             }
         });
 

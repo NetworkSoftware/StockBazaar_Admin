@@ -51,7 +51,6 @@ import customer.smart.support.app.Appconfig;
 import customer.smart.support.client.category.Categories;
 import customer.smart.support.client.stock.MainActivityProduct;
 import customer.smart.support.client.stock.Product;
-import customer.smart.support.client.stock.ProductAdapter;
 import customer.smart.support.client.stock.ProductRegister;
 
 
@@ -80,7 +79,7 @@ public class MainActivityShop extends AppCompatActivity implements ShopClick, Sh
         getSupportActionBar().setTitle("Shop Name");
         recyclerView = findViewById(R.id.recycler_view);
         categoriesList = new ArrayList<>();
-        mAdapter = new ShopAdapter(this, categoriesList,this, this);
+        mAdapter = new ShopAdapter(this, categoriesList, this, this);
         final LinearLayoutManager addManager1 = new GridLayoutManager(MainActivityShop.this, 1);
         recyclerView.setLayoutManager(addManager1);
         recyclerView.setAdapter(mAdapter);
@@ -269,8 +268,8 @@ public class MainActivityShop extends AppCompatActivity implements ShopClick, Sh
     }
 
     @Override
-    public void onDeleteClick(int position) {
-        AlertDialog diaBox = AskOption(position);
+    public void onDeleteClick(Shop shop) {
+        AlertDialog diaBox = AskOption(shop);
         diaBox.show();
     }
 
@@ -282,10 +281,10 @@ public class MainActivityShop extends AppCompatActivity implements ShopClick, Sh
     }
 
     @Override
-    public void onStockAdd(int position) {
+    public void onStockAdd(Shop shop) {
         Intent intent = new Intent(MainActivityShop.this, MainActivityProduct.class);
-        intent.putExtra(SHOPID, categoriesList.get(position).id);
-        intent.putExtra(SHOPNAME, categoriesList.get(position).shop_name);
+        intent.putExtra(SHOPID, shop.id);
+        intent.putExtra(SHOPNAME, shop.shop_name);
         intent.putExtra("EXTRA_CAT", category.get(0).getTitle());
         startActivity(intent);
     }
@@ -350,7 +349,7 @@ public class MainActivityShop extends AppCompatActivity implements ShopClick, Sh
     }
 
 
-    private AlertDialog AskOption(final int position) {
+    private AlertDialog AskOption(final Shop shop) {
         AlertDialog myQuittingDialogBox = new AlertDialog.Builder(this)
                 //set message, title, and icon
                 .setTitle("Delete")
@@ -361,7 +360,7 @@ public class MainActivityShop extends AppCompatActivity implements ShopClick, Sh
 
                     public void onClick(DialogInterface dialog, int whichButton) {
                         //your deleting code
-                        deleteFile(position);
+                        deleteFile(shop);
                         dialog.dismiss();
                     }
 
@@ -381,13 +380,13 @@ public class MainActivityShop extends AppCompatActivity implements ShopClick, Sh
     }
 
 
-    private void deleteFile(final int position) {
+    private void deleteFile(final Shop shop) {
         String tag_string_req = "req_register";
         progressDialog.setMessage("Fetching ...");
         showDialog();
         // showDialog();
         StringRequest strReq = new StringRequest(Request.Method.DELETE,
-                Appconfig.SHOP + "?id=" + categoriesList.get(position).id, new Response.Listener<String>() {
+                Appconfig.SHOP + "?id=" + shop.id, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.d("Register Response: ", response);
@@ -395,8 +394,7 @@ public class MainActivityShop extends AppCompatActivity implements ShopClick, Sh
                 try {
                     JSONObject jObj = new JSONObject(response);
                     if (jObj.getBoolean("success")) {
-                        categoriesList.remove(position);
-                        mAdapter.notifyData(categoriesList);
+                        fetchShop();
                     }
                     Toast.makeText(MainActivityShop.this, jObj.getString("message"), Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
@@ -417,9 +415,8 @@ public class MainActivityShop extends AppCompatActivity implements ShopClick, Sh
             }
         }) {
             protected Map<String, String> getParams() {
-                HashMap localHashMap = new HashMap();
-                localHashMap.put("id", categoriesList.get(position).id);
-                return localHashMap;
+                return new HashMap();
+
             }
         };
         strReq.setRetryPolicy(Appconfig.getPolicy());

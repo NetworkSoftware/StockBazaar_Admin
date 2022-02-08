@@ -18,6 +18,7 @@ import customer.smart.support.ad.MainActivityAd;
 import customer.smart.support.app.Appconfig;
 import customer.smart.support.client.category.MainActivityCategories;
 import customer.smart.support.client.seller_as.MainActivitySeller;
+import customer.smart.support.client.service.ServiceTabsActivity;
 import customer.smart.support.client.shop.MainActivityShop;
 import customer.smart.support.client.stock.MainActivityProduct;
 import customer.smart.support.client.wallet.MainActivityWallet;
@@ -55,6 +56,7 @@ public class NaviActivity extends AppCompatActivity {
         LinearLayout orders = findViewById(R.id.orders);
         LinearLayout seller = findViewById(R.id.seller);
         LinearLayout wallet = findViewById(R.id.wallet);
+        LinearLayout service = findViewById(R.id.serviceLi);
 
         LinearLayout category = findViewById(R.id.category);
         LinearLayout client_shop = findViewById(R.id.client_shop);
@@ -74,6 +76,7 @@ public class NaviActivity extends AppCompatActivity {
             seller.setVisibility(View.VISIBLE);
             wallet.setVisibility(View.VISIBLE);
             client_shop.setVisibility(View.VISIBLE);
+            service.setVisibility(View.VISIBLE);
         } else if (sharedpreferences.getString("role", "admin").equalsIgnoreCase("admin")) {
 
             String data = sharedpreferences.getString("data", "");
@@ -147,6 +150,11 @@ public class NaviActivity extends AppCompatActivity {
                 wallet.setVisibility(View.VISIBLE);
             } else {
                 wallet.setVisibility(View.GONE);
+            }
+            if (data.contains("service")) {
+                service.setVisibility(View.VISIBLE);
+            } else {
+                service.setVisibility(View.GONE);
             }
 
 
@@ -267,6 +275,14 @@ public class NaviActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent io = new Intent(NaviActivity.this, customer.smart.support.address.MainActivity.class);
+                startActivity(io);
+
+            }
+        });
+        service.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent io = new Intent(NaviActivity.this, ServiceTabsActivity.class);
                 startActivity(io);
 
             }

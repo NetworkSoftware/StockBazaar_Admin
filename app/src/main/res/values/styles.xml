@@ -61,4 +61,9 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">12dp</item>
     </style>
+
+    <style name="MyTabLayoutTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse">
+        <item name="android:textSize">18dp</item>
+        <item name="android:fontFamily">@font/sans</item>
+    </style>
 </resources>

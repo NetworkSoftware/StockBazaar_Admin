@@ -26,6 +26,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:hint="Mobile"
+            android:inputType="phone"
+            android:maxLines="1"
             android:textColor="#000"
             android:textSize="15dp" />
 

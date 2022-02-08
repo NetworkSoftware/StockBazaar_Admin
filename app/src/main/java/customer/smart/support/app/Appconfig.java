@@ -48,8 +48,8 @@ public class Appconfig {
     public static final String mypreference = "mypref";
     public static final String ip = "http://thestockbazaar.com/prisma/tmobile/";
     public static final String ip_img = "http://thestockbazaar.com/prisma/tmobile/";
-    /*        public static final String ip = "http://192.168.1.204:8111/prisma/tmobile/";
-            public static final String ip_img = "http://192.168.1.204:8111/prisma/tmobile/";*/
+    /* public static final String ip = "http://192.168.1.204:8111/prisma/tmobile/";
+     public static final String ip_img = "http://192.168.1.204:8111/prisma/tmobile/";*/
     public static final String CREATE_SHOP = ip + "create_shop.php";
     public static final String STATUSUPDATE = ip + "status_update";
     public static final String STAFF_LOGIN = ip + "staff_login.php";
@@ -90,6 +90,8 @@ public class Appconfig {
     public static final String WALLETSTATUS = ip + "wallet_status";
     public static final String OTP = ip + "otp";
     public static final String OTPLOGIN = ip + "otplogin";
+    public static final String SERVICE = ip + "service";
+    public static final String EXCHANGE = ip + "exchange";
 
     //category
     public static final String CATEGORIES = ip + "category";
@@ -225,6 +227,7 @@ public class Appconfig {
         return filename;
 
     }
+
     public static DefaultRetryPolicy getTimeOut() {
         return new DefaultRetryPolicy(
                 50000,

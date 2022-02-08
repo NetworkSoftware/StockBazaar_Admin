@@ -3,7 +3,6 @@ package customer.smart.support.app;
 import static com.android.volley.Request.Method.GET;
 import static customer.smart.support.app.Appconfig.mypreference;
 
-import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -32,20 +31,16 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 import customer.smart.support.NaviActivity;
 import customer.smart.support.R;
 import customer.smart.support.client.stock.Product;
 import customer.smart.support.client.stock.ProductRegister;
-import customer.smart.support.stock.ProductName;
-import customer.smart.support.stock.StockRegister;
 
 
 public class FirebaseMessageReceiver extends FirebaseMessagingService {
-    private SharedPreferences sharedpreferences;
     Intent intent = null;
+    private SharedPreferences sharedpreferences;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -81,17 +76,22 @@ public class FirebaseMessageReceiver extends FirebaseMessagingService {
             try {
                 JSONObject jsonObject = new JSONObject(metadata);
                 String type = jsonObject.getString("type");
-                String id = jsonObject.getString("id");
                 String adminPhone = sharedpreferences.getString(Appconfig.AdminPhone, "");
                 Log.e("xxxx", adminPhone);
                 if (adminPhone.equalsIgnoreCase("9787665726") ||
                         adminPhone.equalsIgnoreCase("7010504536") ||
                         adminPhone.equalsIgnoreCase("9514414404") ||
                         adminPhone.equalsIgnoreCase("9787665854")) {
-                    fetchContacts(id, type, message, title);
+                    if (type.equalsIgnoreCase("service")
+                            || type.equalsIgnoreCase("exchange")) {
+                        intent = new Intent(this, NaviActivity.class);
+                        sent(message, title, intent, null);
+                    } else {
+                        String id = jsonObject.getString("id");
+                        fetchContacts(id, type, message, title);
+                    }
                 }
                 return;
-
             } catch (Exception e) {
                 Log.e("xxxx", e.toString());
             }

@@ -244,7 +244,7 @@
                             android:layout_gravity="center"
                             android:backgroundTint="@color/white"
                             android:hint="Description"
-                            android:inputType="text"
+                            android:inputType="textMultiLine"
                             android:textColor="@color/black"
                             android:textSize="15dp" />
 
