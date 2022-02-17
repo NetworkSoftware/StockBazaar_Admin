@@ -68,6 +68,7 @@ public class MainActivityProduct extends AppCompatActivity implements ProductAda
     CategoryFilterAdapter categoryFilterAdapter;
     BrandFilterAdapter brandFilterAdapter;
     String[] SHOPNAME = new String[]{"Loading"};
+    SharedPreferences sharedPreferences;
     private RecyclerView recyclerView, recycler_category, recycler_brand;
     private List<Product> contactList;
     private ProductAdapter mAdapter;
@@ -81,7 +82,6 @@ public class MainActivityProduct extends AppCompatActivity implements ProductAda
     private ArrayList<BrandFilterBean> brandFilterBeans = new ArrayList<>();
     private String selectPrice = "ALL";
     private Map<String, String> idNameMap = new HashMap<>();
-    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,8 +178,18 @@ public class MainActivityProduct extends AppCompatActivity implements ProductAda
                     JSONObject jObj = new JSONObject(response);
                     int success = jObj.getInt("success");
                     if (success == 1) {
+                        if (offset == 0) {
+                            String count = jObj.getString("productCount");
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString(Appconfig.productCount, count);
+                            editor.commit();
+                            getSupportActionBar().setSubtitle(count);
+                        } else {
+                            getSupportActionBar().setSubtitle(sharedPreferences.getString(Appconfig.productCount, ""));
+                        }
                         JSONArray jsonArray = jObj.getJSONArray("data");
                         offset = offset + 1;
+
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             Product product = new Product();
@@ -239,12 +249,11 @@ public class MainActivityProduct extends AppCompatActivity implements ProductAda
                             }
                             brandFilterAdapter.notifyData(brandFilterBeans);
                             selectPrice = "ALL";
-                            getSupportActionBar().setSubtitle(selectPrice);
+                          //  getSupportActionBar().setSubtitle(selectPrice);
                             brandFilterAdapter.notifyData(selectPrice);
                         }
 
                         mAdapter.notifyData(contactList);
-                        getSupportActionBar().setSubtitle(contactList.size() + "  Nos");
 
                     } else {
                         Toast.makeText(getApplication(), jObj.getString("message"), Toast.LENGTH_SHORT).show();
@@ -336,7 +345,7 @@ public class MainActivityProduct extends AppCompatActivity implements ProductAda
             onBackPressed();
         }
         if (id == R.id.logOut) {
-           logout();
+            logout();
         }
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_search) {

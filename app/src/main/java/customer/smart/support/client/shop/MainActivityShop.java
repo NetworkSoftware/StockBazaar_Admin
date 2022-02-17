@@ -114,6 +114,7 @@ public class MainActivityShop extends AppCompatActivity implements ShopClick, Sh
     /**
      * fetches json by making http calls
      */
+
     private void fetchShop() {
         String tag_string_req = "req_register";
         progressDialog.setMessage("Processing ...");
@@ -484,4 +485,5 @@ public class MainActivityShop extends AppCompatActivity implements ShopClick, Sh
     public void onContactSelected(Shop product) {
 
     }
+
 }

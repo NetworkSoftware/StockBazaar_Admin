@@ -1,5 +1,7 @@
 package customer.smart.support.order;
 
+import static customer.smart.support.app.Appconfig.decimalFormat;
+
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -10,7 +12,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -56,8 +57,6 @@ import customer.smart.support.app.HeaderFooterPageEvent;
 import customer.smart.support.app.PdfConfig;
 import customer.smart.support.app.PdfConfigInvoice;
 
-import static customer.smart.support.app.Appconfig.decimalFormat;
-
 
 public class MyOrderPage extends AppCompatActivity {
 
@@ -70,7 +69,7 @@ public class MyOrderPage extends AppCompatActivity {
                     "Ph: 7010504536, 9787665726",
             "STOCK BAZAAR\n" +
                     "174 4TH STR," +
-                    "CROSS CUT"+
+                    "CROSS CUT" +
                     "GANDHIPURAM," +
                     "CBE TN 641012," +
                     "PH 9514414404,\n" +
@@ -281,7 +280,11 @@ public class MyOrderPage extends AppCompatActivity {
         TextInputEditText buyeraddress = dialogView.findViewById(R.id.buyeraddress);
         BetterSpinner id = dialogView.findViewById(R.id.id);
         TextInputEditText cod = dialogView.findViewById(R.id.cod);
-
+        if ("gpay".equalsIgnoreCase(payment.getText().toString())) {
+            id.setText("3000042878");
+        } else {
+            id.setText("51713");
+        }
 
         ArrayAdapter<String> addressAdapter = new ArrayAdapter<String>(MyOrderPage.this,
                 android.R.layout.simple_dropdown_item_1line, ADDRESS);
