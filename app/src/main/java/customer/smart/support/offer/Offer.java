@@ -17,7 +17,7 @@ public class Offer implements Serializable {
     public String minQuantity;
     public String maxQuantity;
     ArrayList<String> image1;
-public String price;
+public String price,productId;
 
     public Offer() {
     }
@@ -123,5 +123,13 @@ public String price;
 
     public void setPrice(String price) {
         this.price = price;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 }

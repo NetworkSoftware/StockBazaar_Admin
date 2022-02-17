@@ -4,4 +4,5 @@ public interface ImageClick {
     void onImageClick(int position);
     void onDeleteClick(int position);
     void itemEditClick(int position);
+    void itemDownload(String image);
 }

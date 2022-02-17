@@ -222,6 +222,7 @@ public class MainActivityShop extends AppCompatActivity implements ShopClick, Sh
                                 intent.putExtra("data", productListBean);
                                 intent.putExtra("SHOPNAME", jsonObject.getString("shopName"));
                                 intent.putExtra("SHOPID", jsonObject.getString("selectshop"));
+                                intent.putExtra("CATEGORY", jsonObject.getString("categoryName"));
                                 startActivity(intent);
                             }
                         } catch (Exception e) {

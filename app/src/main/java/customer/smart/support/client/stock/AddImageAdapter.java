@@ -62,7 +62,12 @@ public class AddImageAdapter extends RecyclerView.Adapter<AddImageAdapter.MyView
         } catch (Exception e) {
             Toast.makeText(mainActivityUser, "Something went wrong", Toast.LENGTH_SHORT).show();
         }
-
+        holder.download.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageClick.itemDownload(samples);
+            }
+        });
 
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +92,7 @@ public class AddImageAdapter extends RecyclerView.Adapter<AddImageAdapter.MyView
         private final CardView itemsCard, itemsAdd;
         private final ImageView itemsImage;
         private final TextView nameimage, categoryimage;
-        LinearLayout delete;
+        LinearLayout delete,download;
 
         public MyViewHolder(View view) {
             super((view));
@@ -97,6 +102,7 @@ public class AddImageAdapter extends RecyclerView.Adapter<AddImageAdapter.MyView
             categoryimage = view.findViewById(R.id.categoryimage);
             nameimage = view.findViewById(R.id.nameimage);
             delete = view.findViewById(R.id.delete);
+            download = view.findViewById(R.id.download);
 
         }
     }

@@ -83,13 +83,10 @@ public class MainActivityMobile extends AppCompatActivity implements MobileAdapt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maincustomer);
-
         sharedpreferences = getSharedPreferences(mypreference,
                 Context.MODE_PRIVATE);
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
-
-        // toolbar fancy stuff
 
         contactList = new ArrayList<>();
         recyclerView = findViewById(R.id.recycler_view);
@@ -117,7 +114,6 @@ public class MainActivityMobile extends AppCompatActivity implements MobileAdapt
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        // Associate searchable configuration with the SearchView
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         searchView = (SearchView) menu.findItem(R.id.action_search)
                 .getActionView();
@@ -125,18 +121,15 @@ public class MainActivityMobile extends AppCompatActivity implements MobileAdapt
                 .getSearchableInfo(getComponentName()));
         searchView.setMaxWidth(Integer.MAX_VALUE);
 
-        // listening to search query text change
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                // filter recycler view when query submitted
                 shopAdapter.getFilter().filter(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String query) {
-                // filter recycler view when text is changed
                 shopAdapter.getFilter().filter(query);
                 return false;
             }
@@ -146,14 +139,11 @@ public class MainActivityMobile extends AppCompatActivity implements MobileAdapt
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == android.R.id.home) {
             finish();
         }
-        //noinspection SimplifiableIfStatement
+
         if (id == R.id.action_search) {
             return true;
         }
@@ -163,7 +153,6 @@ public class MainActivityMobile extends AppCompatActivity implements MobileAdapt
 
     @Override
     public void onBackPressed() {
-        // close search view on back button pressed
         if (!searchView.isIconified()) {
             searchView.setIconified(true);
             return;
@@ -281,7 +270,6 @@ public class MainActivityMobile extends AppCompatActivity implements MobileAdapt
 
     private AlertDialog AskOption(final Shop shop) {
         AlertDialog myQuittingDialogBox = new AlertDialog.Builder(this)
-                //set message, title, and icon
                 .setTitle("Delete")
                 .setMessage("Do you want to Delete")
                 .setIcon(R.drawable.ic_delete_black_24dp)
@@ -313,7 +301,6 @@ public class MainActivityMobile extends AppCompatActivity implements MobileAdapt
         String tag_string_req = "req_register";
         progressDialog.setMessage("Fetching ...");
         showDialog();
-        // showDialog();
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 Appconfig.DELETE_SHOP, new Response.Listener<String>() {
             @Override
@@ -328,9 +315,7 @@ public class MainActivityMobile extends AppCompatActivity implements MobileAdapt
                     }
                     Toast.makeText(MainActivityMobile.this, jObj.getString("message"), Toast.LENGTH_SHORT).show();
                     shopAdapter.notifyData(shopList);
-
-                } catch (
-                        JSONException e) {
+                } catch (JSONException e) {
                     Log.e("xxxxxxxxxxx", e.toString());
                     Toast.makeText(MainActivityMobile.this, "Some Network Error.Try after some time", Toast.LENGTH_SHORT).show();
 
@@ -442,7 +427,8 @@ public class MainActivityMobile extends AppCompatActivity implements MobileAdapt
 
     }
 
-    private void updateStatus(final String shopId, final String status, RoundedBottomSheetDialog mBottomSheetDialog) {
+    private void updateStatus(final String shopId, final String status,
+                              RoundedBottomSheetDialog mBottomSheetDialog) {
         String tag_string_req = "req_register";
         showDialog();
         StringRequest strReq = new StringRequest(Request.Method.PUT,

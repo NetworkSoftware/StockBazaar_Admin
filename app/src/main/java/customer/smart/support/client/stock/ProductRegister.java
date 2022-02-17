@@ -4,15 +4,20 @@ import static customer.smart.support.app.Appconfig.SHOP;
 import static customer.smart.support.app.Appconfig.STOCK;
 import static customer.smart.support.app.Appconfig.mypreference;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,6 +34,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -57,8 +64,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -165,24 +176,26 @@ public class ProductRegister extends AppCompatActivity
         selectshop.setFocusableInTouchMode(false);
 
         selectcategories = findViewById(R.id.selectcategories);
-        if("MOBILE SPARES".equalsIgnoreCase(selectcategories.getText().toString())){
+        if ("MOBILE SPARES".equalsIgnoreCase(selectcategories.getText().toString())) {
             brand.setHint("Select Items");
-        }else {
+        } else {
             brand.setHint("Select Brand");
         }
+
+
         ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, CATEGORY);
         selectcategories.setAdapter(categoryAdapter);
         selectcategories.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                BRAND = idBrandMap.containsKey(selectcategories.getText().toString())?
-                        idBrandMap.get(selectcategories.getText().toString()).split(","):
+                BRAND = idBrandMap.containsKey(selectcategories.getText().toString()) ?
+                        idBrandMap.get(selectcategories.getText().toString()).split(",") :
                         idBrandMap.get(SHOPNAME[0]).split(",");
 
-                if("MOBILE SPARES".equalsIgnoreCase(selectcategories.getText().toString())){
+                if ("MOBILE SPARES".equalsIgnoreCase(selectcategories.getText().toString())) {
                     brand.setHint("Select Item");
-                }else {
+                } else {
                     brand.setHint("Select Brand");
                 }
                 ArrayAdapter<String> brandAdapter = new ArrayAdapter<String>(ProductRegister.this,
@@ -267,8 +280,13 @@ public class ProductRegister extends AppCompatActivity
             } else {
                 selectshop.setText(type);
             }
+            String categoryIntend = getIntent().getStringExtra("CATEGORY");
+            if (categoryIntend != null) {
+                selectcategories.setText(categoryIntend);
+            } else {
+                selectcategories.setText(product.categoryName);
+            }
 
-            selectcategories.setText(product.categoryName);
             stock_update.setText(product.stock_update);
             imageUrl = product.image;
             if (imageUrl == null) {
@@ -514,7 +532,9 @@ public class ProductRegister extends AppCompatActivity
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        imageutils.request_permission_result(requestCode, permissions, grantResults);
+        if (requestCode != 123) {
+            imageutils.request_permission_result(requestCode, permissions, grantResults);
+        }
     }
 
     @Override
@@ -544,6 +564,11 @@ public class ProductRegister extends AppCompatActivity
     @Override
     public void itemEditClick(int position) {
 
+    }
+
+    @Override
+    public void itemDownload(String position) {
+        DownloadImage(position);
     }
 
 
@@ -718,6 +743,73 @@ public class ProductRegister extends AppCompatActivity
             super.onPostExecute(result);
         }
 
+    }
+
+
+
+    void DownloadImage(String ImageUrl) {
+        if (ContextCompat.checkSelfPermission(ProductRegister.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(ProductRegister.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(ProductRegister.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE}, 123);
+        } else {
+            showToast("Downloading Image...");
+            new DownloadsImage().execute(ImageUrl);
+        }
+    }
+
+    class DownloadsImage extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            URL url = null;
+            try {
+                url = new URL(strings[0]);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            Bitmap bm = null;
+            try {
+                bm = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES + "/StockBazaar"); //Creates app specific folder
+
+            if (!path.exists()) {
+                path.mkdirs();
+            }
+
+            File imageFile = new File(path, System.currentTimeMillis() + ".png");
+            FileOutputStream out = null;
+            try {
+                out = new FileOutputStream(imageFile);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            try {
+                bm.compress(Bitmap.CompressFormat.PNG, 100, out); // Compress Image
+                out.flush();
+                out.close();
+                MediaScannerConnection.scanFile(ProductRegister.this, new String[]{imageFile.getAbsolutePath()}, null, new MediaScannerConnection.OnScanCompletedListener() {
+                    public void onScanCompleted(String path, Uri uri) {
+                    }
+                });
+            } catch (Exception e) {
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            showToast("Image Saved!");
+        }
+    }
+
+    protected void showToast(String text) {
+        Toast.makeText(ProductRegister.this, text, Toast.LENGTH_SHORT).show();
     }
 }
 

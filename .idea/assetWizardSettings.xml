@@ -23,7 +23,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:/$PROJECT_DIR$/../../Android/Sdk/icons/material/materialicons/expand_less/baseline_expand_less_24.xml" />
+                                      <entry key="url" value="file:/$PROJECT_DIR$/../../Android/Sdk/icons/material/materialicons/download/baseline_download_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -33,7 +33,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_baseline_expand_less_24" />
+                            <entry key="outputName" value="ic_baseline_download_24" />
                             <entry key="sourceFile" value="C:\Users\gopal" />
                           </map>
                         </option>

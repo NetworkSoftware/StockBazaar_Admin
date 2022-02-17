@@ -70,6 +70,7 @@ import customer.smart.support.client.bulkPrice.BulkPriceBeen;
 import customer.smart.support.client.price.PercentagePriceAdapter;
 import customer.smart.support.client.price.PercentagePriceBeen;
 import customer.smart.support.client.stock.ImageClick;
+import customer.smart.support.client.stock.Product;
 
 import static customer.smart.support.app.Appconfig.CATEGORIES;
 
@@ -145,6 +146,12 @@ public class CategoriesRegister extends AppCompatActivity implements Imageutils.
             public void itemEditClick(int position) {
                 showBulkPercentagePrice(position);
             }
+
+            @Override
+            public void itemDownload(String image) {
+
+            }
+
         }, true);
         final LinearLayoutManager sizeManager = new LinearLayoutManager(
                 this, LinearLayoutManager.VERTICAL, false);

@@ -110,6 +110,7 @@ public class OfferActivity extends AppCompatActivity implements OnOfferClick {
                             shop.setCategory(jsonObject.getString("isDealer"));
                             shop.setMinQuantity(jsonObject.getString("minQuantity"));
                             shop.setMaxQuantity(jsonObject.getString("maxQuantity"));
+                            shop.setProductId(jsonObject.getString("productId"));
                             shop.setImage(jsonObject.getString("image"));
 
                             ArrayList<String> imageList = new ArrayList<>();
@@ -143,7 +144,7 @@ public class OfferActivity extends AppCompatActivity implements OnOfferClick {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("Registration Error: ", error.getMessage());
+             //   Log.e("Registration Error: ", error.getMessage());
                 Toast.makeText(OfferActivity.this,
                         "Some Network Error.Try after some time", Toast.LENGTH_LONG).show();
                 hideDialog();

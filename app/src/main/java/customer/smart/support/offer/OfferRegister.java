@@ -31,6 +31,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
@@ -43,6 +44,7 @@ import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -64,6 +66,9 @@ import customer.smart.support.attachment.AttachmentBaseAdapter;
 import customer.smart.support.attachment.Base;
 import customer.smart.support.attachment.BaseClick;
 
+import static customer.smart.support.app.Appconfig.CATEGORIES;
+import static customer.smart.support.app.Appconfig.CATEGORY;
+import static customer.smart.support.app.Appconfig.FETCHOFFERPRODUCTID;
 import static customer.smart.support.app.Appconfig.mypreference;
 
 /**
@@ -83,10 +88,13 @@ public class OfferRegister extends AppCompatActivity implements BaseClick, Image
     Imageutils imageutils;
     private ImageView image;
     private String imageUrl = null;
-    MaterialBetterSpinner category;
+    MaterialBetterSpinner category,productId;
 
     private String[] CATEGORY = new String[]{
             "Customer", "Dealer", "All",
+    };
+    private String[] PRODUCTID = new String[]{
+            "Loading",
     };
 
     private RecyclerView baseList;
@@ -107,7 +115,6 @@ public class OfferRegister extends AppCompatActivity implements BaseClick, Image
         pDialog.setCancelable(false);
 
         category = findViewById(R.id.category);
-
         ArrayAdapter<String> titleAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, CATEGORY);
         category.setAdapter(titleAdapter);
@@ -116,6 +123,18 @@ public class OfferRegister extends AppCompatActivity implements BaseClick, Image
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             }
         });
+
+        //
+        productId = findViewById(R.id.productId);
+        ArrayAdapter<String> productAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, PRODUCTID);
+        productId.setAdapter(productAdapter);
+        productId.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            }
+        });
+
         image =  findViewById(R.id.image);
         image.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -247,7 +266,7 @@ public class OfferRegister extends AppCompatActivity implements BaseClick, Image
                 }
             }
         });
-
+        getAllStocks();
 
     }
 
@@ -294,6 +313,7 @@ public class OfferRegister extends AppCompatActivity implements BaseClick, Image
                 entity.addPart("endDate", new StringBody(endDate.getText().toString()));
                 entity.addPart("startDate", new StringBody(startDate.getText().toString()));
                 entity.addPart("isDealer", new StringBody(category.getText().toString()));
+                entity.addPart("productId", new StringBody(productId.getText().toString()));
                 entity.addPart("minQuantity", new StringBody(minQuantity.getText().toString()));
                 entity.addPart("maxQuantity", new StringBody(maxQuantity.getText().toString()));
                 for (int i = 0; i < bases.size(); i++) {
@@ -641,50 +661,56 @@ public class OfferRegister extends AppCompatActivity implements BaseClick, Image
 
     }
 
-
-    private void sendNotification(String name, String isDealer) {
+    private void getAllStocks() {
         String tag_string_req = "req_register";
+        //  pDialog.setMessage("Processing ...");
         showDialog();
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("to", "/topics/allDevices");
-            jsonObject.put("priority", "high");
-            JSONObject dataObject = new JSONObject();
-            dataObject.put("title", name);
-            dataObject.put("message", isDealer + ", Tap the banner to redeem offer");
-            jsonObject.put("data", dataObject);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        JsonObjectRequest strReq = new JsonObjectRequest(Request.Method.POST,
-                "https://fcm.googleapis.com/fcm/send", jsonObject, new Response.Listener<JSONObject>() {
+        StringRequest strReq = new StringRequest(Request.Method.GET,
+                FETCHOFFERPRODUCTID, new Response.Listener<String>() {
             @Override
-            public void onResponse(JSONObject response) {
-                Log.d("Register Response: ", response.toString());
+            public void onResponse(String response) {
                 hideDialog();
-                finish();
+                Log.d("Register Response: ", response);
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    int success = jObj.getInt("success");
+
+                    if (success == 1) {
+                        //  JSONArray jsonArray = jObj.getJSONArray("productId");
+                        JSONArray productId = jObj.getJSONArray("productId");
+                        PRODUCTID=new String[productId.length()];
+                        for(int i = 0; i<productId.length(); i++){
+                            PRODUCTID[i] = productId.getString(i);
+                        }
+
+                    } else {
+                        Toast.makeText(getApplication(), jObj.getString("message"), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    Log.e("xxxxxxxxxxx", e.toString());
+                    Toast.makeText(getApplication(), "Some Network Error.Try after some time", Toast.LENGTH_SHORT).show();
+
+                }
+                ArrayAdapter<String> stateAdapter = new ArrayAdapter<String>(OfferRegister.this,
+                        android.R.layout.simple_dropdown_item_1line, PRODUCTID);
+                productId.setAdapter(stateAdapter);
+
             }
         }, new Response.ErrorListener() {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                finish();
-                hideDialog();
+                Log.e("Registration Error: ", error.getMessage());
+                Toast.makeText(getApplication(),
+                        "Some Network Error.Try after some time", Toast.LENGTH_LONG).show();
             }
         }) {
             protected Map<String, String> getParams() {
                 HashMap localHashMap = new HashMap();
                 return localHashMap;
             }
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap hashMap = new HashMap();
-                hashMap.put("Content-Type", "application/json");
-                hashMap.put("Authorization", "key=AAAAnzs0QyM:APA91bFS6VSw0lBB8mi8bXP26PFDd2awcnrLaaeXdAsHtXM6YGx4GRPDuSRl_wDYTL-mhW6esVEYaU_MfbjTc9N3ObybCb54Mi14aHFNc5x_i-Gx2P-hp2hzZ4yczca1CCNTAUGyAzEu");
-                return hashMap;
-            }
         };
+        strReq.setRetryPolicy(Appconfig.getPolicy());
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
