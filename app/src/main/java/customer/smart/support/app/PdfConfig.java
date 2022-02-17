@@ -1,7 +1,5 @@
 package customer.smart.support.app;
 
-import static customer.smart.support.app.PdfConfigInvoice.createTextRight;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -27,11 +25,11 @@ import customer.smart.support.address.AddressBean;
 
 
 public class PdfConfig {
-
     private static final BaseColor whiteBase = new BaseColor(255, 255, 255);
     private static final BaseColor greenBase = new BaseColor(14, 157, 31);
     private static BaseFont urName;
     private static final Font catNormalFont = new Font(urName, 13, Font.BOLD);
+    private static final Font catNormal = new Font(urName, 8, Font.BOLD);
     private static final Font catNormalFontTitel = new Font(urName, 15, Font.BOLD);
     private static Font invoiceFont = new Font(urName, 20, Font.BOLD, greenBase);
 
@@ -62,9 +60,15 @@ public class PdfConfig {
         table1.setWidthPercentage(100);
         table1.setWidths(new float[]{1});
 
-        PdfPTable table01 = new PdfPTable(3);
+        PdfPTable table01 = new PdfPTable(5);
         table01.setWidthPercentage(100);
-        table01.setWidths(new int[]{1, 1, 1});
+        table01.setWidths(new int[]{1, 1, 1, 1, 1});
+
+        if ("NA".equalsIgnoreCase(orderId)) {
+            table01.addCell(createTextLeftRight("", catNormal));
+        } else {
+            table01.addCell(createTextLeftRight("order Id: #" + orderId, catNormal));
+        }
         table01.addCell(createTextCenterWithLeft("" + "\n", catNormalFontTitel));
         table01.addCell(createTextLeft("FROM" + "\n", catNormalFontTitel));
         if (addressBean.getSelleraddress().toLowerCase(Locale.ROOT).contains("stock bazaar")) {
@@ -80,13 +84,15 @@ public class PdfConfig {
             table01.addCell(createTextImage(null));
         }
 
-        table01.addCell(createTextRight("", catNormalFont));
-        table1.addCell(createTable(table01, 0, whiteBase, false));
+        table01.addCell(emptyTop("", catNormalFont));
+        table01.addCell(emptyTop("", catNormalFont));
+        table01.addCell(emptyTop("", catNormalFont));
+        table1.addCell(createTableBorder(table01, 0, whiteBase, false));
         table1.addCell(createTextCenter("\t\t" + addressBean.getSelleraddress(), catNormalFont));
-        table1.addCell(createTextCenter("\n", catNormalFont));
+        //  table1.addCell(createTextCenter("\n", catNormalFont));
         table1.addCell(createTextBorder("TO" + "\n", catNormalFontTitel));
         table1.addCell(createTextCenter("\t\t" + addressBean.getBuyeraddress(), catNormalFont));
-     //   table1.addCell(createTextCenter("\n", catNormalFont));
+        //   table1.addCell(createTextCenter("\n", catNormalFont));
 
         //  table1.addCell(createTextCellTable("", catNormalFont));
 
@@ -103,19 +109,6 @@ public class PdfConfig {
             table11.setWidths(new float[]{1});
             table11.addCell(createTextCenterNo("ID : " + addressBean.getIdtext(), catNormalFont));
         }
-
-        if ("NA".equalsIgnoreCase(orderId)) {
-
-        } else {
-            PdfPTable table111 = null;
-            table111 = new PdfPTable(1);
-            table111.setWidthPercentage(100);
-            table111.setWidths(new float[]{1});
-            table111.addCell(createTextCenterNo("ORDER ID : #" + orderId, catNormalFont));
-            table1.addCell(table111);
-        }
-
-
         table1.addCell(table11);
         table1.setKeepTogether(true);
         document.add(table1);
@@ -132,6 +125,20 @@ public class PdfConfig {
         cell.setVerticalAlignment(Element.ALIGN_CENTER);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setBorder(Rectangle.NO_BORDER);
+        cell.setBackgroundColor(baseColor);
+        return cell;
+    }
+
+    public static PdfPCell createTableBorder(PdfPTable pTable, int padding, BaseColor baseColor, boolean isBorder) throws DocumentException, IOException {
+
+        PdfPCell cell = new PdfPCell();
+        cell.addElement(pTable);
+        cell.setPaddingTop(0);
+        cell.setPaddingBottom(0);
+        cell.setPaddingLeft(padding);
+        cell.setVerticalAlignment(Element.ALIGN_CENTER);
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setBorder(Rectangle.RIGHT);
         cell.setBackgroundColor(baseColor);
         return cell;
     }
@@ -168,7 +175,7 @@ public class PdfConfig {
         cell.setPadding(5);
         cell.setVerticalAlignment(Element.ALIGN_CENTER);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        cell.setBorder(Rectangle.LEFT | Rectangle.TOP);
+        cell.setBorder(Rectangle.TOP);
         return cell;
     }
 
@@ -184,12 +191,35 @@ public class PdfConfig {
         return cell;
     }
 
+    public static PdfPCell createTextLeftRight(String text, Font font) throws DocumentException, IOException {
+        PdfPCell cell = new PdfPCell();
+        Paragraph p = new Paragraph(text, font);
+        p.setAlignment(Element.ALIGN_CENTER);
+        cell.addElement(p);
+        cell.setPadding(5);
+        cell.setVerticalAlignment(Element.ALIGN_LEFT);
+        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(Rectangle.TOP | Rectangle.LEFT);
+        return cell;
+    }
+
+    public static PdfPCell emptyTop(String text, Font font) throws DocumentException, IOException {
+        PdfPCell cell = new PdfPCell();
+        Paragraph p = new Paragraph(text, font);
+        p.setAlignment(Element.ALIGN_LEFT);
+        cell.addElement(p);
+        cell.setPaddingLeft(5);
+        cell.setVerticalAlignment(Element.ALIGN_LEFT);
+        cell.setBorder(Rectangle.TOP);
+        return cell;
+    }
+
     public static PdfPCell createTextImage(Image image) throws DocumentException, IOException {
         PdfPCell cell = new PdfPCell();
         cell.addElement(image);
         cell.setUseAscender(true);
         cell.setPaddingLeft(10);
-        cell.setBorder(Rectangle.TOP | Rectangle.RIGHT);
+        cell.setBorder(Rectangle.TOP);
         return cell;
     }
 
