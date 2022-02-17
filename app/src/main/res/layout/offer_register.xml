@@ -9,9 +9,9 @@
         android:id="@+id/submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
         android:background="#009a9a"
         android:gravity="center"
@@ -33,8 +33,8 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_gravity="center"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
 
                 <ProgressBar
                     android:id="@+id/progressimg"
@@ -71,37 +71,43 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#000"
                 android:layout_margin="5dp"
                 android:text="Add Attachments"
+                android:textColor="#000"
                 android:textSize="18dp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/attachmentList"
                 android:layout_width="match_parent"
-                android:minHeight="200dp"
-                android:layout_margin="5dp"
-                android:padding="3dp"
-                android:background="@drawable/rectangle"
-                android:layout_height="wrap_content" />
-            <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
-                android:id="@+id/productId"
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Select Product Id"
-                android:textColor="#000"
-                android:textSize="15dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
                 android:layout_margin="5dp"
-                android:textColorHint="#c6c6c6"
-                app:met_floatingLabel="normal"/>
+                android:background="@drawable/rectangle"
+                android:minHeight="200dp"
+                android:padding="3dp" />
+
+
+
+                <AutoCompleteTextView
+                    android:id="@+id/productId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/gray"
+                    android:hint="Select Produt"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:inputType="text"
+                    android:textColorHint="#c6c6c6"
+                    android:textSize="@dimen/textsize" />
+
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_margin="5dp">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -118,10 +124,10 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_margin="5dp">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -138,10 +144,10 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_margin="5dp">
 
                 <EditText
@@ -156,11 +162,12 @@
                     android:textSize="@dimen/textsize" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_margin="5dp">
 
                 <EditText
@@ -175,11 +182,12 @@
                     android:textSize="@dimen/textsize" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_margin="5dp">
 
                 <EditText
@@ -194,11 +202,12 @@
                     android:textSize="@dimen/textsize" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_margin="5dp">
 
                 <EditText
@@ -219,14 +228,14 @@
                 android:id="@+id/category"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:hint="Select Dealer"
                 android:textColor="#000"
-                android:textSize="15dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_margin="5dp"
                 android:textColorHint="#c6c6c6"
-                app:met_floatingLabel="normal"/>
+                android:textSize="15dp"
+                app:met_floatingLabel="normal" />
 
 
         </LinearLayout>

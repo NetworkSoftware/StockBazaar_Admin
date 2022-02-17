@@ -53,7 +53,7 @@ public class PdfConfig {
         document.addCreator("Lars Vogel");
     }
 
-    public static void addContent(Document document, AddressBean addressBean, Context context) throws Exception {
+    public static void addContent(String orderId, Document document, AddressBean addressBean, Context context) throws Exception {
 
         invoiceFont = new Font(urName, 20, Font.BOLD, greenBase);
 
@@ -76,7 +76,7 @@ public class PdfConfig {
             Image img = Image.getInstance(byteArray);
             img.scaleAbsolute(100, 100);
             table01.addCell(createTextImage(img));
-        }else {
+        } else {
             table01.addCell(createTextImage(null));
         }
 
@@ -86,9 +86,9 @@ public class PdfConfig {
         table1.addCell(createTextCenter("\n", catNormalFont));
         table1.addCell(createTextBorder("TO" + "\n", catNormalFontTitel));
         table1.addCell(createTextCenter("\t\t" + addressBean.getBuyeraddress(), catNormalFont));
-        table1.addCell(createTextCenter("\n", catNormalFont));
+     //   table1.addCell(createTextCenter("\n", catNormalFont));
 
-        table1.addCell(createTextCellTable("", catNormalFont));
+        //  table1.addCell(createTextCellTable("", catNormalFont));
 
         PdfPTable table11 = null;
         if (addressBean.getCod() != null && addressBean.getCod().length() > 0) {
@@ -103,6 +103,18 @@ public class PdfConfig {
             table11.setWidths(new float[]{1});
             table11.addCell(createTextCenterNo("ID : " + addressBean.getIdtext(), catNormalFont));
         }
+
+        if ("NA".equalsIgnoreCase(orderId)) {
+
+        } else {
+            PdfPTable table111 = null;
+            table111 = new PdfPTable(1);
+            table111.setWidthPercentage(100);
+            table111.setWidths(new float[]{1});
+            table111.addCell(createTextCenterNo("ORDER ID : #" + orderId, catNormalFont));
+            table1.addCell(table111);
+        }
+
 
         table1.addCell(table11);
         table1.setKeepTogether(true);
@@ -141,6 +153,7 @@ public class PdfConfig {
         Paragraph p = new Paragraph(text, font);
         p.setAlignment(Element.ALIGN_CENTER);
         cell.addElement(p);
+        cell.setPadding(5);
         cell.setVerticalAlignment(Element.ALIGN_CENTER);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setBorder(Rectangle.LEFT | Rectangle.RIGHT);
@@ -198,7 +211,7 @@ public class PdfConfig {
         Paragraph p = new Paragraph(text, font);
         p.setAlignment(Element.ALIGN_CENTER);
         cell.addElement(p);
-        cell.setPaddingBottom(10);
+        cell.setPaddingBottom(2);
         cell.setVerticalAlignment(Element.ALIGN_CENTER);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setBorder(Rectangle.NO_BORDER);
@@ -210,7 +223,7 @@ public class PdfConfig {
         Paragraph p = new Paragraph(text, font);
         p.setAlignment(Element.ALIGN_CENTER);
         cell.addElement(p);
-        cell.setPadding(5);
+        cell.setPadding(0);
         cell.setVerticalAlignment(Element.ALIGN_CENTER);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setBorder(Rectangle.LEFT | Rectangle.RIGHT);

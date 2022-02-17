@@ -1,5 +1,8 @@
 package customer.smart.support.offer;
 
+import static customer.smart.support.app.Appconfig.FETCHOFFERPRODUCTID;
+import static customer.smart.support.app.Appconfig.mypreference;
+
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -9,28 +12,26 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
@@ -66,40 +67,34 @@ import customer.smart.support.attachment.AttachmentBaseAdapter;
 import customer.smart.support.attachment.Base;
 import customer.smart.support.attachment.BaseClick;
 
-import static customer.smart.support.app.Appconfig.CATEGORIES;
-import static customer.smart.support.app.Appconfig.CATEGORY;
-import static customer.smart.support.app.Appconfig.FETCHOFFERPRODUCTID;
-import static customer.smart.support.app.Appconfig.mypreference;
-
 /**
  * Created by user_1 on 11-07-2018.
  */
 
 public class OfferRegister extends AppCompatActivity implements BaseClick, Imageutils.ImageAttachmentListener {
 
-    EditText name,price;
+    private final String[] CATEGORY = new String[]{
+            "Customer", "Dealer", "All",
+    };
+    private final ArrayList<Base> bases = new ArrayList<>();
+    EditText name, price;
     EditText startDate;
     EditText endDate;
     EditText minQuantity;
     EditText maxQuantity;
-    private TextView submit;
-    private ProgressDialog pDialog;
     SharedPreferences sharedpreferences;
     Imageutils imageutils;
-    private ImageView image;
+    MaterialBetterSpinner category;
+    AutoCompleteTextView productId;
+        private TextView submit;
+    private ProgressDialog pDialog;
+private ImageView image;
     private String imageUrl = null;
-    MaterialBetterSpinner category,productId;
-
-    private String[] CATEGORY = new String[]{
-            "Customer", "Dealer", "All",
-    };
     private String[] PRODUCTID = new String[]{
             "Loading",
     };
-
     private RecyclerView baseList;
     private AttachmentBaseAdapter attachmentBaseAdapter;
-    private ArrayList<Base> bases = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -125,17 +120,11 @@ public class OfferRegister extends AppCompatActivity implements BaseClick, Image
         });
 
         //
-        productId = findViewById(R.id.productId);
-        ArrayAdapter<String> productAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line, PRODUCTID);
-        productId.setAdapter(productAdapter);
-        productId.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            }
-        });
 
-        image =  findViewById(R.id.image);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.select_dialog_item, PRODUCTID);
+        productId.setThreshold(2);
+        productId.setAdapter(adapter);
+        image = findViewById(R.id.image);
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -148,28 +137,28 @@ public class OfferRegister extends AppCompatActivity implements BaseClick, Image
                         File storedFile = imageutils.createImage(file, filename, path, false);
                         pDialog.setMessage("Uploading...");
                         showDialog();
-                        new UploadFileToServer().execute(Appconfig.compressImage(storedFile.getPath(),OfferRegister.this));
+                        new UploadFileToServer().execute(Appconfig.compressImage(storedFile.getPath(), OfferRegister.this));
                     }
                 });
             }
         });
 
-        name =  findViewById(R.id.name);
-        price =  findViewById(R.id.price);
-        startDate =  findViewById(R.id.startDate);
-        endDate =  findViewById(R.id.endDate);
-        minQuantity =  findViewById(R.id.minQuantity);
-        maxQuantity =  findViewById(R.id.maxQuantity);
+        name = findViewById(R.id.name);
+        price = findViewById(R.id.price);
+        startDate = findViewById(R.id.startDate);
+        endDate = findViewById(R.id.endDate);
+        minQuantity = findViewById(R.id.minQuantity);
+        maxQuantity = findViewById(R.id.maxQuantity);
 
 
         bases.add(new Base("", "true"));
-        baseList =  findViewById(R.id.attachmentList);
+        baseList = findViewById(R.id.attachmentList);
         attachmentBaseAdapter = new AttachmentBaseAdapter(this, bases, this);
         baseList.setLayoutManager(new GridLayoutManager(this, 3));
         baseList.setAdapter(attachmentBaseAdapter);
 
 
-        submit =  findViewById(R.id.submit);
+        submit = findViewById(R.id.submit);
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -270,6 +259,136 @@ public class OfferRegister extends AppCompatActivity implements BaseClick, Image
 
     }
 
+    private void showDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }
+
+    private void hideDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        imageutils.request_permission_result(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    public void image_attachment(int from, String filename, Bitmap file, Uri uri) {
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        hideDialog();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+
+        super.onStop();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        imageutils.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onBaseClick(final int position) {
+        if (position == 0) {
+            imageutils.imagepicker(1);
+            imageutils.setImageAttachmentListener(new Imageutils.ImageAttachmentListener() {
+                @Override
+                public void image_attachment(int from, String filename, Bitmap file, Uri uri) {
+                    String path = getCacheDir() + File.separator + "ImageAttach" + File.separator;
+                    Base base = new Base();
+                    base.setUrl(imageutils.getPath(uri));
+                    base.setIsImage("false");
+                    if (filename != null) {
+                        base.setIsImage("true");
+                        imageutils.createImage(file, filename, path, false);
+                    }
+                    pDialog.setMessage("Uploading...");
+                    showDialog();
+                    new UploadFileToServerArray().execute(imageutils.getPath(uri));
+
+                }
+            });
+        } else {
+            Intent localIntent = new Intent(OfferRegister.this, ActivityMediaOnline.class);
+            localIntent.putExtra("filePath", bases.get(position).getUrl());
+            localIntent.putExtra("isImage", Boolean.parseBoolean(bases.get(position).getIsImage()));
+            startActivity(localIntent);
+        }
+
+    }
+
+    @Override
+    public void onDeleteClick(int position) {
+        bases.remove(position);
+        attachmentBaseAdapter.notifyData(bases);
+    }
+
+    private void getAllStocks() {
+        String tag_string_req = "req_register";
+        //  pDialog.setMessage("Processing ...");
+        showDialog();
+        StringRequest strReq = new StringRequest(Request.Method.GET,
+                FETCHOFFERPRODUCTID, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                hideDialog();
+                Log.d("Register Response: ", response);
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    int success = jObj.getInt("success");
+
+                    if (success == 1) {
+                        //  JSONArray jsonArray = jObj.getJSONArray("productId");
+                        JSONArray productId = jObj.getJSONArray("productId");
+                        PRODUCTID = new String[productId.length()];
+                        for (int i = 0; i < productId.length(); i++) {
+                            PRODUCTID[i] = productId.getString(i);
+                        }
+
+                    } else {
+                        Toast.makeText(getApplication(), jObj.getString("message"), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    Log.e("xxxxxxxxxxx", e.toString());
+                    Toast.makeText(getApplication(), "Some Network Error.Try after some time", Toast.LENGTH_SHORT).show();
+
+                }
+                ArrayAdapter<String> stateAdapter = new ArrayAdapter<String>(OfferRegister.this,
+                        android.R.layout.simple_dropdown_item_1line, PRODUCTID);
+                productId.setAdapter(stateAdapter);
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Registration Error: ", error.getMessage());
+                Toast.makeText(getApplication(),
+                        "Some Network Error.Try after some time", Toast.LENGTH_LONG).show();
+            }
+        }) {
+            protected Map<String, String> getParams() {
+                HashMap localHashMap = new HashMap();
+                return localHashMap;
+            }
+        };
+        strReq.setRetryPolicy(Appconfig.getPolicy());
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+    }
 
     private class UploadDataToServer extends AsyncTask<String, Integer, String> {
         public long totalSize = 0;
@@ -284,7 +403,7 @@ public class OfferRegister extends AppCompatActivity implements BaseClick, Image
 
         @Override
         protected void onProgressUpdate(Integer... progress) {
-            pDialog.setMessage("Uploading..." + (String.valueOf(progress[0])));
+            pDialog.setMessage("Uploading..." + (progress[0]));
         }
 
         @Override
@@ -358,7 +477,7 @@ public class OfferRegister extends AppCompatActivity implements BaseClick, Image
                 String msg = jObj.getString("message");
                 if (success == 1) {
                     finish();
-                  //  sendNotification(name.getText().toString(), category.getText().toString());
+                    //  sendNotification(name.getText().toString(), category.getText().toString());
                 }
             } catch (Exception e) {
                 Toast.makeText(getApplicationContext(), "Image not uploaded", Toast.LENGTH_SHORT).show();
@@ -373,30 +492,9 @@ public class OfferRegister extends AppCompatActivity implements BaseClick, Image
 
     }
 
-
-    private void showDialog() {
-        if (!pDialog.isShowing())
-            pDialog.show();
-    }
-
-    private void hideDialog() {
-        if (pDialog.isShowing())
-            pDialog.dismiss();
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        imageutils.request_permission_result(requestCode, permissions, grantResults);
-    }
-
-    @Override
-    public void image_attachment(int from, String filename, Bitmap file, Uri uri) {
-    }
-
     private class UploadFileToServer extends AsyncTask<String, Integer, String> {
-        String filepath;
         public long totalSize = 0;
+        String filepath;
 
         @Override
         protected void onPreExecute() {
@@ -408,7 +506,7 @@ public class OfferRegister extends AppCompatActivity implements BaseClick, Image
 
         @Override
         protected void onProgressUpdate(Integer... progress) {
-            pDialog.setMessage("Uploading..." + (String.valueOf(progress[0])));
+            pDialog.setMessage("Uploading..." + (progress[0]));
         }
 
         @Override
@@ -435,7 +533,7 @@ public class OfferRegister extends AppCompatActivity implements BaseClick, Image
 
                 File sourceFile = new File(filepath);
                 // Adding file data to http body
-                entity.addPart("model", new StringBody("offer_"+name.getText().toString()));
+                entity.addPart("model", new StringBody("offer_" + name.getText().toString()));
                 entity.addPart("image", new FileBody(sourceFile));
 
                 totalSize = entity.getContentLength();
@@ -470,7 +568,7 @@ public class OfferRegister extends AppCompatActivity implements BaseClick, Image
         protected void onPostExecute(String result) {
             Log.e("Response from server: ", result);
             try {
-                JSONObject jsonObject = new JSONObject(result.toString());
+                JSONObject jsonObject = new JSONObject(result);
                 if (!jsonObject.getBoolean("error")) {
                     GlideApp.with(getApplicationContext())
                             .load(filepath)
@@ -499,70 +597,9 @@ public class OfferRegister extends AppCompatActivity implements BaseClick, Image
 
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        hideDialog();
-    }
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-
-        super.onStop();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        imageutils.onActivityResult(requestCode, resultCode, data);
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onBaseClick(final int position) {
-        if (position == 0) {
-            imageutils.imagepicker(1);
-            imageutils.setImageAttachmentListener(new Imageutils.ImageAttachmentListener() {
-                @Override
-                public void image_attachment(int from, String filename, Bitmap file, Uri uri) {
-                    String path = getCacheDir() + File.separator + "ImageAttach" + File.separator;
-                    Base base = new Base();
-                    base.setUrl(imageutils.getPath(uri));
-                    base.setIsImage("false");
-                    if (filename != null) {
-                        base.setIsImage("true");
-                        imageutils.createImage(file, filename, path, false);
-                    }
-                    pDialog.setMessage("Uploading...");
-                    showDialog();
-                    new UploadFileToServerArray().execute(imageutils.getPath(uri));
-
-                }
-            });
-        } else {
-            Intent localIntent = new Intent(OfferRegister.this, ActivityMediaOnline.class);
-            localIntent.putExtra("filePath", bases.get(position).getUrl());
-            localIntent.putExtra("isImage", Boolean.parseBoolean(bases.get(position).getIsImage()));
-            startActivity(localIntent);
-        }
-
-    }
-
-    @Override
-    public void onDeleteClick(int position) {
-        bases.remove(position);
-        attachmentBaseAdapter.notifyData(bases);
-    }
-
-
     private class UploadFileToServerArray extends AsyncTask<String, Integer, String> {
-        String filepath;
         public long totalSize = 0;
+        String filepath;
 
         @Override
         protected void onPreExecute() {
@@ -573,7 +610,7 @@ public class OfferRegister extends AppCompatActivity implements BaseClick, Image
 
         @Override
         protected void onProgressUpdate(Integer... progress) {
-            pDialog.setMessage("Uploading..." + (String.valueOf(progress[0])));
+            pDialog.setMessage("Uploading..." + (progress[0]));
         }
 
         @Override
@@ -600,7 +637,7 @@ public class OfferRegister extends AppCompatActivity implements BaseClick, Image
 
                 File sourceFile = new File(filepath);
                 // Adding file data to http body
-                entity.addPart("model", new StringBody("offer_"+name.getText().toString()));
+                entity.addPart("model", new StringBody("offer_" + name.getText().toString()));
                 entity.addPart("image", new FileBody(sourceFile));
 
                 totalSize = entity.getContentLength();
@@ -636,7 +673,7 @@ public class OfferRegister extends AppCompatActivity implements BaseClick, Image
             Log.e("Response from server: ", result);
             hideDialog();
             try {
-                JSONObject jsonObject = new JSONObject(result.toString());
+                JSONObject jsonObject = new JSONObject(result);
                 if (!jsonObject.getBoolean("error")) {
                     String model = jsonObject.getString("model");
                     String imageUrl = Appconfig.ip_img + "uploads/" + model + "/" + imageutils.getfilename_from_path(filepath);
@@ -659,59 +696,6 @@ public class OfferRegister extends AppCompatActivity implements BaseClick, Image
             super.onPostExecute(result);
         }
 
-    }
-
-    private void getAllStocks() {
-        String tag_string_req = "req_register";
-        //  pDialog.setMessage("Processing ...");
-        showDialog();
-        StringRequest strReq = new StringRequest(Request.Method.GET,
-                FETCHOFFERPRODUCTID, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                hideDialog();
-                Log.d("Register Response: ", response);
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    int success = jObj.getInt("success");
-
-                    if (success == 1) {
-                        //  JSONArray jsonArray = jObj.getJSONArray("productId");
-                        JSONArray productId = jObj.getJSONArray("productId");
-                        PRODUCTID=new String[productId.length()];
-                        for(int i = 0; i<productId.length(); i++){
-                            PRODUCTID[i] = productId.getString(i);
-                        }
-
-                    } else {
-                        Toast.makeText(getApplication(), jObj.getString("message"), Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    Log.e("xxxxxxxxxxx", e.toString());
-                    Toast.makeText(getApplication(), "Some Network Error.Try after some time", Toast.LENGTH_SHORT).show();
-
-                }
-                ArrayAdapter<String> stateAdapter = new ArrayAdapter<String>(OfferRegister.this,
-                        android.R.layout.simple_dropdown_item_1line, PRODUCTID);
-                productId.setAdapter(stateAdapter);
-
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("Registration Error: ", error.getMessage());
-                Toast.makeText(getApplication(),
-                        "Some Network Error.Try after some time", Toast.LENGTH_LONG).show();
-            }
-        }) {
-            protected Map<String, String> getParams() {
-                HashMap localHashMap = new HashMap();
-                return localHashMap;
-            }
-        };
-        strReq.setRetryPolicy(Appconfig.getPolicy());
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
 }

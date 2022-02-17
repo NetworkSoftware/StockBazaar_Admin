@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -79,7 +80,8 @@ public class OfferUpdate extends AppCompatActivity implements BaseClick, Imageut
     EditText maxQuantity;
     SharedPreferences sharedpreferences;
     Imageutils imageutils;
-    MaterialBetterSpinner category, productId;
+    MaterialBetterSpinner category;
+    AutoCompleteTextView productId;
     String shopId = null;
     String oldName;
     private TextView submit;
@@ -135,15 +137,11 @@ public class OfferUpdate extends AppCompatActivity implements BaseClick, Imageut
         });
 
         productId = findViewById(R.id.productId);
-        ArrayAdapter<String> productAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line, PRODUCTID);
-        productId.setAdapter(productAdapter);
-        productId.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.select_dialog_item, PRODUCTID);
+        productId.setThreshold(2);
+        productId.setAdapter(adapter);
 
-            }
-        });
+
         bases.add(new Base("", "true"));
         baseList = (RecyclerView) findViewById(R.id.attachmentList);
         attachmentBaseAdapter = new AttachmentBaseAdapter(this, bases, this);

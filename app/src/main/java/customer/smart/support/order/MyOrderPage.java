@@ -294,7 +294,7 @@ public class MyOrderPage extends AppCompatActivity {
                 android.R.layout.simple_dropdown_item_1line, IDS);
         id.setAdapter(IdsAdapter);
 
-        buyeraddress.setText(name.getText().toString() + "\n" + address.getText().toString() + "\nPh:" +
+        buyeraddress.setText(name.getText().toString() + "\n" + address.getText().toString() + "Ph:" +
                 phone.getText().toString());
 
 
@@ -453,7 +453,7 @@ public class MyOrderPage extends AppCompatActivity {
 
             document.open();
             PdfConfig.addMetaData(document);
-            PdfConfig.addContent(document, addressBean, MyOrderPage.this);
+            PdfConfig.addContent(myorderBean.getId(),document, addressBean, MyOrderPage.this);
 
 
             document.close();

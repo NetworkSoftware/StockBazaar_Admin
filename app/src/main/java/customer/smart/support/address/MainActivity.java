@@ -237,7 +237,7 @@ public class MainActivity extends BaseActivity {
 
             document.open();
             PdfConfig.addMetaData(document);
-            PdfConfig.addContent(document, addressBean, context);
+            PdfConfig.addContent("NA",document, addressBean, context);
 
 
             document.close();
