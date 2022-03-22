@@ -6,4 +6,5 @@ public interface SellerClick {
     void onDeleteClick(int position);
     void onImageClick(int position);
     void onStatus(Seller seller,String status);
+    void onCallClick(String call);
 }

@@ -67,6 +67,19 @@ public class ExchangeAdapter extends RecyclerView.Adapter<ExchangeAdapter.MyView
                 exchangeClick.onImageClick(bean);
             }
         });
+        if((bean.whatsapp!=null)&&
+                (!bean.whatsapp.equalsIgnoreCase("null")&&
+                        (!bean.whatsapp.equalsIgnoreCase("NA")))){
+            holder.callLi.setVisibility(View.VISIBLE);
+        }else {
+            holder.callLi.setVisibility(View.GONE);
+        }
+        holder.call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                exchangeClick.onCallClick(bean.whatsapp);
+            }
+        });
         GlideApp.with(context)
                 .load(Appconfig.getResizedImage(bean.getImage(), false))
                 .placeholder(R.drawable.profile)
@@ -100,8 +113,8 @@ public class ExchangeAdapter extends RecyclerView.Adapter<ExchangeAdapter.MyView
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView brand, warranty, price, model, ram, rom, box, accessories,
                 mobileCondition, hardwareProblem, softwareChanged, id,whatsapp;
-        ImageView arrow_button, image;
-        LinearLayout hidden_view, linearActive;
+        ImageView arrow_button, image,call;
+        LinearLayout hidden_view, linearActive,callLi;
         CardView cardView;
 
         public MyViewHolder(View view) {
@@ -117,6 +130,8 @@ public class ExchangeAdapter extends RecyclerView.Adapter<ExchangeAdapter.MyView
             price = view.findViewById(R.id.price);
             image = view.findViewById(R.id.image);
             whatsapp = view.findViewById(R.id.whatsapp);
+
+            callLi = view.findViewById(R.id.callLi);
             warranty = view.findViewById(R.id.warranty);
             ram = view.findViewById(R.id.ram);
             rom = view.findViewById(R.id.rom);
@@ -125,6 +140,7 @@ public class ExchangeAdapter extends RecyclerView.Adapter<ExchangeAdapter.MyView
             mobileCondition = view.findViewById(R.id.mobileCondition);
             hardwareProblem = view.findViewById(R.id.hardwareProblem);
             softwareChanged = view.findViewById(R.id.softwareChanged);
+            call = view.findViewById(R.id.call);
         }
     }
 }

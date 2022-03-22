@@ -16,15 +16,17 @@ import androidx.transition.TransitionManager;
 import java.util.ArrayList;
 
 import customer.smart.support.R;
+import customer.smart.support.client.exchange.ExchangeClick;
 
 
 public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.MyViewHolder> {
     private final Context context;
     private ArrayList<Service> histories;
-
-    public ServiceAdapter(Context context, ArrayList<Service> histories) {
+    private final ServiceClick serviceClick;
+    public ServiceAdapter(Context context, ArrayList<Service> histories,ServiceClick serviceClick) {
         this.histories = histories;
         this.context = context;
+        this.serviceClick = serviceClick;
     }
 
     public void notifyData(ArrayList<Service> myList) {
@@ -52,6 +54,12 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.MyViewHo
         holder.problem.setText(bean.getProblem());
         holder.district.setText(bean.getDistrict());
         holder.pincode.setText(bean.getPincode());
+        holder.call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                serviceClick.onCallClick(bean.mobile);
+            }
+        });
         holder.arrow_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,7 +88,7 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.MyViewHo
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView category, brand, model, mobile, problem, district, pincode, id;
-        ImageView arrow_button;
+        ImageView arrow_button,call;
         LinearLayout hidden_view, linearActive;
         CardView cardView;
 
@@ -98,6 +106,7 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.MyViewHo
             problem = view.findViewById(R.id.problem);
             district = view.findViewById(R.id.district);
             pincode = view.findViewById(R.id.pincode);
+            call = view.findViewById(R.id.call);
             id = view.findViewById(R.id.id);
 
 

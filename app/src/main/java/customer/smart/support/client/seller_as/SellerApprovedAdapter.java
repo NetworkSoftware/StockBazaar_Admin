@@ -1,5 +1,6 @@
 package customer.smart.support.client.seller_as;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +27,7 @@ public class SellerApprovedAdapter extends RecyclerView.Adapter<SellerApprovedAd
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public ImageView cancel, thumbnail;
         public TextView seller_name, phone, shop_update, status;
-        public MaterialButton details, pending, approved;
+        public MaterialButton details, pending, approved,call;
 
         public MyViewHolder(View view) {
             super(view);
@@ -39,6 +40,7 @@ public class SellerApprovedAdapter extends RecyclerView.Adapter<SellerApprovedAd
             shop_update = view.findViewById(R.id.shop_update);
             details = view.findViewById(R.id.details);
             status = view.findViewById(R.id.status);
+            call = view.findViewById(R.id.call);
         }
     }
 
@@ -57,12 +59,18 @@ public class SellerApprovedAdapter extends RecyclerView.Adapter<SellerApprovedAd
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, final int position) {
+    public void onBindViewHolder(MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         final Seller seller = sellers.get(position);
 
         holder.seller_name.setText(seller.shopname);
         holder.status.setText("Status : " + seller.status);
         holder.phone.setText(seller.mobile);
+        holder.call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sellerClick.onCallClick(seller.mobile);
+            }
+        });
         GlideApp.with(context)
                 .load(Appconfig.getResizedImage(seller.getShopInside(), true))
                 .placeholder(R.drawable.profile)

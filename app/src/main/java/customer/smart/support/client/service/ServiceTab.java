@@ -1,5 +1,7 @@
 package customer.smart.support.client.service;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +32,7 @@ import customer.smart.support.app.Appconfig;
 import customer.smart.support.app.BaseFragment;
 
 
-public class ServiceTab extends BaseFragment{
+public class ServiceTab extends BaseFragment implements ServiceClick{
 
     View view;
     ArrayList<Service> serviceArrayList = new ArrayList<>();
@@ -47,7 +49,7 @@ public class ServiceTab extends BaseFragment{
     private void showTickets() {
         recyclerView = view.findViewById(R.id.recycler_view);
         serviceArrayList = new ArrayList<>();
-        serviceAdapter = new ServiceAdapter(getActivity(), serviceArrayList);
+        serviceAdapter = new ServiceAdapter(getActivity(), serviceArrayList,this);
         final LinearLayoutManager addManager1 = new GridLayoutManager(getActivity(), 1);
         recyclerView.setLayoutManager(addManager1);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -117,4 +119,10 @@ public class ServiceTab extends BaseFragment{
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
+    @Override
+    public void onCallClick(String whatsapp) {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:" + whatsapp));
+        startActivity(intent);
+    }
 }

@@ -1,6 +1,7 @@
 package customer.smart.support.client.service;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,7 +52,7 @@ public class ExchangeTab extends BaseFragment implements ExchangeClick {
     private void showTickets() {
         recyclerView = view.findViewById(R.id.recycler_view);
         exchangeArrayList = new ArrayList<>();
-        exchangeAdapter = new ExchangeAdapter(getActivity(), exchangeArrayList,this);
+        exchangeAdapter = new ExchangeAdapter(getActivity(), exchangeArrayList, this);
         final LinearLayoutManager addManager1 = new GridLayoutManager(getActivity(), 1);
         recyclerView.setLayoutManager(addManager1);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -132,5 +133,12 @@ public class ExchangeTab extends BaseFragment implements ExchangeClick {
         localIntent.putExtra("filePath", exchange.getImage());
         localIntent.putExtra("isImage", true);
         startActivity(localIntent);
+    }
+
+    @Override
+    public void onCallClick(String whatsapp) {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:" + whatsapp));
+        startActivity(intent);
     }
 }

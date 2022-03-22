@@ -26,7 +26,7 @@ public class SellerRequestAdapter extends RecyclerView.Adapter<SellerRequestAdap
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public ImageView cancel, thumbnail;
         public TextView seller_name, phone, shop_update, status;
-        public MaterialButton details, pending, approved;
+        public MaterialButton details, pending, approved,call;
 
         public MyViewHolder(View view) {
             super(view);
@@ -39,6 +39,7 @@ public class SellerRequestAdapter extends RecyclerView.Adapter<SellerRequestAdap
             shop_update = view.findViewById(R.id.shop_update);
             details = view.findViewById(R.id.details);
             status = view.findViewById(R.id.status);
+            call = view.findViewById(R.id.call);
         }
     }
 
@@ -67,7 +68,12 @@ public class SellerRequestAdapter extends RecyclerView.Adapter<SellerRequestAdap
                 .load(Appconfig.getResizedImage(seller.getShopInside(), true))
                 .placeholder(R.drawable.profile)
                 .into(holder.thumbnail);
-
+        holder.call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sellerClick.onCallClick(seller.mobile);
+            }
+        });
         if (seller.status.equalsIgnoreCase("Request")) {
             holder.approved.setVisibility(View.VISIBLE);
             holder.pending.setVisibility(View.VISIBLE);

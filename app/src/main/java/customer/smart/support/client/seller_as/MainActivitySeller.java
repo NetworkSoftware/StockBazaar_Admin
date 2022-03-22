@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -565,6 +566,13 @@ public class MainActivitySeller extends AppCompatActivity implements SellerClick
     @Override
     public void onStatus(Seller seller, String status) {
         updateStatus(seller.id, status);
+    }
+
+    @Override
+    public void onCallClick(String call) {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:" + call));
+        startActivity(intent);
     }
 
     private void updateStatus(final String shopId, final String status) {
