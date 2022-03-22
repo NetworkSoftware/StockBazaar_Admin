@@ -60,6 +60,7 @@ public class ExchangeAdapter extends RecyclerView.Adapter<ExchangeAdapter.MyView
         holder.mobileCondition.setText("Mobile Conditions:" + bean.getMobileCondition());
         holder.hardwareProblem.setText("Hardware:" + bean.getHardwareProblem());
         holder.softwareChanged.setText("Software:" + bean.getSoftwareChanged());
+        holder.whatsapp.setText(bean.getWhatsapp());
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,7 +98,8 @@ public class ExchangeAdapter extends RecyclerView.Adapter<ExchangeAdapter.MyView
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView brand, warranty, price, model, ram, rom, box, accessories, mobileCondition, hardwareProblem, softwareChanged, id;
+        TextView brand, warranty, price, model, ram, rom, box, accessories,
+                mobileCondition, hardwareProblem, softwareChanged, id,whatsapp;
         ImageView arrow_button, image;
         LinearLayout hidden_view, linearActive;
         CardView cardView;
@@ -114,7 +116,7 @@ public class ExchangeAdapter extends RecyclerView.Adapter<ExchangeAdapter.MyView
             id = view.findViewById(R.id.id);
             price = view.findViewById(R.id.price);
             image = view.findViewById(R.id.image);
-
+            whatsapp = view.findViewById(R.id.whatsapp);
             warranty = view.findViewById(R.id.warranty);
             ram = view.findViewById(R.id.ram);
             rom = view.findViewById(R.id.rom);

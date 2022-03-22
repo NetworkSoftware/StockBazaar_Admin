@@ -36,6 +36,8 @@ import customer.smart.support.NaviActivity;
 import customer.smart.support.R;
 import customer.smart.support.client.stock.Product;
 import customer.smart.support.client.stock.ProductRegister;
+import customer.smart.support.order.MainActivityOrder;
+import customer.smart.support.order.Order;
 
 
 public class FirebaseMessageReceiver extends FirebaseMessagingService {
@@ -46,14 +48,14 @@ public class FirebaseMessageReceiver extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         sharedpreferences = getSharedPreferences(mypreference,
                 Context.MODE_PRIVATE);
-        //handle when receive notification via data event
+
         if (remoteMessage.getData().size() > 0) {
 
             showNotification(remoteMessage.getData().get("title"),
                     remoteMessage.getData().get("message"), remoteMessage.getData().get("metadata"));
         }
 
-        //handle when receive notification
+
         if (remoteMessage.getNotification() != null) {
             showNotification(remoteMessage.getNotification().getTitle(),
                     remoteMessage.getNotification().getBody(), null);
@@ -86,9 +88,12 @@ public class FirebaseMessageReceiver extends FirebaseMessagingService {
                             || type.equalsIgnoreCase("exchange")) {
                         intent = new Intent(this, NaviActivity.class);
                         sent(message, title, intent, null);
+                    }else if("order".equalsIgnoreCase(type)){
+                        intent = new Intent(this, MainActivityOrder.class);
+                        sent(message, title, intent, null);
                     } else {
                         String id = jsonObject.getString("id");
-                        fetchContacts(id, type, message, title);
+                        fetchContacts(id, message, title);
                     }
                 }
                 return;
@@ -145,7 +150,7 @@ public class FirebaseMessageReceiver extends FirebaseMessagingService {
 
     }
 
-    private void fetchContacts(String id, final String type, final String message, final String title) {
+    private void fetchContacts(String id, final String message, final String title) {
 
         String url = Appconfig.FETCH_ITEM_BY_ID + "?id=" + id
                 + "&type=product";

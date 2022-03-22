@@ -89,6 +89,7 @@ public class ExchangeTab extends BaseFragment implements ExchangeClick {
                             service.setBox(jsonObject.getString("box"));
                             service.setPrice(jsonObject.getString("price"));
                             service.setImage(jsonObject.getString("image"));
+                            service.setWhatsapp(jsonObject.getString("whatsapp"));
                             service.setAccessories(jsonObject.getString("accessories"));
                             service.setMobileCondition(jsonObject.getString("mobileCondition"));
                             service.setHardwareProblem(jsonObject.getString("hardwareProblem"));

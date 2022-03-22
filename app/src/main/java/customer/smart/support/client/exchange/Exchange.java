@@ -17,6 +17,7 @@ public class Exchange implements Serializable {
     String softwareChanged;
     String image;
     String price;
+    String whatsapp;
 
 
     public Exchange() {
@@ -124,5 +125,13 @@ public class Exchange implements Serializable {
 
     public void setPrice(String price) {
         this.price = price;
+    }
+
+    public String getWhatsapp() {
+        return whatsapp;
+    }
+
+    public void setWhatsapp(String whatsapp) {
+        this.whatsapp = whatsapp;
     }
 }

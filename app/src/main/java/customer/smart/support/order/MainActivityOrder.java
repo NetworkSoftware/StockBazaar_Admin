@@ -509,7 +509,6 @@ public class MainActivityOrder extends AppCompatActivity implements OrderAdapter
 
     @Override
     public void onCancelClick(final String id) {
-
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(MainActivityOrder.this);
         LayoutInflater inflater = MainActivityOrder.this.getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.alert_dialog, null);

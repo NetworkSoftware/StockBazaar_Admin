@@ -1,6 +1,5 @@
 package customer.smart.support;
 
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;

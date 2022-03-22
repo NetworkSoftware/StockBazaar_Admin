@@ -39,7 +39,6 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/sans_bold"
                         android:text="Price"
-                        android:textColor="@color/gray"
                         android:textSize="15dp" />
 
                     <LinearLayout
@@ -81,7 +80,6 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/sans_bold"
                         android:text="Price"
-                        android:textColor="@color/gray"
                         android:textSize="15dp" />
 
                 </LinearLayout>
@@ -109,7 +107,33 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/sans_bold"
                         android:text="Price"
-                        android:textColor="@color/gray"
+                        android:textSize="15dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/sans_bold"
+                        android:text="Whatsapp"
+                        android:textColor="@color/black"
+                        android:textSize="15dp" />
+
+                    <TextView
+                        android:id="@+id/whatsapp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/sans_bold"
+                        android:text="Price"
                         android:textSize="15dp" />
 
                 </LinearLayout>
@@ -138,7 +162,6 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/sans_bold"
                         android:text="Price"
-                        android:textColor="@color/gray"
                         android:textSize="15dp" />
 
                     <ImageView
@@ -195,7 +218,6 @@
                                 android:fontFamily="@font/sans_bold"
                                 android:maxLines="3"
                                 android:text="End Trip"
-                                android:textColor="@color/gray"
                                 android:textSize="16dp" />
                         </LinearLayout>
 
@@ -221,7 +243,6 @@
                                 android:fontFamily="@font/sans_bold"
                                 android:maxLines="3"
                                 android:text="End Trip"
-                                android:textColor="@color/gray"
                                 android:textSize="16dp" />
                         </LinearLayout>
 
@@ -247,7 +268,6 @@
                                 android:fontFamily="@font/sans_bold"
                                 android:maxLines="3"
                                 android:text="Start Trip"
-                                android:textColor="@color/gray"
                                 android:textSize="16dp" />
                         </LinearLayout>
 
@@ -273,7 +293,6 @@
                                 android:fontFamily="@font/sans_bold"
                                 android:maxLines="3"
                                 android:text="End Trip"
-                                android:textColor="@color/gray"
                                 android:textSize="16dp" />
                         </LinearLayout>
 
@@ -299,7 +318,6 @@
                                 android:fontFamily="@font/sans_bold"
                                 android:maxLines="3"
                                 android:text="End Trip"
-                                android:textColor="@color/gray"
                                 android:textSize="16dp" />
                         </LinearLayout>
 
@@ -325,7 +343,6 @@
                                 android:fontFamily="@font/sans_bold"
                                 android:maxLines="3"
                                 android:text="End Trip"
-                                android:textColor="@color/gray"
                                 android:textSize="16dp" />
                         </LinearLayout>
 
@@ -351,7 +368,6 @@
                                 android:fontFamily="@font/sans_bold"
                                 android:maxLines="3"
                                 android:text="End Trip"
-                                android:textColor="@color/gray"
                                 android:textSize="16dp" />
                         </LinearLayout>
 
@@ -377,7 +393,6 @@
                                 android:fontFamily="@font/sans_bold"
                                 android:maxLines="3"
                                 android:text="End Trip"
-                                android:textColor="@color/gray"
                                 android:textSize="16dp" />
                         </LinearLayout>
 
