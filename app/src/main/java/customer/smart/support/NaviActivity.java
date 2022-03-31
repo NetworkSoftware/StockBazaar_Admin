@@ -23,6 +23,7 @@ import customer.smart.support.client.stock.MainActivityProduct;
 import customer.smart.support.client.wallet.MainActivityWallet;
 import customer.smart.support.cmobile.MainActivityMobile;
 import customer.smart.support.contact.MainActivityContact;
+import customer.smart.support.marketingstaff.MainActivityMarketingStaff;
 import customer.smart.support.offer.OfferActivity;
 import customer.smart.support.order.MainActivityOrder;
 import customer.smart.support.shop.MainActivity;
@@ -56,6 +57,7 @@ public class NaviActivity extends AppCompatActivity {
         LinearLayout seller = findViewById(R.id.seller);
         LinearLayout wallet = findViewById(R.id.wallet);
         LinearLayout service = findViewById(R.id.serviceLi);
+        LinearLayout marketing=findViewById(R.id.marketing);
 
         LinearLayout category = findViewById(R.id.category);
         LinearLayout client_shop = findViewById(R.id.client_shop);
@@ -76,6 +78,8 @@ public class NaviActivity extends AppCompatActivity {
             wallet.setVisibility(View.VISIBLE);
             client_shop.setVisibility(View.VISIBLE);
             service.setVisibility(View.VISIBLE);
+            marketing.setVisibility(View.VISIBLE);
+
         } else if (sharedpreferences.getString("role", "admin").equalsIgnoreCase("admin")) {
 
             String data = sharedpreferences.getString("data", "");
@@ -155,7 +159,11 @@ public class NaviActivity extends AppCompatActivity {
             } else {
                 service.setVisibility(View.GONE);
             }
-
+            if (data.contains("marketing")) {
+                marketing.setVisibility(View.VISIBLE);
+            } else {
+                marketing.setVisibility(View.GONE);
+            }
 
         }
 
@@ -282,6 +290,15 @@ public class NaviActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent io = new Intent(NaviActivity.this, ServiceTabsActivity.class);
+                startActivity(io);
+
+            }
+        });
+
+        marketing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent io = new Intent(NaviActivity.this, MainActivityMarketingStaff.class);
                 startActivity(io);
 
             }

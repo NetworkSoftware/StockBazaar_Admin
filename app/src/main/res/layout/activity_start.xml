@@ -65,23 +65,22 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp"
+            android:layout_height="80dp"
             android:orientation="horizontal">
 
             <Button
                 android:id="@+id/loginOtp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="3dp"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:layout_margin="5dp"
                 android:text="OTP LOGIN" />
 
             <Button
                 android:id="@+id/loginPassword"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="3dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:text="PASSWORD LOGIN" />
         </LinearLayout>

@@ -168,6 +168,8 @@ public class StartActivity extends AppCompatActivity {
                         } else {
                             editor.putString("role", jObj.getString("role"));
                             editor.putString("data", jObj.getString("data"));
+                            editor.putString("name", jObj.getString("name"));
+
                             editor.commit();
                             Intent io = new Intent(StartActivity.this, NaviActivity.class);
                             startActivity(io);
@@ -288,6 +290,8 @@ public class StartActivity extends AppCompatActivity {
                             editor.putBoolean(Appconfig.isClient, false);
                             editor.putString("role", jObj.getString("role"));
                             editor.putString("data", jObj.getString("data"));
+                            editor.putString("name", jObj.getString("name"));
+
                             editor.commit();
                             Intent io = new Intent(StartActivity.this, NaviActivity.class);
                             startActivity(io);

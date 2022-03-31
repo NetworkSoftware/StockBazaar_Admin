@@ -3,6 +3,7 @@
     package="customer.smart.support">
 
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -192,10 +193,6 @@
             android:label="Staff Register"
             android:theme="@style/AppThemeWhite" />
         <activity
-            android:name=".cmobile.MobileRegister"
-            android:label="Mobile Register"
-            android:theme="@style/AppThemeWhite" />
-        <activity
             android:name=".order.MyOrderPage"
             android:label="Mobile Register"
             android:theme="@style/AppThemeWhite" />
@@ -239,7 +236,17 @@
             android:name=".client.service.ServiceTabsActivity"
             android:label="@string/app_name"
             android:theme="@style/AppThemeWhiteNO" />
-
+        <activity
+            android:name=".marketingstaff.MarketStaffRegister"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".marketingstaff.MainActivitySign"
+            android:label="Sign Pad" />
+        <activity
+            android:name=".marketingstaff.MainActivityMarketingStaff"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".cmobile.MainActivityMobile"
             android:label="@string/app_name"

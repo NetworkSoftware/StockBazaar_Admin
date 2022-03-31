@@ -39,7 +39,6 @@ import customer.smart.support.R;
 import customer.smart.support.app.AppController;
 import customer.smart.support.app.Appconfig;
 import customer.smart.support.attachment.ActivityMediaOnline;
-import customer.smart.support.cmobile.MobileRegister;
 
 public class MainActivityStock extends AppCompatActivity implements ContactsAdapter.ContactsAdapterListener {
     private static final String TAG = MainActivityStock.class.getSimpleName();

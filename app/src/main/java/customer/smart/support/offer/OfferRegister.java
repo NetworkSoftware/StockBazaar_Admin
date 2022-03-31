@@ -1,8 +1,5 @@
 package customer.smart.support.offer;
 
-import static customer.smart.support.app.Appconfig.FETCHOFFERPRODUCTID;
-import static customer.smart.support.app.Appconfig.mypreference;
-
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -67,6 +64,9 @@ import customer.smart.support.attachment.AttachmentBaseAdapter;
 import customer.smart.support.attachment.Base;
 import customer.smart.support.attachment.BaseClick;
 
+import static customer.smart.support.app.Appconfig.FETCHOFFERPRODUCTID;
+import static customer.smart.support.app.Appconfig.mypreference;
+
 /**
  * Created by user_1 on 11-07-2018.
  */
@@ -86,9 +86,9 @@ public class OfferRegister extends AppCompatActivity implements BaseClick, Image
     Imageutils imageutils;
     MaterialBetterSpinner category;
     AutoCompleteTextView productId;
-        private TextView submit;
+    private TextView submit;
     private ProgressDialog pDialog;
-private ImageView image;
+    private ImageView image;
     private String imageUrl = null;
     private String[] PRODUCTID = new String[]{
             "Loading",
@@ -120,8 +120,8 @@ private ImageView image;
         });
 
         //
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.select_dialog_item, PRODUCTID);
+        productId = findViewById(R.id.productId);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, PRODUCTID);
         productId.setThreshold(2);
         productId.setAdapter(adapter);
         image = findViewById(R.id.image);

@@ -5,7 +5,7 @@
     <string name="toolbar_title">Stock</string>
     <string name="action_search">Search</string>
     <string name="search_hint">Type name…</string>
-    <string name="hint_pet_name">Mobile Name</string>
+    <string name="hint_pet_name">Mobile Brand</string>
     <string name="hint_imei_name">IMEI Number</string>
     <string name="hint_imei_nam">IMEI Number</string>
 
@@ -17,5 +17,7 @@
     <string name="selectable">selectable</string>
     <string name="dateandtime">dateandtime</string>
     <string name="date">date</string>
-
+    <string name="agreement">I agree the terms and conditions.</string>
+    <string name="clear_pad">Clear Pad</string>
+    <string name="save_signature">Save Signature</string>
 </resources>
