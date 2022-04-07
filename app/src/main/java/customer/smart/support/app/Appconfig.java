@@ -49,9 +49,8 @@ public class Appconfig {
     public static final String mypreference = "mypref";
     public static final String ip = "http://thestockbazaar.com/prisma/tmobile/";
     public static final String ip_img = "http://thestockbazaar.com/prisma/tmobile/";
-
 //  public static final String ip = "http://192.168.1.100:8111/prisma/tmobile/";
-//      public static final String ip_img = "http://192.168.1.100:8111/prisma/tmobile/";
+//  public static final String ip_img = "http://192.168.1.100:8111/prisma/tmobile/";
     public static final String CREATE_SHOP = ip + "create_shop.php";
     public static final String STATUSUPDATE = ip + "status_update";
     public static final String STAFF_LOGIN = ip + "staff_login.php";

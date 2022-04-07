@@ -89,7 +89,6 @@ public class ExchangeAdapter extends RecyclerView.Adapter<ExchangeAdapter.MyView
             public void onClick(View view) {
 
                 if (holder.hidden_view.getVisibility() == View.VISIBLE) {
-
                     TransitionManager.beginDelayedTransition(holder.cardView,
                             new AutoTransition());
                     holder.hidden_view.setVisibility(View.GONE);

@@ -60,6 +60,29 @@
         android:fontFamily="sans-serif-medium"
         android:textColor="@color/contact_name"
         android:textSize="@dimen/contact_number" />
+    <TextView
+        android:id="@+id/data"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="password"
+        android:layout_weight="1"
+        android:layout_below="@id/ram"
+        android:layout_toRightOf="@id/thumbnail"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="@color/contact_name"
+        android:textSize="@dimen/contact_number" />
+    <TextView
+        android:id="@+id/role"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="password"
+        android:layout_weight="1"
+        android:layout_below="@id/ram"
+        android:layout_toRightOf="@id/thumbnail"
+        android:maxLines="4"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="@color/contact_name"
+        android:textSize="@dimen/contact_number" />
 
 </LinearLayout>
 </LinearLayout>

@@ -84,8 +84,44 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+                android:id="@+id/role"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:hint="Select Role"
+                android:textColor="@color/black"
+                android:textColorHint="#c6c6c6"
+                android:textSize="15dp"
+                app:met_floatingLabel="normal" />
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/categoryText"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="visible"
+                android:textColorHint="@color/gray"
+                android:layout_margin="5dp">
 
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/data"
+                    android:drawableEnd="@drawable/ic_baseline_arrow_drop_down_24"
+                    android:fontFamily="@font/sans"
+                    android:textColorHint="#c6c6c6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/white"
+                    android:hint="Select the data"
+                    android:inputType="text"
+                    android:textColor="@color/black"
+                    android:textSize="15dp"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

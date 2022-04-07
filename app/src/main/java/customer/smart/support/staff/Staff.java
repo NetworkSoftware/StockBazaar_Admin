@@ -12,6 +12,8 @@ public class Staff implements Serializable{
     String image;
     String contact;
     String password;
+    String role;
+    String data;
     String createdat;
 
     public Staff() {
@@ -63,5 +65,21 @@ public class Staff implements Serializable{
 
     public void setCreatedat(String createdat) {
         this.createdat = createdat;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
     }
 }

@@ -30,12 +30,14 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.MyViewHolder
     private StaffAdapterListener listener;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView name,contact,password;
+        public TextView name,contact,password,data,role;
         public ImageView thumbnail;
 
         public MyViewHolder(View view) {
             super(view);
             name = view.findViewById(R.id.name);
+            data = view.findViewById(R.id.data);
+            role = view.findViewById(R.id.role);
             contact = view.findViewById(R.id.contact);
             password = view.findViewById(R.id.password);
             thumbnail = view.findViewById(R.id.thumbnail);
@@ -72,6 +74,8 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.MyViewHolder
         holder.name.setText(contact.getName());
         holder.password.setText(contact.getPassword());
         holder.contact.setText(contact.contact);
+        holder.data.setText(contact.data);
+        holder.role.setText(contact.role);
 
         GlideApp.with(context)
                 .load(contact.image)

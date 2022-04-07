@@ -249,6 +249,8 @@ public class MarketStaffRegister extends AppCompatActivity implements Imageutils
 
         staffName.setText(sharedpreferences.getString("name",""));
         staffcontact.setText(sharedpreferences.getString("user",""));
+        staffName.setFocusable(false);
+        staffcontact.setFocusable(false);
         // Edit Text
         imeiNo = findViewById(R.id.imeiNo);
         brand = findViewById(R.id.brand);

@@ -91,7 +91,8 @@ public class MainActivityStaff extends AppCompatActivity implements StaffAdapter
                     @Override
                     public void onResponse(JSONObject response) {
                         if (response == null) {
-                            Toast.makeText(getApplicationContext(), "Couldn't fetch the contacts! Pleas try again.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Couldn't fetch the contacts! " +
+                                    "Pleas try again.", Toast.LENGTH_LONG).show();
                             return;
                         }
 
@@ -125,7 +126,7 @@ public class MainActivityStaff extends AppCompatActivity implements StaffAdapter
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.staff_main, menu);
 
         // Associate searchable configuration with the SearchView
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);

@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +24,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.material.textfield.TextInputEditText;
+import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -61,7 +65,17 @@ public class StaffRegister extends AppCompatActivity implements Imageutils.Image
     private ProgressDialog pDialog;
     private CircleImageView profiletImage;
     private String imageUrl = "";
-
+    TextInputEditText data;
+    MaterialBetterSpinner role;
+    private final String[] STAFFDATA = new String[]{
+            "adv", "shop", "stock", "staff",
+            "cmobile", "offer", "contact", "address",
+            "spare", "orders", "category", "cshop",
+            "seller", "wallet", "service", "marketing",
+    };
+    private final String[] STAFFROLE = new String[]{
+            "admin", "sadmin",
+    };
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,11 +96,27 @@ public class StaffRegister extends AppCompatActivity implements Imageutils.Image
 
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
-
+        role = findViewById(R.id.role);
+        data = findViewById(R.id.data);
         name = (EditText) findViewById(R.id.name);
         password = (EditText) findViewById(R.id.password);
         contact = (EditText) findViewById(R.id.contact);
-
+        data.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(b){
+                    Appconfig.multiSelectionModule(StaffRegister.this,
+                            "Select Language", STAFFDATA, data);
+                }}
+        });
+        ArrayAdapter<String> genderAdapter = new ArrayAdapter<String>(StaffRegister.this,
+                android.R.layout.simple_dropdown_item_1line, STAFFROLE);
+        role.setAdapter(genderAdapter);
+        role.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            }
+        });
         submit = (TextView) findViewById(R.id.submit);
 
         submit.setOnClickListener(new View.OnClickListener() {
@@ -94,10 +124,14 @@ public class StaffRegister extends AppCompatActivity implements Imageutils.Image
             public void onClick(View v) {
                 if (name.getText().toString().length() > 0 &&
                         password.getText().toString().length() > 0 &&
-                        contact.getText().toString().length() > 0
+                        contact.getText().toString().length() > 0 &&
+                        role.getText().toString().length() > 0 &&
+                        data.getText().toString().length() > 0
                 ) {
                     registerUser();
 
+                }else {
+                    Toast.makeText(getApplicationContext(), "Enter valid details", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -145,6 +179,8 @@ public class StaffRegister extends AppCompatActivity implements Imageutils.Image
                 localHashMap.put("contact", contact.getText().toString());
                 localHashMap.put("password", password.getText().toString());
                 localHashMap.put("name", name.getText().toString());
+                localHashMap.put("role", role.getText().toString());
+                localHashMap.put("data", data.getText().toString());
                 localHashMap.put("image", imageUrl);
                 return localHashMap;
             }
@@ -186,6 +222,7 @@ public class StaffRegister extends AppCompatActivity implements Imageutils.Image
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         imageutils.onActivityResult(requestCode, resultCode, data);
 
     }

@@ -1,6 +1,8 @@
 package customer.smart.support.marketingstaff;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import customer.smart.support.R;
+import customer.smart.support.app.Appconfig;
 import customer.smart.support.app.GlideApp;
 import customer.smart.support.stock.Contact;
 
@@ -33,12 +36,14 @@ public class MarketStaffAdapter extends RecyclerView.Adapter<MarketStaffAdapter.
     private List<MarketStaff> contactList;
     private List<MarketStaff> contactListFiltered;
     private MarketStaffAdapterListener listener;
-
+    SharedPreferences sharedPreferences;
     public MarketStaffAdapter(Context context, List<MarketStaff> contactList, MarketStaffAdapterListener listener) {
         this.context = context;
         this.listener = listener;
         this.contactList = contactList;
         this.contactListFiltered = contactList;
+        sharedPreferences = context.getSharedPreferences(Appconfig.mypreference, Context.MODE_PRIVATE);
+
     }
 
     @Override
@@ -50,7 +55,7 @@ public class MarketStaffAdapter extends RecyclerView.Adapter<MarketStaffAdapter.
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, final int position) {
+    public void onBindViewHolder(MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         final MarketStaff contact = contactListFiltered.get(position);
         holder.name.setText(contact.getCustomerName());
         holder.contact.setText(contact.customerContact);
@@ -64,7 +69,8 @@ public class MarketStaffAdapter extends RecyclerView.Adapter<MarketStaffAdapter.
             }
         });
 
-        if(contact.getStatus().equalsIgnoreCase("done")){
+        if((contact.getStatus().equalsIgnoreCase("done"))||
+                (sharedPreferences.getString("data", "").contains("marketing"))){
             holder.status.setVisibility(View.GONE);
         }else {
             holder.status.setVisibility(View.VISIBLE);
