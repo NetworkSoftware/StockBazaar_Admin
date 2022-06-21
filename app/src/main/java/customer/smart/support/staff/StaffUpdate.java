@@ -75,7 +75,7 @@ public class StaffUpdate extends AppCompatActivity implements Imageutils.ImageAt
             "adv", "shop", "stock", "staff",
             "cmobile", "offer", "contact", "address",
             "spare", "orders", "category", "cshop",
-            "seller", "wallet", "service", "marketing",
+            "seller", "wallet", "service", "marketing","enquiry"
     };
     private final String[] STAFFROLE = new String[]{
             "admin", "sadmin",

@@ -85,7 +85,8 @@ public class FirebaseMessageReceiver extends FirebaseMessagingService {
                         adminPhone.equalsIgnoreCase("9514414404") ||
                         adminPhone.equalsIgnoreCase("9787665854")) {
                     if (type.equalsIgnoreCase("service")
-                            || type.equalsIgnoreCase("exchange")) {
+                            || type.equalsIgnoreCase("exchange")||
+                            type.equalsIgnoreCase("enquiry")) {
                         intent = new Intent(this, NaviActivity.class);
                         sent(message, title, intent, null);
                     }else if("order".equalsIgnoreCase(type)){

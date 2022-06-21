@@ -16,6 +16,7 @@ import androidx.appcompat.widget.SearchView;
 import customer.smart.support.ad.MainActivityAd;
 import customer.smart.support.app.Appconfig;
 import customer.smart.support.client.category.MainActivityCategories;
+import customer.smart.support.client.enquiry.MainActivityEnquiry;
 import customer.smart.support.client.seller_as.MainActivitySeller;
 import customer.smart.support.client.service.ServiceTabsActivity;
 import customer.smart.support.client.shop.MainActivityShop;
@@ -60,6 +61,7 @@ public class NaviActivity extends AppCompatActivity {
         LinearLayout marketing=findViewById(R.id.marketing);
 
         LinearLayout category = findViewById(R.id.category);
+        LinearLayout enquiry = findViewById(R.id.enquiry);
         LinearLayout client_shop = findViewById(R.id.client_shop);
         if (sharedpreferences.getString(
                 "role", "admin").equalsIgnoreCase("sadmin")) {
@@ -79,6 +81,7 @@ public class NaviActivity extends AppCompatActivity {
             client_shop.setVisibility(View.VISIBLE);
             service.setVisibility(View.VISIBLE);
             marketing.setVisibility(View.VISIBLE);
+            enquiry.setVisibility(View.VISIBLE);
 
         } else if (sharedpreferences.getString("role", "admin").equalsIgnoreCase("admin")) {
 
@@ -165,6 +168,11 @@ public class NaviActivity extends AppCompatActivity {
                 marketing.setVisibility(View.GONE);
             }
 
+            if (data.contains("enquiry")) {
+                enquiry.setVisibility(View.VISIBLE);
+            } else {
+                enquiry.setVisibility(View.GONE);
+            }
         }
 
         client_shop.setOnClickListener(new View.OnClickListener() {
@@ -192,6 +200,14 @@ public class NaviActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent io = new Intent(NaviActivity.this, MainActivityCategories.class);
+                startActivity(io);
+
+            }
+        });
+        enquiry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent io = new Intent(NaviActivity.this, MainActivityEnquiry.class);
                 startActivity(io);
 
             }

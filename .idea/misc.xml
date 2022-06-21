@@ -5,6 +5,8 @@
       <map>
         <entry key="..\:/StudioProjects/StockBazaar_Admin/app/src/main/res/layout/active_booking.xml" value="0.264" />
         <entry key="..\:/StudioProjects/StockBazaar_Admin/app/src/main/res/layout/activity_main_address.xml" value="0.2" />
+        <entry key="..\:/StudioProjects/StockBazaar_Admin/app/src/main/res/layout/activity_main_categories.xml" value="0.24615384615384617" />
+        <entry key="..\:/StudioProjects/StockBazaar_Admin/app/src/main/res/layout/activity_main_enquiry.xml" value="0.25" />
         <entry key="..\:/StudioProjects/StockBazaar_Admin/app/src/main/res/layout/activity_maincontact.xml" value="0.12708333333333333" />
         <entry key="..\:/StudioProjects/StockBazaar_Admin/app/src/main/res/layout/activity_maincustomer.xml" value="0.23796296296296296" />
         <entry key="..\:/StudioProjects/StockBazaar_Admin/app/src/main/res/layout/activity_navi.xml" value="0.12708333333333333" />
@@ -14,8 +16,12 @@
         <entry key="..\:/StudioProjects/StockBazaar_Admin/app/src/main/res/layout/activity_start.xml" value="0.12708333333333333" />
         <entry key="..\:/StudioProjects/StockBazaar_Admin/app/src/main/res/layout/booking_history_list.xml" value="0.25" />
         <entry key="..\:/StudioProjects/StockBazaar_Admin/app/src/main/res/layout/categories_register.xml" value="0.24615384615384617" />
+        <entry key="..\:/StudioProjects/StockBazaar_Admin/app/src/main/res/layout/categories_row_item.xml" value="0.12708333333333333" />
         <entry key="..\:/StudioProjects/StockBazaar_Admin/app/src/main/res/layout/client_product_row_item.xml" value="0.12708333333333333" />
         <entry key="..\:/StudioProjects/StockBazaar_Admin/app/src/main/res/layout/client_stock_register.xml" value="0.25" />
+        <entry key="..\:/StudioProjects/StockBazaar_Admin/app/src/main/res/layout/content_main_enquiry.xml" value="0.25" />
+        <entry key="..\:/StudioProjects/StockBazaar_Admin/app/src/main/res/layout/content_maincategories.xml" value="0.25" />
+        <entry key="..\:/StudioProjects/StockBazaar_Admin/app/src/main/res/layout/enquiry_item.xml" value="0.12708333333333333" />
         <entry key="..\:/StudioProjects/StockBazaar_Admin/app/src/main/res/layout/exchange_list.xml" value="0.264" />
         <entry key="..\:/StudioProjects/StockBazaar_Admin/app/src/main/res/layout/image_list_row.xml" value="0.25" />
         <entry key="..\:/StudioProjects/StockBazaar_Admin/app/src/main/res/layout/mobile_register.xml" value="0.25" />

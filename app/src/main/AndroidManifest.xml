@@ -205,6 +205,10 @@
             android:label="@string/app_name"
             android:theme="@style/AppThemeWhiteNO" />
         <activity
+            android:name=".client.enquiry.MainActivityEnquiry"
+            android:label="@string/app_name"
+            android:theme="@style/AppThemeWhiteNO" />
+        <activity
             android:name=".client.wallet.MainActivityWallet"
             android:label="@string/app_name"
             android:theme="@style/AppThemeWhiteNO" />

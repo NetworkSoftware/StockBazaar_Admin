@@ -114,7 +114,7 @@ public class StartActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (phoneNo.getText().length() <= 0) {
                     Toast.makeText(getApplicationContext(), "Enter valid phoneNo", Toast.LENGTH_SHORT).show();
-                } else if ("SUBMIT".equalsIgnoreCase(loginPassword.getText().toString())) {
+                }else if ("SUBMIT".equalsIgnoreCase(loginPassword.getText().toString())) {
                     if (password.getText().toString().length() > 0) {
                         passwordLogin();
                     } else {
@@ -144,7 +144,8 @@ public class StartActivity extends AppCompatActivity {
         dialog.setMessage("Login ...");
         showDialog();
         // showDialog();
-        StringRequest strReq = new StringRequest(Request.Method.POST, Appconfig.STAFF_LOGIN, new Response.Listener<String>() {
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                Appconfig.STAFF_LOGIN, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.d("Register Response: ", response);
