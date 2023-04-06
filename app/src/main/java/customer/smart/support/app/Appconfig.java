@@ -224,7 +224,7 @@ public class Appconfig {
         try {
             out = new FileOutputStream(filename);
 
-            scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
+            scaledBitmap.compress(Bitmap.CompressFormat.PNG, 80, out);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -246,7 +246,7 @@ public class Appconfig {
         if (!file.exists()) {
             file.mkdirs();
         }
-        String uriSting = (file.getAbsolutePath() + "/" + System.currentTimeMillis() + ".jpg");
+        String uriSting = (file.getAbsolutePath() + "/" + System.currentTimeMillis() + ".png");
         return uriSting;
     }
 
