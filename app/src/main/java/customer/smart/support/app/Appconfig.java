@@ -47,10 +47,11 @@ public class Appconfig {
     public static final String Phone = "phone";
     public static final String AdminPhone = "user";
     public static final String mypreference = "mypref";
-   public static final String ip = "http://thestockbazaar.com/prisma/tmobile/";
+    public static final String ip = "http://thestockbazaar.com/prisma/tmobile/";
     public static final String ip_img = "http://thestockbazaar.com/prisma/tmobile/";
-//  public static final String ip = "http://192.168.1.204:8111/prisma/tmobile/";
-//  public static final String ip_img = "http://192.168.1.204:8111/prisma/tmobile/";
+    //public static final String ip = "http://192.168.29.8:8111/prisma/tmobile/";
+    //public static final String ip = "http://192.168.29.45:8111/prisma/tmobile/";
+    //public static final String ip_img = "http://192.168.29.8:8111/prisma/tmobile/";
     public static final String CREATE_SHOP = ip + "create_shop.php";
     public static final String STATUSUPDATE = ip + "status_update";
     public static final String STAFF_LOGIN = ip + "staff_login.php";
@@ -102,9 +103,17 @@ public class Appconfig {
     public static final String CATEGORIES = ip + "category";
     public static final String FETCH_ITEM_BY_ID = ip + "fetchItemByIdNew";
     public static final String FETCHOFFERPRODUCTID = ip + "fetchOfferProductId";
+
+    //retail
+    public static final String RETAIL_FOLDER = ip + "retail_folder";
+    public static final String MOVE_FOLDER = ip + "retail_folder_change";
+    public static final String RETAIL_CATEGORY = ip + "retail_category";
+    public static final String RETAIL_PRODUCT = ip + "retail_product";
+    public static final String RETAIL_ORDER = ip + "retail_order";
     public static String URL_IMAGE_UPLOAD = ip + "fileUpload.php";
     public static String URL_IMAGE_UPLOAD_LATEST = ip + "fileUploadlatest.php";
     public static String URL_FEED_UPLOAD = ip + "fileFeed.php";
+
     //getAll_category
     public static String[] CATEGORY = new String[]{
             "New Mobiles", "Old Mobiles", "Accessories", "Spare",

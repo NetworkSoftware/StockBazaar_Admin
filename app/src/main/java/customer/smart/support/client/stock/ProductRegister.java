@@ -540,10 +540,10 @@ public class ProductRegister extends AppCompatActivity
     @Override
     public void image_attachment(int from, String filename, Bitmap file, Uri uri) {
         String path = getCacheDir().getPath() + File.separator + "ImageAttach" + File.separator;
-        File storedFile = imageutils.createImage(file, filename, path, false);
+        String storedPath = imageutils.createImage(file, filename, path, false);
         pDialog.setMessage("Uploading...");
         showDialog();
-        new UploadFileToServer().execute(Appconfig.compressImage(storedFile.getPath(), ProductRegister.this));
+        new UploadFileToServer().execute(Appconfig.compressImage(storedPath, ProductRegister.this));
     }
 
     @Override
@@ -748,14 +748,15 @@ public class ProductRegister extends AppCompatActivity
 
 
     void DownloadImage(String ImageUrl) {
-        if (ContextCompat.checkSelfPermission(ProductRegister.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(ProductRegister.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(ProductRegister.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE}, 123);
-        } else {
-            showToast("Downloading Image...");
-            new DownloadsImage().execute(ImageUrl);
-        }
+//        if (ContextCompat.checkSelfPermission(ProductRegister.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+//                ContextCompat.checkSelfPermission(ProductRegister.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(ProductRegister.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+//                    Manifest.permission.WRITE_EXTERNAL_STORAGE}, 123);
+//        } else {
+//
+//        }
+        showToast("Downloading Image...");
+        new DownloadsImage().execute(ImageUrl);
     }
 
     class DownloadsImage extends AsyncTask<String, Void, Void> {

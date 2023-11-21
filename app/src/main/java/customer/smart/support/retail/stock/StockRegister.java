@@ -1,9 +1,17 @@
-package customer.smart.support.spares;
+package customer.smart.support.retail.stock;
+
+import static customer.smart.support.app.Appconfig.RETAIL_CATEGORY;
+import static customer.smart.support.app.Appconfig.RETAIL_PRODUCT;
+import static customer.smart.support.app.Appconfig.mypreference;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,8 +21,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,7 +29,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,6 +38,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
+import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -43,127 +49,116 @@ import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import customer.smart.support.R;
+import customer.smart.support.StartActivity;
 import customer.smart.support.app.AndroidMultiPartEntity;
 import customer.smart.support.app.AppController;
 import customer.smart.support.app.Appconfig;
-import customer.smart.support.app.CustomFontEditText;
 import customer.smart.support.app.Imageutils;
 import customer.smart.support.attachment.ActivityMediaOnline;
-import customer.smart.support.offer.OfferRegister;
-import de.hdodenhof.circleimageview.CircleImageView;
+import customer.smart.support.client.bulkPrice.BulkPriceBeen;
+import customer.smart.support.client.stock.AddImageAdapter;
+import customer.smart.support.client.stock.ImageClick;
+import customer.smart.support.client.stock.Product;
 
-/**
- * Created by user_1 on 11-07-2018.
- */
+public class StockRegister extends AppCompatActivity
+        implements Imageutils.ImageAttachmentListener, ImageClick {
 
-public class SparesUpdate extends AppCompatActivity implements Imageutils.ImageAttachmentListener,ImageClick {
-
-
-    AutoCompleteTextView brand;
-    CustomFontEditText spare;
-
-    TextInputEditText price;
-    TextInputEditText description;
+    String[] CATEGORY = new String[]{"Loading"};
+    TextInputEditText model, price;
     AddImageAdapter maddImageAdapter;
-    CardView itemsAdd;
     String studentId = null;
-    String metadata = null;
     TextView submit;
     Imageutils imageutils;
-    CheckBox isNotify;
-    CustomFontEditText stock_update;
+    MaterialBetterSpinner selectcategories;
+    SharedPreferences sharedpreferences;
+    private Map<String, String> nameIdMap = new HashMap<>();
+    private Map<String, String> idNameMap = new HashMap<>();
     private ProgressDialog pDialog;
     private RecyclerView imagelist;
     private ArrayList<String> samplesList = new ArrayList<>();
-    private CircleImageView profiletImage;
     private String imageUrl = "";
+    private StockModel product = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.spares_register);
+        setContentView(R.layout.retail_stock_register);
         imageutils = new Imageutils(this);
-
+        sharedpreferences = getSharedPreferences(mypreference,
+                Context.MODE_PRIVATE);
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
-
-        isNotify = findViewById(R.id.isNotify);
-        isNotify.setVisibility(View.VISIBLE);
-
-        price = findViewById(R.id.price);
-        description = findViewById(R.id.description);
-        itemsAdd = findViewById(R.id.itemsAdd);
         ImageView image_wallpaper = findViewById(R.id.image_wallpaper);
         image_wallpaper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (brand.getText().toString().length() > 0) {
-                    imageutils.imagepicker(1);
-                } else {
-                    Toast.makeText(getApplicationContext(), "Please select brand", Toast.LENGTH_SHORT).show();
-                }
+                imageutils.imagepicker(1);
             }
         });
         samplesList = new ArrayList<>();
         imagelist = findViewById(R.id.imagelist);
-        maddImageAdapter = new AddImageAdapter(this, samplesList,this);
+        maddImageAdapter = new AddImageAdapter(this, samplesList, this);
         final LinearLayoutManager addManager1 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         imagelist.setLayoutManager(addManager1);
         imagelist.setAdapter(maddImageAdapter);
 
-        ExistData existData = (ExistData) getIntent().getSerializableExtra("existData");
-        brand = findViewById(R.id.brand);
-        ArrayAdapter<String> disAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line, existData.data);
-        brand.setThreshold(1);
-        brand.setAdapter(disAdapter);
-        spare = findViewById(R.id.spare);
-
-        stock_update = findViewById(R.id.stock_update);
+        model = findViewById(R.id.model);
+        price = findViewById(R.id.price);
+        selectcategories = findViewById(R.id.selectcategories);
 
         submit = findViewById(R.id.submit);
-
+        submit.setText("SUBMIT");
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (brand.getText().toString().length() > 0 &&
-                        price.getText().toString().length() > 0 &&
-                        spare.getText().toString().length() > 0 &&
-                        stock_update.getText().toString().length() > 0 &&
-                        samplesList.size() > 0 &&
-                        description.getText().toString().length() > 0
-                ) {
+                if (selectcategories.getText().toString().length() <= 0) {
+                    selectcategories.setError("Enter the Category");
+                } else if (model.getText().toString().length() <= 0) {
+                    model.setError("Enter the Model");
+                } else if (price.getText().toString().length() <= 0) {
+                    price.setError("Please enter the price");
+                } else if (samplesList.size() <= 0) {
+                    Toast.makeText(getApplicationContext(), "Upload the Images!", Toast.LENGTH_SHORT).show();
+                } else {
 
-                    registerUser();
+                    stockRegister();
 
                 }
+
             }
         });
 
+
         try {
+            product = (StockModel) getIntent().getSerializableExtra("data");
+            studentId = product.id;
+            model.setText(product.getName());
+            price.setText(product.price);
+            String categoryIntend = getIntent().getStringExtra("CATEGORY");
+            if (categoryIntend != null) {
+                selectcategories.setText(categoryIntend);
+            } else {
+                selectcategories.setText(nameIdMap.get(product.getCategoryId()));
+            }
 
-            SparesBean sparesBean = (SparesBean) getIntent().getSerializableExtra("data");
-
-            brand.setText(sparesBean.brand);
-            price.setText(sparesBean.price);
-            spare.setText(sparesBean.spare);
-            description.setText(sparesBean.description);
-            studentId = sparesBean.id;
-            metadata = sparesBean.metadata;
-            imageUrl = sparesBean.image;
-            stock_update.setText(sparesBean.stock_update);
+            imageUrl = product.image;
             if (imageUrl == null) {
                 imageUrl = "";
             } else {
@@ -171,20 +166,22 @@ public class SparesUpdate extends AppCompatActivity implements Imageutils.ImageA
             }
             maddImageAdapter.notifyData(samplesList);
 
-
         } catch (Exception e) {
             Log.e("xxxxxxxxxxx", e.toString());
-
         }
-
+        getAllCategories();
     }
 
-    private void registerUser() {
-        String tag_string_req = "req_register";
-        pDialog.setMessage("Processing ...");
+    private void stockRegister() {
+        pDialog.setMessage("Updating ...");
         showDialog();
-        StringRequest strReq = new StringRequest(Request.Method.POST,
-                Appconfig.SPARE_UPDATE, new Response.Listener<String>() {
+        int method = Request.Method.POST;
+        if (product != null) {
+            method = Request.Method.PUT;
+        }
+        String url = RETAIL_PRODUCT;
+        StringRequest strReq = new StringRequest(method,
+                url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.d("Register Response: ", response);
@@ -194,15 +191,13 @@ public class SparesUpdate extends AppCompatActivity implements Imageutils.ImageA
                     boolean success = jsonObject.getBoolean("success");
                     String msg = jsonObject.getString("message");
                     if (success) {
-                     //   spareUpdateNotify();
-                        finish();
+                        onBackPressed();
                     }
                     Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     Toast.makeText(getApplicationContext(), "Some Network Error.Try after some time", Toast.LENGTH_SHORT).show();
 
                 }
-
             }
         }, new Response.ErrorListener() {
 
@@ -216,27 +211,73 @@ public class SparesUpdate extends AppCompatActivity implements Imageutils.ImageA
         }) {
             protected Map<String, String> getParams() {
                 HashMap localHashMap = new HashMap();
-                localHashMap.put("brand", brand.getText().toString());
+                if (product != null) {
+                    localHashMap.put("id", studentId);
+                }
+                localHashMap.put("name", model.getText().toString());
                 localHashMap.put("price", price.getText().toString());
-                localHashMap.put("description", description.getText().toString());
-                localHashMap.put("stock_update", stock_update.getText().toString());
-                localHashMap.put("spare", spare.getText().toString());
-                localHashMap.put("id", studentId);
+                localHashMap.put("categoryId", nameIdMap.containsKey(selectcategories.getText().toString()) ?
+                        nameIdMap.get(selectcategories.getText().toString()) : selectcategories.getText().toString());
+                localHashMap.put("folderId", getIntent().getStringExtra("folderId"));
                 localHashMap.put("image", new Gson().toJson(samplesList));
-                localHashMap.put("isnotify", isNotify.isChecked() ? "1" : "0");
                 return localHashMap;
             }
         };
+        strReq.setRetryPolicy(Appconfig.getPolicy());
         AppController.getInstance().addToRequestQueue(strReq);
     }
 
+    private void getAllCategories() {
+        String tag_string_req = "req_register";
+        StringRequest strReq = new StringRequest(Request.Method.GET,
+                RETAIL_CATEGORY, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean success = jObj.getBoolean("success");
+
+                    if (success) {
+                        JSONArray jsonArray = jObj.getJSONArray("data");
+                        nameIdMap = new HashMap<>();
+                        idNameMap = new HashMap<>();
+                        CATEGORY = new String[jsonArray.length()];
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            nameIdMap.put(jsonObject.getString("title"),
+                                    jsonObject.getString("id"));
+                            idNameMap.put(jsonObject.getString("id"),
+                                    jsonObject.getString("title"));
+                            CATEGORY[i] = jsonArray.getJSONObject(i).getString("title");
+                        }
+                        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<String>(StockRegister.this,
+                                android.R.layout.simple_dropdown_item_1line, CATEGORY);
+                        selectcategories.setAdapter(categoryAdapter);
+                    }
+
+                } catch (JSONException e) {
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        }) {
+            protected Map<String, String> getParams() {
+                HashMap localHashMap = new HashMap();
+                return localHashMap;
+            }
+        };
+        strReq.setRetryPolicy(Appconfig.getPolicy());
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+    }
 
     private void deleteUser() {
-        String tag_string_req = "req_register";
         pDialog.setMessage("Processing ...");
         showDialog();
-        StringRequest strReq = new StringRequest(Request.Method.POST,
-                Appconfig.SPARE_DELETE, new Response.Listener<String>() {
+        StringRequest strReq = new StringRequest(Request.Method.DELETE,
+                RETAIL_PRODUCT + "?id=" + studentId, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.d("Register Response: ", response);
@@ -246,7 +287,7 @@ public class SparesUpdate extends AppCompatActivity implements Imageutils.ImageA
                     boolean success = jsonObject.getBoolean("success");
                     String msg = jsonObject.getString("message");
                     if (success) {
-                        finish();
+                        onBackPressed();
                     }
                     Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
@@ -271,6 +312,7 @@ public class SparesUpdate extends AppCompatActivity implements Imageutils.ImageA
                 return localHashMap;
             }
         };
+        strReq.setRetryPolicy(Appconfig.getPolicy());
         AppController.getInstance().addToRequestQueue(strReq);
     }
 
@@ -294,7 +336,9 @@ public class SparesUpdate extends AppCompatActivity implements Imageutils.ImageA
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        imageutils.request_permission_result(requestCode, permissions, grantResults);
+        if (requestCode != 123) {
+            imageutils.request_permission_result(requestCode, permissions, grantResults);
+        }
     }
 
     @Override
@@ -303,8 +347,41 @@ public class SparesUpdate extends AppCompatActivity implements Imageutils.ImageA
         String storedPath = imageutils.createImage(file, filename, path, false);
         pDialog.setMessage("Uploading...");
         showDialog();
-        new UploadFileToServer().execute(Appconfig.compressImage(storedPath,SparesUpdate.this));
+        new UploadFileToServer().execute(Appconfig.
+                compressImage(storedPath, StockRegister.this));
     }
+
+    @Override
+    public void onImageClick(int position) {
+        Intent localIntent = new Intent(StockRegister.this, ActivityMediaOnline.class);
+        localIntent.putExtra("filePath", samplesList.get(position));
+        localIntent.putExtra("isImage", true);
+        startActivity(localIntent);
+    }
+
+
+    @Override
+    public void onDeleteClick(int position) {
+        samplesList.remove(position);
+        maddImageAdapter.notifyData(samplesList);
+    }
+
+    @Override
+    public void itemEditClick(int position) {
+
+    }
+
+    @Override
+    public void itemDownload(String position) {
+        DownloadImage(position);
+    }
+
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         imageutils.onActivityResult(requestCode, resultCode, data);
@@ -330,7 +407,7 @@ public class SparesUpdate extends AppCompatActivity implements Imageutils.ImageA
                 diaBox.show();
                 return true;
             case android.R.id.home:
-                finish();
+                onBackPressed();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -365,17 +442,15 @@ public class SparesUpdate extends AppCompatActivity implements Imageutils.ImageA
     }
 
     @Override
-    public void onImageClick(int position) {
-        Intent localIntent = new Intent(SparesUpdate.this, ActivityMediaOnline.class);
-        localIntent.putExtra("filePath", samplesList.get(position));
-        localIntent.putExtra("isImage", true);
-        startActivity(localIntent);
-    }
-
-    @Override
-    public void onDeleteClick(int position) {
-        samplesList.remove(position);
-        maddImageAdapter.notifyData(samplesList);
+    public void onBackPressed() {
+        if (getIntent().getStringExtra("from") != null
+                && getIntent().getStringExtra("from").equalsIgnoreCase("admin")) {
+            Intent intent = new Intent(StockRegister.this, StartActivity.class);
+            startActivity(intent);
+            finishAffinity();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     private class UploadFileToServer extends AsyncTask<String, Integer, String> {
@@ -419,7 +494,7 @@ public class SparesUpdate extends AppCompatActivity implements Imageutils.ImageA
 
                 File sourceFile = new File(filepath);
                 // Adding file data to http body
-                entity.addPart("model", new StringBody(brand.getText().toString()));
+                entity.addPart("model", new StringBody(selectcategories.getText().toString()));
                 entity.addPart("image", new FileBody(sourceFile));
 
                 totalSize = entity.getContentLength();
@@ -457,7 +532,8 @@ public class SparesUpdate extends AppCompatActivity implements Imageutils.ImageA
                 JSONObject jsonObject = new JSONObject(result);
                 if (!jsonObject.getBoolean("error")) {
                     String model = jsonObject.getString("model");
-                    String imageUrl = Appconfig.ip_img + "uploads/" + model + "/" + imageutils.getfilename_from_path(filepath);
+                    String imageUrl = Appconfig.ip_img + "uploads/" + model + "/" +
+                            imageutils.getfilename_from_path(filepath);
                     samplesList.add(imageUrl);
                     maddImageAdapter.notifyData(samplesList);
                 } else {
@@ -469,12 +545,79 @@ public class SparesUpdate extends AppCompatActivity implements Imageutils.ImageA
                 Toast.makeText(getApplicationContext(), "Image not uploaded", Toast.LENGTH_SHORT).show();
             }
             hideDialog();
-            // showing the server response in an alert dialog
-            //showAlert(result);
-
-
             super.onPostExecute(result);
         }
 
     }
+
+
+    void DownloadImage(String ImageUrl) {
+//        if (ContextCompat.checkSelfPermission(StockRegister.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+//                ContextCompat.checkSelfPermission(StockRegister.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(StockRegister.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,
+//                    Manifest.permission.WRITE_EXTERNAL_STORAGE}, 123);
+//        } else {
+//            showToast("Downloading Image...");
+//            new DownloadsImage().execute(ImageUrl);
+//        }
+        showToast("Downloading Image...");
+        new DownloadsImage().execute(ImageUrl);
+    }
+
+    class DownloadsImage extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            URL url = null;
+            try {
+                url = new URL(strings[0]);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            Bitmap bm = null;
+            try {
+                bm = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES + "/StockBazaar"); //Creates app specific folder
+
+            if (!path.exists()) {
+                path.mkdirs();
+            }
+
+            File imageFile = new File(path, System.currentTimeMillis() + ".png");
+            FileOutputStream out = null;
+            try {
+                out = new FileOutputStream(imageFile);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            try {
+                bm.compress(Bitmap.CompressFormat.PNG, 100, out); // Compress Image
+                out.flush();
+                out.close();
+                MediaScannerConnection.scanFile(StockRegister.this, new String[]{imageFile.getAbsolutePath()}, null, new MediaScannerConnection.OnScanCompletedListener() {
+                    public void onScanCompleted(String path, Uri uri) {
+                    }
+                });
+            } catch (Exception e) {
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            showToast("Image Saved!");
+        }
+    }
+
+    protected void showToast(String text) {
+        Toast.makeText(StockRegister.this, text, Toast.LENGTH_SHORT).show();
+    }
 }
+
+
+

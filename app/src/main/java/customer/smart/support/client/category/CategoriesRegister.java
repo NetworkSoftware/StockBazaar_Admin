@@ -71,6 +71,7 @@ import customer.smart.support.client.price.PercentagePriceAdapter;
 import customer.smart.support.client.price.PercentagePriceBeen;
 import customer.smart.support.client.stock.ImageClick;
 import customer.smart.support.client.stock.Product;
+import customer.smart.support.retail.stock.StockRegister;
 
 import static customer.smart.support.app.Appconfig.CATEGORIES;
 
@@ -101,7 +102,7 @@ public class CategoriesRegister extends AppCompatActivity implements Imageutils.
         getSupportActionBar().setTitle("Categories Register");
 
 
-        profiletImage = (ImageView) findViewById(R.id.profiletImage);
+        profiletImage = findViewById(R.id.profiletImage);
         profiletImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,7 +160,7 @@ public class CategoriesRegister extends AppCompatActivity implements Imageutils.
         percentagepricelist.setAdapter(percentagePriceAdapter);
 
 
-        submit = (TextView) findViewById(R.id.submit);
+        submit = findViewById(R.id.submit);
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -335,12 +336,12 @@ public class CategoriesRegister extends AppCompatActivity implements Imageutils.
                 localHashMap.put("title", description.getText().toString());
                 localHashMap.put("brand", brand.getText().toString());
                 localHashMap.put("tag", tag.getText().toString());
-                ArrayList<PercentagePriceBeen> tempList=new ArrayList<>();
-                for (int i=0;i<percentagePriceBeens.size();i++){
+                ArrayList<PercentagePriceBeen> tempList = new ArrayList<>();
+                for (int i = 0; i < percentagePriceBeens.size(); i++) {
                     tempList.add(new PercentagePriceBeen(
                             percentagePriceBeens.get(i).getPrice_percentage(),
                             percentagePriceBeens.get(i).getPriceRange()
-                            ));
+                    ));
                 }
                 localHashMap.put("percentage", new Gson().toJson(tempList));
                 localHashMap.put("qtyPercent", new Gson().toJson(percentagePriceBeens));
@@ -378,10 +379,11 @@ public class CategoriesRegister extends AppCompatActivity implements Imageutils.
     @Override
     public void image_attachment(int from, String filename, Bitmap file, Uri uri) {
         String path = getCacheDir().getPath() + File.separator + "ImageAttach" + File.separator;
-        File storedFile = imageutils.createImage(file, filename, path, false);
+        String storedPath = imageutils.createImage(file, filename, path, false);
         pDialog.setMessage("Uploading...");
         showDialog();
-        new UploadFileToServer().execute(Appconfig.compressImage(storedFile.getPath(), CategoriesRegister.this));
+        new UploadFileToServer().execute(Appconfig.
+                compressImage(storedPath, CategoriesRegister.this));
     }
 
     @SuppressLint("MissingSuperCall")

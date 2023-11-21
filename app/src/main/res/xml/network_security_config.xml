@@ -2,8 +2,8 @@
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">thestockbazaar.com</domain>
-        <domain includeSubdomains="true">192.168.1.107</domain>
-        <domain includeSubdomains="true">192.168.1.204</domain>
+        <domain includeSubdomains="true">192.168.29.45</domain>
+        <domain includeSubdomains="true">192.168.29.8</domain>
         <domain includeSubdomains="true">192.168.1.175</domain>
     </domain-config>
 </network-security-config>

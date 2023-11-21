@@ -134,10 +134,10 @@ public class OfferRegister extends AppCompatActivity implements BaseClick, Image
                     @Override
                     public void image_attachment(int from, String filename, Bitmap file, Uri uri) {
                         String path = getCacheDir().getPath() + File.separator + "ImageAttach" + File.separator;
-                        File storedFile = imageutils.createImage(file, filename, path, false);
+                        String storedPath = imageutils.createImage(file, filename, path, false);
                         pDialog.setMessage("Uploading...");
                         showDialog();
-                        new UploadFileToServer().execute(Appconfig.compressImage(storedFile.getPath(), OfferRegister.this));
+                        new UploadFileToServer().execute(Appconfig.compressImage(storedPath, OfferRegister.this));
                     }
                 });
             }

@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 
 import customer.smart.support.ad.MainActivityAd;
 import customer.smart.support.app.Appconfig;
@@ -20,13 +19,13 @@ import customer.smart.support.client.enquiry.MainActivityEnquiry;
 import customer.smart.support.client.seller_as.MainActivitySeller;
 import customer.smart.support.client.service.ServiceTabsActivity;
 import customer.smart.support.client.shop.MainActivityShop;
-import customer.smart.support.client.stock.MainActivityProduct;
 import customer.smart.support.client.wallet.MainActivityWallet;
 import customer.smart.support.cmobile.MainActivityMobile;
 import customer.smart.support.contact.MainActivityContact;
 import customer.smart.support.marketingstaff.MainActivityMarketingStaff;
 import customer.smart.support.offer.OfferActivity;
 import customer.smart.support.order.MainActivityOrder;
+import customer.smart.support.retail.folder.MainActivityFolder;
 import customer.smart.support.shop.MainActivity;
 import customer.smart.support.spares.MainActivitySpares;
 import customer.smart.support.staff.MainActivityStaff;
@@ -58,7 +57,9 @@ public class NaviActivity extends AppCompatActivity {
         LinearLayout seller = findViewById(R.id.seller);
         LinearLayout wallet = findViewById(R.id.wallet);
         LinearLayout service = findViewById(R.id.serviceLi);
-        LinearLayout marketing=findViewById(R.id.marketing);
+        LinearLayout marketing = findViewById(R.id.marketing);
+
+        LinearLayout retail = findViewById(R.id.retail);
 
         LinearLayout category = findViewById(R.id.category);
         LinearLayout enquiry = findViewById(R.id.enquiry);
@@ -82,6 +83,7 @@ public class NaviActivity extends AppCompatActivity {
             service.setVisibility(View.VISIBLE);
             marketing.setVisibility(View.VISIBLE);
             enquiry.setVisibility(View.VISIBLE);
+            retail.setVisibility(View.VISIBLE);
 
         } else if (sharedpreferences.getString("role", "admin").equalsIgnoreCase("admin")) {
 
@@ -173,8 +175,19 @@ public class NaviActivity extends AppCompatActivity {
             } else {
                 enquiry.setVisibility(View.GONE);
             }
+            if (data.contains("retail")) {
+                retail.setVisibility(View.VISIBLE);
+            } else {
+                retail.setVisibility(View.GONE);
+            }
         }
-
+        retail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent io = new Intent(NaviActivity.this, MainActivityFolder.class);
+                startActivity(io);
+            }
+        });
         client_shop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

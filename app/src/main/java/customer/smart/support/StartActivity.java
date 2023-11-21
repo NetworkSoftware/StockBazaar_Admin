@@ -4,11 +4,17 @@ import static customer.smart.support.app.Appconfig.mypreference;
 import static customer.smart.support.client.shop.MainActivityShop.SHOPID;
 import static customer.smart.support.client.shop.MainActivityShop.SHOPNAME;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +24,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -114,7 +121,7 @@ public class StartActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (phoneNo.getText().length() <= 0) {
                     Toast.makeText(getApplicationContext(), "Enter valid phoneNo", Toast.LENGTH_SHORT).show();
-                }else if ("SUBMIT".equalsIgnoreCase(loginPassword.getText().toString())) {
+                } else if ("SUBMIT".equalsIgnoreCase(loginPassword.getText().toString())) {
                     if (password.getText().toString().length() > 0) {
                         passwordLogin();
                     } else {
@@ -136,7 +143,36 @@ public class StartActivity extends AppCompatActivity {
                 return true; // Return false to keep the keyboard open else return true to close the keyboard
             }
         });
+        if (shouldAskPermissions()) {
+            askPermissions();
+        }
+        ActivityCompat.requestPermissions(this,
+                new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.MANAGE_EXTERNAL_STORAGE}, 1);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (!Environment.isExternalStorageManager()) {
+                Intent intent = new Intent();
+                intent.setAction(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                Uri uri = Uri.fromParts("package", this.getPackageName(), null);
+                intent.setData(uri);
+                startActivity(intent);
 
+            }
+        }
+    }
+
+    @TargetApi(23)
+    protected void askPermissions() {
+        String[] permissions = {
+                "android.permission.READ_EXTERNAL_STORAGE",
+                "android.permission.WRITE_EXTERNAL_STORAGE"
+        };
+        int requestCode = 200;
+        requestPermissions(permissions, requestCode);
+    }
+
+    protected boolean shouldAskPermissions() {
+        return (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
     }
 
     private void passwordLogin() {
@@ -170,7 +206,6 @@ public class StartActivity extends AppCompatActivity {
                             editor.putString("role", jObj.getString("role"));
                             editor.putString("data", jObj.getString("data"));
                             editor.putString("name", jObj.getString("name"));
-
                             editor.commit();
                             Intent io = new Intent(StartActivity.this, NaviActivity.class);
                             startActivity(io);
@@ -279,7 +314,7 @@ public class StartActivity extends AppCompatActivity {
                             editor.putBoolean(Appconfig.isClient, true);
                             editor.putString(Appconfig.shopId, jObj.getJSONObject("data").getString("id"));
                             editor.putString(Appconfig.shopName, jObj.getJSONObject("data").getString("shopname"));
-                            editor.putString(Appconfig.category,jObj.getJSONObject("data").getString("category"));
+                            editor.putString(Appconfig.category, jObj.getJSONObject("data").getString("category"));
                             editor.commit();
                             Intent io = new Intent(StartActivity.this, MainActivityProduct.class);
                             io.putExtra(SHOPID, jObj.getJSONObject("data").getString("id"));

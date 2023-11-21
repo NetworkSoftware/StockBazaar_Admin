@@ -418,7 +418,6 @@ public class PdfConfigInvoice {
     }
 
     public static PdfPCell createTable(PdfPTable pTable, int padding, BaseColor baseColor, boolean isBorder) throws DocumentException, IOException {
-
         PdfPCell cell = new PdfPCell();
         cell.addElement(pTable);
         cell.setPaddingTop(0);

@@ -268,7 +268,6 @@ public class MyOrderPage extends AppCompatActivity {
 
 
     private void showBottomDialog() {
-
         mBottomSheetDialog = new RoundedBottomSheetDialog(MyOrderPage.this);
         LayoutInflater inflater = MyOrderPage.this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.activity_main_address, null);
@@ -380,7 +379,6 @@ public class MyOrderPage extends AppCompatActivity {
             }
         });
         mBottomSheetDialog.show();
-
     }
 
     public void printFunction() {

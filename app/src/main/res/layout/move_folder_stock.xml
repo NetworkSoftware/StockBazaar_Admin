@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="top"
+    android:layout_margin="10dp"
+    android:gravity="top"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:text="MOVE FOLDER"
+        android:textColor="@color/black"
+        android:textSize="18dp" />
+
+    <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+        android:id="@+id/selectFolder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:hint="Select Folder"
+        android:textColor="@color/black"
+        android:textColorHint="#c6c6c6"
+        android:textSize="15dp"
+        app:met_floatingLabel="normal" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="#0e9d1f"
+        android:fontFamily="@font/sans"
+        android:gravity="center"
+        android:text="SUBMIT"
+        android:textColor="#fff"
+        android:textSize="18dp"
+        android:visibility="visible"
+        app:icon="@drawable/ic_done_black_24dp"
+        app:iconTint="#fff" />
+
+</LinearLayout>
